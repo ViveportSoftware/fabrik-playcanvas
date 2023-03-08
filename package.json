@@ -1,0 +1,42 @@
+{
+  "name": "@viveportengineering/fabrik-playcanvas",
+  "version": "0.0.3",
+  "type": "module",
+  "files": [
+    "dist",
+    "index.d.ts"
+  ],
+  "main": "./dist/index.umd.cjs",
+  "module": "./dist/index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    "types": "./index.d.ts",
+    "import": "./dist/index.js",
+    "require": "./dist/index.umd.cjs"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "posttest": "npm run lint",
+    "publish": "rm -rf dist && pnpm publish"
+  },
+  "devDependencies": {
+    "@types/node": "^18.13.0",
+    "gts": "^3.1.1",
+    "typescript": "~4.9.5",
+    "vite": "^4.1.1",
+    "vite-plugin-dts": "2.0.0-beta.3"
+  },
+  "dependencies": {
+    "@tweenjs/tween.js": "^18.6.4",
+    "playcanvas": "^1.61.0",
+    "rollup-plugin-typescript2": "^0.34.1",
+    "rxjs": "^7.8.0"
+  }
+}
