@@ -60,14 +60,14 @@ export class IKDemoHumanoidVRM extends IK.Base implements IK.IK {
       IK.HumanoidPart.LeftArm,
       new Fabrik.Vec3(offsetX - 0, 1.6, -1.5)
     );
-    this.addTarget(
-      IK.HumanoidPart.RightLeg,
-      new Fabrik.Vec3(offsetX + 0.3, -3, -2)
-    );
-    this.addTarget(
-      IK.HumanoidPart.LeftLeg,
-      new Fabrik.Vec3(offsetX + -0.3, -3, 2)
-    );
+    // this.addTarget(
+    //   IK.HumanoidPart.RightLeg,
+    //   new Fabrik.Vec3(offsetX + 0.3, -3, -2)
+    // );
+    // this.addTarget(
+    //   IK.HumanoidPart.LeftLeg,
+    //   new Fabrik.Vec3(offsetX + -0.3, -3, 2)
+    // );
 
     // this.randomMoveTarget(
     //   IK.HumanoidPart.Spine,
