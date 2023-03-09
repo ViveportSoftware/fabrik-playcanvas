@@ -2,12 +2,12 @@ import * as pc from 'playcanvas';
 import {fromEvent} from 'rxjs';
 
 // @ts-ignore
-// import {createMouseInput} from '../playcanvas/scripts/mouse-input';
+import {createMouseInput} from '../playcanvas/scripts/mouse-input';
 // @ts-ignore
-// import {createOrbitCamera} from '../playcanvas/scripts/orbit-camera';
+import {createOrbitCamera} from '../playcanvas/scripts/orbit-camera';
 
-// import assetsGLBAvatar from '../assets/glbs/avatar.glb?url';
-// import assetsImagesGrid from '../assets/images/grid.png';
+import assetsGLBAvatar from '../assets/glbs/avatar.glb?url';
+import assetsImagesGrid from '../assets/images/grid.png';
 
 export class Renderer {
   protected app?: pc.Application;
@@ -18,18 +18,23 @@ export class Renderer {
   private xrStartCallback: (vrCamera: pc.Entity) => void = () => {};
 
   private updateCallbacks: Array<(dt: number) => void> = new Array();
-  private rootEntity?: pc.Entity;
+  protected rootEntity?: pc.Entity;
+  private isLocalDemo: boolean = true;
 
   constructor(
     app: pc.Application | undefined = undefined,
-    rootEntity: pc.Entity | undefined = undefined
+    rootEntity: pc.Entity | undefined = undefined,
+    isLocalDemo: boolean = true
   ) {
     if (app) {
       this.app = app;
     }
+
     if (rootEntity) {
       this.rootEntity = rootEntity;
     }
+
+    this.isLocalDemo = isLocalDemo;
   }
 
   public async init() {
@@ -80,8 +85,15 @@ export class Renderer {
     this.app.setCanvasFillMode(pc.FILLMODE_FILL_WINDOW);
     this.app.setCanvasResolution(pc.RESOLUTION_AUTO);
 
-    // createMouseInput();
-    // createOrbitCamera();
+    if (this.isLocalDemo) {
+      createMouseInput();
+      createOrbitCamera();
+    }
+
+    if (!this.rootEntity) {
+      this.rootEntity = new pc.Entity('avatarRoot');
+      this.app?.root.addChild(this.rootEntity);
+    }
 
     this.app.on('update', dt => {
       this.updateCallbacks.forEach(cb => {
@@ -93,10 +105,12 @@ export class Renderer {
   }
 
   private async loadAssets(): Promise<void> {
-    const assets: Array<pc.Asset> = [
-      // new pc.Asset('grid', 'texture', {url: assetsImagesGrid}),
-      // new pc.Asset('avatar', 'container', {url: assetsGLBAvatar}),
-    ];
+    const assets: Array<pc.Asset> = [];
+
+    if (this.isLocalDemo) {
+      assets.push(new pc.Asset('grid', 'texture', {url: assetsImagesGrid}));
+      assets.push(new pc.Asset('avatar', 'container', {url: assetsGLBAvatar}));
+    }
 
     const assetListLoader = new pc.AssetListLoader(
       assets,

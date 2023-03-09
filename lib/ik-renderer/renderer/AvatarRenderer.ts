@@ -48,7 +48,12 @@ export class AvatarRenderer extends Renderer {
       entity.setLocalScale(6, 6, 6);
       entity.setLocalPosition(0, -4.5, 0);
 
-      this.app?.root.addChild(entity);
+      if (this.rootEntity) {
+        this.rootEntity.addChild(entity);
+      } else {
+        this.app?.root.addChild(entity);
+      }
+
       return entity;
     }
 
