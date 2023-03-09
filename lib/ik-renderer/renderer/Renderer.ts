@@ -28,6 +28,13 @@ export class Renderer {
   ) {
     if (app) {
       this.app = app;
+      this.app.on('update', dt => {
+        this.updateCallbacks.forEach(cb => {
+          cb.call(this, dt);
+        });
+
+        this.drawBaseLines();
+      });
     }
 
     if (rootEntity) {
