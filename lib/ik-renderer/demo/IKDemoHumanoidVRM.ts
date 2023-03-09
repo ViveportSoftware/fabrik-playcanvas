@@ -114,7 +114,6 @@ export class IKDemoHumanoidVRM extends IK.Base implements IK.IK {
   }
 
   public update(): void {
-    console.log('[FIK] IKDemoHumanoidVRM update');
     this.solveIK();
     this.render();
 
