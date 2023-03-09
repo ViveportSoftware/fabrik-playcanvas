@@ -14,12 +14,18 @@ export class Base implements IK {
   private renderForwardLine: boolean = true;
   protected renderer: Renderer.Renderer | Renderer.AvatarRenderer | undefined;
 
+  private renderIKBone: boolean = true;
+
   constructor() {}
 
   public setRenderer(
     renderer: Renderer.Renderer | Renderer.AvatarRenderer
   ): void {
     this.renderer = renderer;
+  }
+
+  public setRenderIKBone(renderIKBone: boolean): void {
+    this.renderIKBone = renderIKBone;
   }
 
   public addTarget(
@@ -132,7 +138,7 @@ export class Base implements IK {
     );
   }
 
-  public render(renderEntity: boolean = true) {
+  public render() {
     const ikSolver = this.getSolver();
     const numChains = ikSolver.getNumChains();
 
@@ -156,7 +162,7 @@ export class Base implements IK {
           this.setBoneToCache(chain.getName(), boneIndex, boneEntity);
         }
 
-        if (!renderEntity) {
+        if (!this.renderIKBone) {
           boneEntity.enabled = false;
         }
 

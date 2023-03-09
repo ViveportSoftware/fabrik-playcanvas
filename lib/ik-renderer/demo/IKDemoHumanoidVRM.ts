@@ -110,12 +110,12 @@ export class IKDemoHumanoidVRM extends IK.Base implements IK.IK {
     }
 
     this.solveIK();
-    this.render(false);
+    this.render();
   }
 
   public update(): void {
     this.solveIK();
-    this.render(false);
+    this.render();
 
     if (this.ikAvatarRenderer) {
       this.ikAvatarRenderer.update();
