@@ -14,6 +14,8 @@ export class AvatarRenderer extends Renderer {
   ) {
     super(app, rootEntity);
 
+    console.log('[FIK] avatarEntity:', avatarEntity);
+
     this.avatarEntity = avatarEntity;
   }
 
