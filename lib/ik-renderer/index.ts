@@ -1,3 +1,3 @@
-export * from './ik/IK';
-export * from './ik/Target';
+export * as IK from './ik';
 export * from './IKRenderer';
+export * as Renderer from './renderer';

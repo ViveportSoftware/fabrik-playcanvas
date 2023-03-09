@@ -1,4 +1,3 @@
-export * from '../IKRenderer';
 export * from './AvatarRenderer';
 export * from './AvatarRendererBase';
 export * from './AvatarRendererLocalHinge';
