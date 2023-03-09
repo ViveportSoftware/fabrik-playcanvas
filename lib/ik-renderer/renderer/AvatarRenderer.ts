@@ -29,7 +29,7 @@ export class AvatarRenderer extends Renderer {
         if (this.avatarEntity) {
           const head = this.avatarEntity.findByName(AvatarPart.Head);
           if (head) {
-            vrCamera.setPosition(head.getPosition());
+            vrCamera.setPosition(head.getLocalPosition());
             head.setLocalScale(0, 0, 0);
           }
         }
@@ -86,19 +86,19 @@ export class AvatarRenderer extends Renderer {
     const avatarLeftHand = avatarEntity.findByName(AvatarPart.LeftHand);
 
     if (avatarLeftUpperArm) {
-      const pos = avatarLeftUpperArm.getPosition();
+      const pos = avatarLeftUpperArm.getLocalPosition();
       const forward = avatarLeftUpperArm.forward;
       this.renderAvatarForwardLine(pos, forward);
     }
 
     if (avatarLeftLowerArm) {
-      const pos = avatarLeftLowerArm.getPosition();
+      const pos = avatarLeftLowerArm.getLocalPosition();
       const forward = avatarLeftLowerArm.forward;
       this.renderAvatarForwardLine(pos, forward);
     }
 
     if (avatarLeftHand) {
-      const pos = avatarLeftHand.getPosition();
+      const pos = avatarLeftHand.getLocalPosition();
       const forward = avatarLeftHand.forward;
       this.renderAvatarForwardLine(pos, forward);
     }
@@ -114,19 +114,19 @@ export class AvatarRenderer extends Renderer {
     const avatarRightHand = avatarEntity.findByName(AvatarPart.RightHand);
 
     if (avatarRightUpperArm) {
-      const pos = avatarRightUpperArm.getPosition();
+      const pos = avatarRightUpperArm.getLocalPosition();
       const forward = avatarRightUpperArm.forward;
       this.renderAvatarForwardLine(pos, forward);
     }
 
     if (avatarRightLowerArm) {
-      const pos = avatarRightLowerArm.getPosition();
+      const pos = avatarRightLowerArm.getLocalPosition();
       const forward = avatarRightLowerArm.forward;
       this.renderAvatarForwardLine(pos, forward);
     }
 
     if (avatarRightHand) {
-      const pos = avatarRightHand.getPosition();
+      const pos = avatarRightHand.getLocalPosition();
       const forward = avatarRightHand.forward;
       this.renderAvatarForwardLine(pos, forward);
     }
@@ -138,19 +138,19 @@ export class AvatarRenderer extends Renderer {
     const avatarLeftFoot = avatarEntity.findByName(AvatarPart.LeftFoot);
 
     if (avatarLeftUpperLeg) {
-      const pos = avatarLeftUpperLeg.getPosition();
+      const pos = avatarLeftUpperLeg.getLocalPosition();
       const forward = avatarLeftUpperLeg.forward;
       this.renderAvatarForwardLine(pos, forward);
     }
 
     if (avatarLeftLowerLeg) {
-      const pos = avatarLeftLowerLeg.getPosition();
+      const pos = avatarLeftLowerLeg.getLocalPosition();
       const forward = avatarLeftLowerLeg.forward;
       this.renderAvatarForwardLine(pos, forward);
     }
 
     if (avatarLeftFoot) {
-      const pos = avatarLeftFoot.getPosition();
+      const pos = avatarLeftFoot.getLocalPosition();
       const forward = avatarLeftFoot.forward;
       this.renderAvatarForwardLine(pos, forward);
     }
@@ -166,19 +166,19 @@ export class AvatarRenderer extends Renderer {
     const avatarRightFoot = avatarEntity.findByName(AvatarPart.RightFoot);
 
     if (avatarRightUpperLeg) {
-      const pos = avatarRightUpperLeg.getPosition();
+      const pos = avatarRightUpperLeg.getLocalPosition();
       const forward = avatarRightUpperLeg.forward;
       this.renderAvatarForwardLine(pos, forward);
     }
 
     if (avatarRightLowerLeg) {
-      const pos = avatarRightLowerLeg.getPosition();
+      const pos = avatarRightLowerLeg.getLocalPosition();
       const forward = avatarRightLowerLeg.forward;
       this.renderAvatarForwardLine(pos, forward);
     }
 
     if (avatarRightFoot) {
-      const pos = avatarRightFoot.getPosition();
+      const pos = avatarRightFoot.getLocalPosition();
       const forward = avatarRightFoot.forward;
       this.renderAvatarForwardLine(pos, forward);
     }

@@ -38,11 +38,11 @@ export class Base implements IK {
   ): void {
     const cacheTarget = this.targetCacheMap.get(id);
     if (cacheTarget) {
-      cacheTarget.entity.setPosition(pos.x, pos.y, pos.z);
+      cacheTarget.entity.setLocalPosition(pos.x, pos.y, pos.z);
     } else {
       const targetEntity = this.renderer?.addTarget();
       if (targetEntity) {
-        targetEntity.setPosition(pos.x, pos.y, pos.z);
+        targetEntity.setLocalPosition(pos.x, pos.y, pos.z);
         const target = new Target(id, pos, targetEntity);
         this.targetCacheMap.set(target.id, target);
       }
@@ -98,7 +98,11 @@ export class Base implements IK {
 
       this.targetCacheMap.forEach(target => {
         targetPosMap.set(target.id, target.pos);
-        target.entity.setPosition(target.pos.x, target.pos.y, target.pos.z);
+        target.entity.setLocalPosition(
+          target.pos.x,
+          target.pos.y,
+          target.pos.z
+        );
       });
 
       this.solveForTargets(targetPosMap);
@@ -168,7 +172,7 @@ export class Base implements IK {
 
         const startLocation = bone.getStartLocation();
         const endLocation = bone.getEndLocation();
-        boneEntity.setPosition(
+        boneEntity.setLocalPosition(
           startLocation.x,
           startLocation.y,
           startLocation.z
@@ -222,7 +226,7 @@ export class Base implements IK {
       throw new Error('renderer is undefined');
     }
 
-    const v1 = e.getPosition();
+    const v1 = e.getLocalPosition();
     const v2 = e.forward;
 
     this.renderer.drawLine(
