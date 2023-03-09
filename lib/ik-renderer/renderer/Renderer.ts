@@ -2,12 +2,12 @@ import * as pc from 'playcanvas';
 import {fromEvent} from 'rxjs';
 
 // @ts-ignore
-import {createMouseInput} from '../playcanvas/scripts/mouse-input';
+// import {createMouseInput} from '../playcanvas/scripts/mouse-input';
 // @ts-ignore
-import {createOrbitCamera} from '../playcanvas/scripts/orbit-camera';
+// import {createOrbitCamera} from '../playcanvas/scripts/orbit-camera';
 
-import assetsGLBAvatar from '../assets/glbs/avatar.glb?url';
-import assetsImagesGrid from '../assets/images/grid.png';
+// import assetsGLBAvatar from '../assets/glbs/avatar.glb?url';
+// import assetsImagesGrid from '../assets/images/grid.png';
 
 export class Renderer {
   protected app?: pc.Application;
@@ -80,8 +80,8 @@ export class Renderer {
     this.app.setCanvasFillMode(pc.FILLMODE_FILL_WINDOW);
     this.app.setCanvasResolution(pc.RESOLUTION_AUTO);
 
-    createMouseInput();
-    createOrbitCamera();
+    // createMouseInput();
+    // createOrbitCamera();
 
     this.app.on('update', dt => {
       this.updateCallbacks.forEach(cb => {
@@ -93,9 +93,9 @@ export class Renderer {
   }
 
   private async loadAssets(): Promise<void> {
-    const assets = [
-      new pc.Asset('grid', 'texture', {url: assetsImagesGrid}),
-      new pc.Asset('avatar', 'container', {url: assetsGLBAvatar}),
+    const assets: Array<pc.Asset> = [
+      // new pc.Asset('grid', 'texture', {url: assetsImagesGrid}),
+      // new pc.Asset('avatar', 'container', {url: assetsGLBAvatar}),
     ];
 
     const assetListLoader = new pc.AssetListLoader(
