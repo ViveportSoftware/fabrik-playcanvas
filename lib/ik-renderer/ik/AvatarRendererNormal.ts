@@ -32,6 +32,7 @@ export class AvatarRendererNormal
 
     const avatarEntity = this.renderer?.getAvatarEntity();
     if (avatarEntity) {
+      console.log('[FIK] avatarEntity:', avatarEntity);
       this.applyIKToAvatar(avatarEntity);
     }
   }
