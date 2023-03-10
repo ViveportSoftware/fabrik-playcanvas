@@ -45,6 +45,9 @@ export class Base implements IK {
         targetEntity.setLocalPosition(pos.x, pos.y, pos.z);
         const target = new Target(id, pos, targetEntity);
         this.targetCacheMap.set(target.id, target);
+        if (!this.renderIKBone) {
+          targetEntity.enabled = false;
+        }
       }
     }
   }
@@ -214,7 +217,7 @@ export class Base implements IK {
             break;
         }
 
-        if (this.renderForwardLine) {
+        if (this.renderForwardLine && this.renderIKBone) {
           this.renderEntityForwardLine(boneEntity);
         }
       }
