@@ -337,6 +337,7 @@ export class Renderer {
   }
 
   private registerXRInputEvent(): void {
+    console.log('[FIK] registerXRInputEvent');
     if (this.app?.xr.isAvailable(pc.XRTYPE_VR)) {
       this.app.xr.input.on('add', this.xrInputAddCallback, this);
 
