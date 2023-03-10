@@ -53,6 +53,11 @@ export class IKRenderer {
 
   private updateTargetsByXRInputSources(): void {
     if (this.renderer) {
+      console.log(
+        '[FIK] this.renderer.getXRInputSources():',
+        this.renderer,
+        this.renderer.getXRInputSources()
+      );
       this.renderer.getXRInputSources()?.forEach(inputSource => {
         if (inputSource) {
           if (inputSource.handedness === pc.XRHAND_LEFT) {
