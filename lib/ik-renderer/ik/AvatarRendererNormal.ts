@@ -381,7 +381,7 @@ export class AvatarRendererNormal
     this.applyIKToAvatarHead(avatarEntity);
     this.applyIKToAvatarRightArm(avatarEntity);
     this.applyIKToAvatarLeftArm(avatarEntity);
-    this.applyIKToAvatarRightLeg(avatarEntity);
-    this.applyIKToAvatarLeftLeg(avatarEntity);
+    // this.applyIKToAvatarRightLeg(avatarEntity);
+    // this.applyIKToAvatarLeftLeg(avatarEntity);
   }
 }
