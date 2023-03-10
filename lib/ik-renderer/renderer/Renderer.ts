@@ -35,6 +35,8 @@ export class Renderer {
 
         this.drawBaseLines();
       });
+
+      this.registerXRInputEvent();
     }
 
     if (rootEntity) {
@@ -330,15 +332,24 @@ export class Renderer {
     return false;
   }
 
+  private xrInputAddCallback(inputSource: pc.XrInputSource): void {
+    this.xrInputSources.push(inputSource);
+  }
+
+  private registerXRInputEvent(): void {
+    if (this.app?.xr.isAvailable(pc.XRTYPE_VR)) {
+      this.app.xr.input.on('add', this.xrInputAddCallback, this);
+
+      this.app.xr.on('end', () => {
+        this.app?.xr.input.off('add', this.xrInputAddCallback, this);
+        this.xrInputSources = [];
+      });
+    }
+  }
+
   public startXR(): void {
     if (this.app?.xr.isAvailable(pc.XRTYPE_VR)) {
-      this.app.xr.input.on(
-        'add',
-        (inputSource: pc.XrInputSource) => {
-          this.xrInputSources.push(inputSource);
-        },
-        this
-      );
+      this.registerXRInputEvent();
 
       this.app.xr.on('start', () => {
         if (this.vrCamera) {
