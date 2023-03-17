@@ -180,7 +180,7 @@ export class HumanoidNormal extends HumanoidBase implements Humanoid {
     chain.addConsecutiveRotorConstrainedBone(
       Fabrik.X_NEG,
       HumanoidBoneLength.UpperArm * this.boneScale,
-      60,
+      180,
       boneColor
     );
 
