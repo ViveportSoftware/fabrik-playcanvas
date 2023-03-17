@@ -6,7 +6,7 @@ export class IKDemoHumanoid01 extends IK.Base implements IK.IK {
 
   private chains: Map<IK.HumanoidPart, Fabrik.FabrikChain3D> = new Map();
 
-  private boneScale = 0.1;
+  private boneScale = 0.05;
 
   constructor() {
     super();
