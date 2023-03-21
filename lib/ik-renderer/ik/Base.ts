@@ -11,7 +11,7 @@ export class Base implements IK {
   private targetCacheMap: Map<string, Target> = new Map();
 
   private needToSolve: boolean = true;
-  private renderForwardLine: boolean = true;
+  private renderForwardLine: boolean = false;
   protected renderer: Renderer.Renderer | Renderer.AvatarRenderer | undefined;
 
   private renderIKBone: boolean = true;
