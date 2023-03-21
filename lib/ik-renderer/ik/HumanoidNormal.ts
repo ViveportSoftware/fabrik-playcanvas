@@ -1,4 +1,5 @@
 import * as Fabrik from '../../fabrik';
+import {AvatarPart} from '../renderer';
 import {Humanoid} from './Humanoid';
 import {HumanoidBase} from './HumanoidBase';
 import {HumanoidBoneLength} from './HumanoidBoneLength';
@@ -6,8 +7,14 @@ import {HumanoidPart} from './HumanoidPart';
 import {Util} from './Util';
 
 export class HumanoidNormal extends HumanoidBase implements Humanoid {
-  constructor() {
+  private boneLengthMap: Map<AvatarPart, number> = new Map();
+
+  constructor(boneLengthMap: Map<AvatarPart, number> | undefined) {
     super();
+
+    if (boneLengthMap) {
+      this.boneLengthMap = boneLengthMap;
+    }
 
     this.init();
   }
@@ -30,24 +37,26 @@ export class HumanoidNormal extends HumanoidBase implements Humanoid {
 
     chain.addBone(rootBone);
 
+    const hipsBoneLength = this.boneLengthMap?.get(AvatarPart.Hips);
+    const spineBoneLength = this.boneLengthMap?.get(AvatarPart.Spine);
+    const chestBoneLength = this.boneLengthMap?.get(AvatarPart.Chest);
+    const upperChestBoneLength = this.boneLengthMap?.get(AvatarPart.UpperChest);
+
+    if (
+      !hipsBoneLength ||
+      !spineBoneLength ||
+      !chestBoneLength ||
+      !upperChestBoneLength
+    ) {
+      throw new Error('bone length is undefined');
+    }
+
+    chain.addConsecutiveRotorConstrainedBone(Fabrik.Y_AXE, hipsBoneLength, 10);
+    chain.addConsecutiveRotorConstrainedBone(Fabrik.Y_AXE, spineBoneLength, 10);
+    chain.addConsecutiveRotorConstrainedBone(Fabrik.Y_AXE, chestBoneLength, 10);
     chain.addConsecutiveRotorConstrainedBone(
       Fabrik.Y_AXE,
-      HumanoidBoneLength.Spine01 * this.boneScale,
-      10
-    );
-    chain.addConsecutiveRotorConstrainedBone(
-      Fabrik.Y_AXE,
-      HumanoidBoneLength.Spine02 * this.boneScale,
-      10
-    );
-    chain.addConsecutiveRotorConstrainedBone(
-      Fabrik.Y_AXE,
-      HumanoidBoneLength.Spine03 * this.boneScale,
-      10
-    );
-    chain.addConsecutiveRotorConstrainedBone(
-      Fabrik.Y_AXE,
-      HumanoidBoneLength.Spine04 * this.boneScale,
+      upperChestBoneLength,
       30
     );
 
@@ -75,9 +84,15 @@ export class HumanoidNormal extends HumanoidBase implements Humanoid {
 
     chain.addBone(rootBone);
 
+    const neckBoneLength = this.boneLengthMap.get(AvatarPart.Neck);
+
+    if (!neckBoneLength) {
+      throw new Error('bone length is undefined');
+    }
+
     chain.addConsecutiveRotorConstrainedBone(
       new Fabrik.Vec3(0, 1, -0.1),
-      HumanoidBoneLength.Neck * this.boneScale,
+      neckBoneLength,
       0.1,
       boneColor
     );
@@ -111,23 +126,43 @@ export class HumanoidNormal extends HumanoidBase implements Humanoid {
 
     chain.addBone(rootBone);
 
+    const rightShoulderBoneLength = this.boneLengthMap.get(
+      AvatarPart.RightShoulder
+    );
+    const rightUpperArmBoneLength = this.boneLengthMap.get(
+      AvatarPart.RightUpperArm
+    );
+    const rightLowerArmBoneLength = this.boneLengthMap.get(
+      AvatarPart.RightLowerArm
+    );
+    const rightHandBoneLength = this.boneLengthMap.get(AvatarPart.RightHand);
+
+    if (
+      !rightShoulderBoneLength ||
+      !rightUpperArmBoneLength ||
+      !rightLowerArmBoneLength ||
+      !rightHandBoneLength
+    ) {
+      throw new Error('bone length is undefined');
+    }
+
     chain.addConsecutiveRotorConstrainedBone(
       Fabrik.X_AXE,
-      HumanoidBoneLength.Shoulder * this.boneScale,
+      rightShoulderBoneLength,
       10,
       boneColor
     );
 
     chain.addConsecutiveRotorConstrainedBone(
       Fabrik.X_AXE,
-      HumanoidBoneLength.UpperArm * this.boneScale,
+      rightUpperArmBoneLength,
       180,
       boneColor
     );
 
     chain.addConsecutiveHingedBone(
       Fabrik.X_AXE,
-      HumanoidBoneLength.LowerArm * this.boneScale,
+      rightLowerArmBoneLength,
       Fabrik.JointType.LOCAL_HINGE,
       Fabrik.Y_AXE,
       0,
@@ -138,7 +173,7 @@ export class HumanoidNormal extends HumanoidBase implements Humanoid {
 
     chain.addConsecutiveRotorConstrainedBone(
       Fabrik.X_AXE,
-      HumanoidBoneLength.Hand * this.boneScale,
+      rightHandBoneLength,
       45,
       boneColor
     );
@@ -170,23 +205,43 @@ export class HumanoidNormal extends HumanoidBase implements Humanoid {
 
     chain.addBone(rootBone);
 
+    const leftShoulderBoneLength = this.boneLengthMap.get(
+      AvatarPart.LeftShoulder
+    );
+    const leftUpperArmBoneLength = this.boneLengthMap.get(
+      AvatarPart.LeftUpperArm
+    );
+    const leftLowerArmBoneLength = this.boneLengthMap.get(
+      AvatarPart.LeftUpperArm
+    );
+    const leftHandBoneLength = this.boneLengthMap.get(AvatarPart.LeftHand);
+
+    if (
+      !leftShoulderBoneLength ||
+      !leftUpperArmBoneLength ||
+      !leftLowerArmBoneLength ||
+      !leftHandBoneLength
+    ) {
+      throw new Error('bone length is undefined');
+    }
+
     chain.addConsecutiveRotorConstrainedBone(
       Fabrik.X_NEG,
-      HumanoidBoneLength.Shoulder * this.boneScale,
+      leftShoulderBoneLength,
       0.1,
       boneColor
     );
 
     chain.addConsecutiveRotorConstrainedBone(
       Fabrik.X_NEG,
-      HumanoidBoneLength.UpperArm * this.boneScale,
+      leftUpperArmBoneLength,
       180,
       boneColor
     );
 
     chain.addConsecutiveHingedBone(
       Fabrik.X_NEG,
-      HumanoidBoneLength.LowerArm * this.boneScale,
+      leftLowerArmBoneLength,
       Fabrik.JointType.LOCAL_HINGE,
       Fabrik.Y_AXE,
       160,
@@ -197,7 +252,7 @@ export class HumanoidNormal extends HumanoidBase implements Humanoid {
 
     chain.addConsecutiveRotorConstrainedBone(
       Fabrik.X_NEG,
-      HumanoidBoneLength.Hand * this.boneScale,
+      leftHandBoneLength,
       45,
       boneColor
     );
@@ -229,16 +284,34 @@ export class HumanoidNormal extends HumanoidBase implements Humanoid {
 
     chain.addBone(rootBone);
 
+    const rightHipBoneLength = this.boneLengthMap.get(AvatarPart.RightHip);
+    const rightUpperLegBoneLength = this.boneLengthMap.get(
+      AvatarPart.RightUpperLeg
+    );
+    const rightLowerLegBoneLength = this.boneLengthMap.get(
+      AvatarPart.RightLowerLeg
+    );
+    const rightFootBoneLength = this.boneLengthMap.get(AvatarPart.RightFoot);
+
+    if (
+      !rightHipBoneLength ||
+      !rightUpperLegBoneLength ||
+      !rightLowerLegBoneLength ||
+      !rightFootBoneLength
+    ) {
+      throw new Error('bone length is undefined');
+    }
+
     chain.addConsecutiveRotorConstrainedBone(
       new Fabrik.Vec3(1, -0.2, 0),
-      HumanoidBoneLength.Hip * this.boneScale,
+      rightHipBoneLength,
       0.1,
       boneColor
     );
 
     chain.addConsecutiveHingedBone(
       Fabrik.Y_NEG,
-      HumanoidBoneLength.UpperLeg * this.boneScale,
+      rightUpperLegBoneLength,
       Fabrik.JointType.GLOBAL_HINGE,
       Fabrik.X_AXE,
       90,
@@ -249,7 +322,7 @@ export class HumanoidNormal extends HumanoidBase implements Humanoid {
 
     chain.addConsecutiveHingedBone(
       Fabrik.Y_NEG,
-      HumanoidBoneLength.LowerLeg * this.boneScale,
+      rightLowerLegBoneLength,
       Fabrik.JointType.LOCAL_HINGE,
       Fabrik.X_AXE,
       0,
@@ -260,7 +333,7 @@ export class HumanoidNormal extends HumanoidBase implements Humanoid {
 
     // chain.addConsecutiveRotorConstrainedBone(
     //   Fabrik.Z_NEG,
-    //   HumanoidBoneLength.Foot * this.boneScale,
+    //   rightFootBoneLength,
     //   10,
     //   boneColor
     // );
@@ -292,16 +365,34 @@ export class HumanoidNormal extends HumanoidBase implements Humanoid {
 
     chain.addBone(rootBone);
 
+    const leftHipBoneLength = this.boneLengthMap.get(AvatarPart.LeftHip);
+    const leftUpperLegBoneLength = this.boneLengthMap.get(
+      AvatarPart.LeftUpperLeg
+    );
+    const leftLowerLegBoneLength = this.boneLengthMap.get(
+      AvatarPart.LeftLowerLeg
+    );
+    const leftFootBoneLength = this.boneLengthMap.get(AvatarPart.LeftFoot);
+
+    if (
+      !leftHipBoneLength ||
+      !leftUpperLegBoneLength ||
+      !leftLowerLegBoneLength ||
+      !leftFootBoneLength
+    ) {
+      throw new Error('bone length is undefined');
+    }
+
     chain.addConsecutiveRotorConstrainedBone(
       new Fabrik.Vec3(-1, -0.2, 0),
-      HumanoidBoneLength.Hip * this.boneScale,
+      leftHipBoneLength,
       0.1,
       boneColor
     );
 
     chain.addConsecutiveHingedBone(
       Fabrik.Y_NEG,
-      HumanoidBoneLength.UpperLeg * this.boneScale,
+      leftUpperLegBoneLength,
       Fabrik.JointType.GLOBAL_HINGE,
       Fabrik.X_AXE,
       90,
@@ -312,7 +403,7 @@ export class HumanoidNormal extends HumanoidBase implements Humanoid {
 
     chain.addConsecutiveHingedBone(
       Fabrik.Y_NEG,
-      HumanoidBoneLength.LowerLeg * this.boneScale,
+      leftLowerLegBoneLength,
       Fabrik.JointType.LOCAL_HINGE,
       Fabrik.X_AXE,
       0,
@@ -323,7 +414,7 @@ export class HumanoidNormal extends HumanoidBase implements Humanoid {
 
     // chain.addConsecutiveRotorConstrainedBone(
     //   Fabrik.Z_NEG,
-    //   HumanoidBoneLength.Foot * this.boneScale,
+    //   leftFootBoneLength,
     //   10,
     //   boneColor
     // );

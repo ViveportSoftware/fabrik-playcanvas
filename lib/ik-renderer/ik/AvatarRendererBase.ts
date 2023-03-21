@@ -2,13 +2,12 @@ import * as Fabrik from '../../fabrik';
 import * as Renderer from '../renderer';
 
 import {Humanoid} from './Humanoid';
-import {HumanoidNormal} from './HumanoidNormal';
 import {IK} from './IK';
 
 export class AvatarRendererBase {
   protected ik: IK | undefined;
   protected renderer: Renderer.AvatarRenderer | undefined;
-  protected ikHumanoid: Humanoid = new HumanoidNormal();
+  protected ikHumanoid?: Humanoid;
   // protected avatarRenderer: AvatarRenderer = new AvatarRenderer();
   protected printOnceFlag = false;
 
@@ -21,10 +20,16 @@ export class AvatarRendererBase {
   }
 
   public getSolver(): Fabrik.FabrikStructure3D {
+    if (!this.ikHumanoid) {
+      throw new Error('ik is undefined');
+    }
     return this.ikHumanoid.getSolver();
   }
 
   public solveForTargets(targets: Map<string, Fabrik.Vec3>): void {
+    if (!this.ikHumanoid) {
+      throw new Error('ik is undefined');
+    }
     this.ikHumanoid.solveForTargets(targets);
   }
 

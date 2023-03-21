@@ -20,7 +20,11 @@ export class AvatarRendererNormal
   ) {
     super(ik, renderer);
 
-    this.ikHumanoid = new HumanoidNormal();
+    if (this.renderer) {
+      const boneLengthMap = this.renderer.calculateBoneLenth();
+
+      this.ikHumanoid = new HumanoidNormal(boneLengthMap);
+    }
   }
 
   public run(): void {}

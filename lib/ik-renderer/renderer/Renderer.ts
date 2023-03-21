@@ -5,7 +5,6 @@ import {fromEvent} from 'rxjs';
 // import {createMouseInput} from '../playcanvas/scripts/mouse-input';
 // @ts-ignore
 // import {createOrbitCamera} from '../playcanvas/scripts/orbit-camera';
-
 // import assetsGLBAvatar from '../assets/glbs/avatar.glb?url';
 // import assetsImagesGrid from '../assets/images/grid.png';
 
@@ -228,7 +227,7 @@ export class Renderer {
     const graphicsDevice = this.app?.graphicsDevice as pc.GraphicsDevice;
 
     const jointMesh = pc.createSphere(graphicsDevice, {
-      radius: 0.1,
+      radius: 0.02,
     });
 
     const jointMaterial = new pc.BasicMaterial();
@@ -244,8 +243,8 @@ export class Renderer {
     const boneEntity = new pc.Entity(`${prefix}_bone`);
 
     const boneMesh = pc.createCone(graphicsDevice, {
-      baseRadius: 0.1,
-      peakRadius: 0.05,
+      baseRadius: 0.02,
+      peakRadius: 0.005,
       height: length,
       capSegments: 5,
     });
@@ -286,7 +285,7 @@ export class Renderer {
     const graphicsDevice = this.app?.graphicsDevice as pc.GraphicsDevice;
 
     const jointMesh = pc.createSphere(graphicsDevice, {
-      radius: 0.1,
+      radius: 0.02,
     });
 
     const jointMaterial = new pc.BasicMaterial();

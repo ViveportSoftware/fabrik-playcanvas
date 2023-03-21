@@ -46,19 +46,19 @@ export class IKDemoHumanoidVRM extends IK.Base implements IK.IK {
 
     this.addTarget(
       IK.HumanoidPart.Spine,
-      new Fabrik.Vec3(offsetX + 0.001, 4, -0.1)
+      new Fabrik.Vec3(offsetX + 0.001, 1, -0.1)
     );
     this.addTarget(
       IK.HumanoidPart.Head,
-      new Fabrik.Vec3(offsetX + 0.001, 4, -0.1)
+      new Fabrik.Vec3(offsetX + 0.001, 1, -0.1)
     );
     this.addTarget(
       IK.HumanoidPart.RightArm,
-      new Fabrik.Vec3(offsetX + 2, 1.6, 1.5)
+      new Fabrik.Vec3(offsetX + 0.5, 0.3, 0.5)
     );
     this.addTarget(
       IK.HumanoidPart.LeftArm,
-      new Fabrik.Vec3(offsetX - 0, 1.6, -1.5)
+      new Fabrik.Vec3(offsetX - 0.1, 0.3, -0.3)
     );
     // this.addTarget(
     //   IK.HumanoidPart.RightLeg,
