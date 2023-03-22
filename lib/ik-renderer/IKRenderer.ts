@@ -78,8 +78,8 @@ export class IKRenderer {
   }
 
   public updateTargetByXRInputSource(
-    inputSource: pc.XrInputSource,
-    targetPart: HumanoidPart
+    targetPart: HumanoidPart,
+    inputSource: pc.XrInputSource
   ): void {
     const target = this.ik.getTarget(targetPart);
     if (target && inputSource) {
