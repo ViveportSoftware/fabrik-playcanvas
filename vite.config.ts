@@ -2,6 +2,7 @@
 import {defineConfig} from 'vite';
 import dts from 'vite-plugin-dts';
 // import rollupTS2 from 'rollup-plugin-typescript2';
+import mkcert from 'vite-plugin-mkcert';
 
 export default defineConfig({
   build: {
@@ -13,9 +14,12 @@ export default defineConfig({
     },
   },
   server: {
+    host: '0.0.0.0',
     port: 45173,
+    https: true,
   },
   plugins: [
+    mkcert(),
     dts({
       insertTypesEntry: true,
     }),
