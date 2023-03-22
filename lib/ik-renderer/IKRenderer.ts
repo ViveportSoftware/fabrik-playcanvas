@@ -83,7 +83,7 @@ export class IKRenderer {
   ): void {
     const target = this.ik.getTarget(targetPart);
     if (target && inputSource) {
-      const inputPos = inputSource.getLocalPosition() as pc.Vec3;
+      const inputPos = inputSource.getPosition() as pc.Vec3;
       const inputRotation = inputSource.getRotation() as pc.Quat;
       const targetPos = target.getPosition();
       const targetRotation = target.getRotation();
