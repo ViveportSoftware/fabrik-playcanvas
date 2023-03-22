@@ -31,7 +31,7 @@ export class AvatarRenderer extends Renderer {
         if (this.avatarEntity) {
           const head = this.avatarEntity.findByName(AvatarPart.Head);
           if (head) {
-            vrCamera.setPosition(head.getLocalPosition());
+            vrCamera.setPosition(head.getPosition());
             head.setLocalScale(0, 0, 0);
           }
         }
@@ -50,11 +50,11 @@ export class AvatarRenderer extends Renderer {
       // entity.setLocalScale(6, 6, 6);
       // entity.setLocalPosition(0, -4.5, 0);
 
-      const hips = entity?.findByName(AvatarPart.Hips);
-      if (hips) {
-        const hipsPos = hips?.getPosition();
-        entity.setPosition(0, -1 * hipsPos?.y, -0.2);
-      }
+      // const hips = entity?.findByName(AvatarPart.Hips);
+      // if (hips) {
+      //   const hipsPos = hips?.getPosition();
+      //   entity.setPosition(0, -1 * hipsPos?.y, -0.2);
+      // }
 
       if (this.rootEntity) {
         this.rootEntity.addChild(entity);
@@ -70,6 +70,15 @@ export class AvatarRenderer extends Renderer {
 
   public getAvatarEntity(): pc.Entity | undefined {
     return this.avatarEntity;
+  }
+
+  public getAvatarHipsPosition(): pc.Vec3 | undefined {
+    const hips = this.avatarEntity?.findByName(AvatarPart.Hips);
+    if (hips) {
+      const hipsPos = hips?.getPosition();
+      return hipsPos;
+    }
+    return;
   }
 
   public update(): void {

@@ -1,12 +1,12 @@
 import * as pc from 'playcanvas';
 import {fromEvent} from 'rxjs';
 
+// import assetsGLBAvatar from '../assets/glbs/avatar.glb?url';
+// import assetsImagesGrid from '../assets/images/grid.png';
 // @ts-ignore
 // import {createMouseInput} from '../playcanvas/scripts/mouse-input';
 // @ts-ignore
 // import {createOrbitCamera} from '../playcanvas/scripts/orbit-camera';
-// import assetsGLBAvatar from '../assets/glbs/avatar.glb?url';
-// import assetsImagesGrid from '../assets/images/grid.png';
 
 export class Renderer {
   protected app?: pc.Application;
@@ -63,15 +63,17 @@ export class Renderer {
 
     this.drawBaseLines();
 
+    fromEvent<TouchEvent>(document, 'touchend').subscribe(e => {
+      // this.startXR();
+    });
+
+    fromEvent<MouseEvent>(document, 'click').subscribe(e => {
+      // this.startXR();
+    });
+
     fromEvent<KeyboardEvent>(document, 'keyup').subscribe(e => {
       if (e.key === '`') {
         this.startXR();
-        if (this.vrCamera && this.vrCamera.camera) {
-          this.vrCamera.camera.rect = new pc.Vec4(0, 0.5, 1, 0.5);
-        }
-        if (this.camera && this.camera.camera) {
-          this.camera.camera.rect = new pc.Vec4(0, 0, 1, 0.5);
-        }
       }
     });
   }
@@ -138,7 +140,7 @@ export class Renderer {
       clearColor: new pc.Color(0.5, 0.6, 0.9),
       nearClip: 0.1,
       farClip: 1000,
-      fov: 55,
+      // fov: 55,
     });
 
     this.camera.addComponent('script');
@@ -164,12 +166,16 @@ export class Renderer {
       clearColor: new pc.Color(0.5, 0.6, 0.9),
       nearClip: 0.1,
       farClip: 1000,
-      fov: 55,
+      // fov: 55,
     });
 
     this.vrCamera.setPosition(0, 4, 16);
 
-    this.app?.root.addChild(this.vrCamera);
+    if (this.rootEntity) {
+      this.rootEntity.addChild(this.vrCamera);
+    } else {
+      this.app?.root.addChild(this.vrCamera);
+    }
   }
 
   private initLight(): void {
@@ -347,7 +353,7 @@ export class Renderer {
   }
 
   public startXR(): void {
-    if (this.app?.xr.isAvailable(pc.XRTYPE_VR)) {
+    if (this.app?.xr.isAvailable(pc.XRTYPE_VR) && !this.app?.xr.active) {
       this.registerXRInputEvent();
 
       this.app.xr.on('start', () => {
@@ -356,10 +362,18 @@ export class Renderer {
         }
       });
 
-      const cameraComponent = this.vrCamera?.findComponent(
-        'camera'
-      ) as pc.CameraComponent;
-      cameraComponent.startXr(pc.XRTYPE_VR, pc.XRSPACE_LOCAL);
+      this.vrCamera?.camera?.startXr(pc.XRTYPE_VR, pc.XRSPACE_LOCALFLOOR, {
+        callback: err => {
+          console.error('startXr callback err:', err);
+        },
+      });
+
+      // if (this.vrCamera && this.vrCamera.camera) {
+      //   this.vrCamera.camera.rect = new pc.Vec4(0, 0.5, 1, 0.5);
+      // }
+      // if (this.camera && this.camera.camera) {
+      //   this.camera.camera.rect = new pc.Vec4(0, 0, 1, 0.5);
+      // }
     }
   }
 

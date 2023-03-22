@@ -3,6 +3,7 @@ import * as Fabrik from '../../fabrik';
 import {AvatarPart} from '../renderer/AvatarPart';
 
 import {IK} from '.';
+import {IKRenderer} from '../IKRenderer';
 import * as Renderer from '../renderer';
 import {AvatarRenderer} from './AvatarRenderer';
 import {AvatarRendererBase} from './AvatarRendererBase';
@@ -23,7 +24,11 @@ export class AvatarRendererNormal
     if (this.renderer) {
       const boneLengthMap = this.renderer.calculateBoneLenth();
 
-      this.ikHumanoid = new HumanoidNormal(boneLengthMap);
+      const hipsPos = this.renderer.getAvatarHipsPosition();
+      if (hipsPos) {
+        const fabrikHipsPos = IKRenderer.pcV3ToFabrikV3(hipsPos);
+        this.ikHumanoid = new HumanoidNormal(fabrikHipsPos, boneLengthMap);
+      }
     }
   }
 

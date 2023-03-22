@@ -8,9 +8,17 @@ import {Util} from './Util';
 
 export class HumanoidNormal extends HumanoidBase implements Humanoid {
   private boneLengthMap: Map<AvatarPart, number> = new Map();
+  private hipsPos: Fabrik.Vec3 = new Fabrik.Vec3();
 
-  constructor(boneLengthMap: Map<AvatarPart, number> | undefined) {
+  constructor(
+    hipsPos: Fabrik.Vec3,
+    boneLengthMap: Map<AvatarPart, number> | undefined
+  ) {
     super();
+
+    if (hipsPos) {
+      this.hipsPos = hipsPos;
+    }
 
     if (boneLengthMap) {
       this.boneLengthMap = boneLengthMap;
@@ -31,7 +39,8 @@ export class HumanoidNormal extends HumanoidBase implements Humanoid {
   }
 
   private initSpine(): void {
-    const rootBone = Util.createRootBone(new Fabrik.Vec3(0, 0, 0));
+    console.error('this.hipsPos:', this.hipsPos);
+    const rootBone = Util.createRootBone(this.hipsPos);
 
     const chain = new Fabrik.FabrikChain3D(HumanoidPart.Spine);
 
