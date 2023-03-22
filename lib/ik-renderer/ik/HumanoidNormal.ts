@@ -39,8 +39,7 @@ export class HumanoidNormal extends HumanoidBase implements Humanoid {
   }
 
   private initSpine(): void {
-    console.error('this.hipsPos:', this.hipsPos);
-    const rootBone = Util.createRootBone(this.hipsPos);
+    const rootBone = Util.createRootBone(new Fabrik.Vec3(0, this.hipsPos.y, 0));
 
     const chain = new Fabrik.FabrikChain3D(HumanoidPart.Spine);
 
