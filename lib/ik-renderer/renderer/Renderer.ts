@@ -1,12 +1,12 @@
 import * as pc from 'playcanvas';
 import {fromEvent} from 'rxjs';
 
-// import assetsGLBAvatar from '../assets/glbs/avatar.glb?url';
-// import assetsImagesGrid from '../assets/images/grid.png';
+import assetsGLBAvatar from '../assets/glbs/avatar.glb?url';
+import assetsImagesGrid from '../assets/images/grid.png';
 // @ts-ignore
-// import {createMouseInput} from '../playcanvas/scripts/mouse-input';
+import {createMouseInput} from '../playcanvas/scripts/mouse-input';
 // @ts-ignore
-// import {createOrbitCamera} from '../playcanvas/scripts/orbit-camera';
+import {createOrbitCamera} from '../playcanvas/scripts/orbit-camera';
 
 export class Renderer {
   protected app?: pc.Application;
@@ -18,7 +18,7 @@ export class Renderer {
 
   private updateCallbacks: Array<(dt: number) => void> = new Array();
   protected rootEntity?: pc.Entity;
-  private isLocalDemo: boolean = true;
+  public isLocalDemo: boolean = true;
 
   constructor(
     app: pc.Application | undefined = undefined,
@@ -96,8 +96,8 @@ export class Renderer {
     this.app.setCanvasResolution(pc.RESOLUTION_AUTO);
 
     if (this.isLocalDemo) {
-      // createMouseInput();
-      // createOrbitCamera();
+      createMouseInput();
+      createOrbitCamera();
     }
 
     if (!this.rootEntity) {
@@ -118,8 +118,8 @@ export class Renderer {
     const assets: Array<pc.Asset> = [];
 
     if (this.isLocalDemo) {
-      // assets.push(new pc.Asset('grid', 'texture', {url: assetsImagesGrid}));
-      // assets.push(new pc.Asset('avatar', 'container', {url: assetsGLBAvatar}));
+      assets.push(new pc.Asset('grid', 'texture', {url: assetsImagesGrid}));
+      assets.push(new pc.Asset('avatar', 'container', {url: assetsGLBAvatar}));
     }
 
     const assetListLoader = new pc.AssetListLoader(
@@ -354,19 +354,21 @@ export class Renderer {
 
   public startXR(): void {
     if (this.app?.xr.isAvailable(pc.XRTYPE_VR) && !this.app?.xr.active) {
-      this.registerXRInputEvent();
+      if (this.isLocalDemo) {
+        this.registerXRInputEvent();
 
-      this.app.xr.on('start', () => {
-        if (this.vrCamera) {
-          this.xrStartCallback.call(this, this.vrCamera);
-        }
-      });
+        this.app.xr.on('start', () => {
+          if (this.vrCamera) {
+            this.xrStartCallback.call(this, this.vrCamera);
+          }
+        });
 
-      this.vrCamera?.camera?.startXr(pc.XRTYPE_VR, pc.XRSPACE_LOCALFLOOR, {
-        callback: err => {
-          console.error('startXr callback err:', err);
-        },
-      });
+        this.vrCamera?.camera?.startXr(pc.XRTYPE_VR, pc.XRSPACE_LOCALFLOOR, {
+          callback: err => {
+            console.error('startXr callback err:', err);
+          },
+        });
+      }
 
       // if (this.vrCamera && this.vrCamera.camera) {
       //   this.vrCamera.camera.rect = new pc.Vec4(0, 0.5, 1, 0.5);

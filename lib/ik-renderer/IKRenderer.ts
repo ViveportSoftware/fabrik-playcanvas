@@ -52,7 +52,7 @@ export class IKRenderer {
   }
 
   private updateTargetsByXRInputSources(): void {
-    if (this.renderer) {
+    if (this.renderer && this.renderer.isLocalDemo) {
       this.renderer.getXRInputSources()?.forEach(inputSource => {
         if (inputSource) {
           if (inputSource.handedness === pc.XRHAND_LEFT) {
@@ -63,7 +63,6 @@ export class IKRenderer {
               HumanoidPart.RightArm
             );
           }
-
           const vrCameraPos = this.renderer.getVRCameraPos();
           if (vrCameraPos) {
             const target = this.ik.getTarget(HumanoidPart.Head);
@@ -78,7 +77,7 @@ export class IKRenderer {
     }
   }
 
-  private updateTargetByXRInputSource(
+  public updateTargetByXRInputSource(
     inputSource: pc.XrInputSource,
     targetPart: HumanoidPart
   ): void {

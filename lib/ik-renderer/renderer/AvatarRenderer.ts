@@ -12,9 +12,10 @@ export class AvatarRenderer extends Renderer {
   constructor(
     app: pc.Application | undefined = undefined,
     rootEntity: pc.Entity | undefined = undefined,
-    avatarEntity: pc.Entity | undefined = undefined
+    avatarEntity: pc.Entity | undefined = undefined,
+    isLocalDemo: boolean = true
   ) {
-    super(app, rootEntity);
+    super(app, rootEntity, isLocalDemo);
 
     this.avatarEntity = avatarEntity;
   }
