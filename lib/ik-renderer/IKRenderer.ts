@@ -56,11 +56,11 @@ export class IKRenderer {
       this.renderer.getXRInputSources()?.forEach(inputSource => {
         if (inputSource) {
           if (inputSource.handedness === pc.XRHAND_LEFT) {
-            this.updateTargetByXRInputSource(inputSource, HumanoidPart.LeftArm);
+            this.updateTargetByXRInputSource(HumanoidPart.LeftArm, inputSource);
           } else if (inputSource.handedness === pc.XRHAND_RIGHT) {
             this.updateTargetByXRInputSource(
-              inputSource,
-              HumanoidPart.RightArm
+              HumanoidPart.RightArm,
+              inputSource
             );
           }
           const vrCameraPos = this.renderer.getVRCameraPos();
