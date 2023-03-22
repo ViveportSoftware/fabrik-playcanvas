@@ -22,7 +22,7 @@ export class Target {
   }
 
   public setPosition(pos: Fabrik.Vec3): void {
-    this.entity.setPosition(pos.x, pos.y, pos.z);
+    this.entity.setLocalPosition(pos.x, pos.y, pos.z);
     this.pos.x = pos.x;
     this.pos.y = pos.y;
     this.pos.z = pos.z;
