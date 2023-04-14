@@ -72,7 +72,7 @@ export class AvatarRendererLocalHinge
     const avatarChest = avatarEntity.findByName(AvatarPart.Chest);
     const avatarUpperChest = avatarEntity.findByName(AvatarPart.UpperChest);
 
-    const chain = this.getSolver().getChainByName(HumanoidPart.Spine);
+    const chain = this.getSolver()?.getChainByName(HumanoidPart.Spine);
     const chainName = chain?.getName() as string;
 
     const ikChest = chain?.getBone(1);
@@ -99,7 +99,7 @@ export class AvatarRendererLocalHinge
   private applyIKToAvatarHead(avatarEntity: pc.Entity): void {
     const avatarNeck = avatarEntity.findByName(AvatarPart.Neck);
 
-    const chain = this.getSolver().getChainByName(HumanoidPart.Head);
+    const chain = this.getSolver()?.getChainByName(HumanoidPart.Head);
     const chainName = chain?.getName() as string;
 
     const iKNeck = chain?.getBone(1);
@@ -122,7 +122,7 @@ export class AvatarRendererLocalHinge
     );
     const avatarRightHand = avatarEntity.findByName(AvatarPart.RightHand);
 
-    const chain = this.getSolver().getChainByName(HumanoidPart.RightArm);
+    const chain = this.getSolver()?.getChainByName(HumanoidPart.RightArm);
     const chainName = chain?.getName() as string;
 
     const ikRightSoulderBone = chain?.getBone(1);
@@ -222,7 +222,7 @@ export class AvatarRendererLocalHinge
     const avatarLeftLowerArm = avatarEntity.findByName(AvatarPart.LeftLowerArm);
     const avatarLeftHand = avatarEntity.findByName(AvatarPart.LeftHand);
 
-    const chain = this.getSolver().getChainByName(HumanoidPart.LeftArm);
+    const chain = this.getSolver()?.getChainByName(HumanoidPart.LeftArm);
     const chainName = chain?.getName() as string;
 
     const ikLeftSoulderBone = chain?.getBone(1);
@@ -271,7 +271,7 @@ export class AvatarRendererLocalHinge
     );
     const avatarRightFoot = avatarEntity.findByName(AvatarPart.RightFoot);
 
-    const chain = this.getSolver().getChainByName(HumanoidPart.RightLeg);
+    const chain = this.getSolver()?.getChainByName(HumanoidPart.RightLeg);
     const chainName = chain?.getName() as string;
 
     const ikRightUpperLegBone = chain?.getBone(2);
@@ -317,7 +317,7 @@ export class AvatarRendererLocalHinge
     const avatarLeftLowerLeg = avatarEntity.findByName(AvatarPart.LeftLowerLeg);
     const avatarLeftFoot = avatarEntity.findByName(AvatarPart.LeftFoot);
 
-    const chain = this.getSolver().getChainByName(HumanoidPart.LeftLeg);
+    const chain = this.getSolver()?.getChainByName(HumanoidPart.LeftLeg);
     const chainName = chain?.getName() as string;
 
     const ikLeftUpperLegBone = chain?.getBone(2);

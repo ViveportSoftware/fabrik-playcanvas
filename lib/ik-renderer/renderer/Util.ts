@@ -57,4 +57,43 @@ export class Util {
     quaternion.w = (m01 - m10) * num2;
     return quaternion;
   }
+
+  //   mat3 rotateAlign( vec3 v1, vec3 v2)
+  // {
+  //     vec3 axis = cross( v1, v2 );
+
+  //     const float cosA = dot( v1, v2 );
+  //     const float k = 1.0f / (1.0f + cosA);
+
+  //     mat3 result( (axis.x * axis.x * k) + cosA,
+  //                  (axis.y * axis.x * k) - axis.z,
+  //                  (axis.z * axis.x * k) + axis.y,
+  //                  (axis.x * axis.y * k) + axis.z,
+  //                  (axis.y * axis.y * k) + cosA,
+  //                  (axis.z * axis.y * k) - axis.x,
+  //                  (axis.x * axis.z * k) - axis.y,
+  //                  (axis.y * axis.z * k) + axis.x,
+  //                  (axis.z * axis.z * k) + cosA
+  //                  );
+
+  //     return result;
+  // }
+  public static rotateAlign(v1: pc.Vec3, v2: pc.Vec3): pc.Mat3 {
+    const axis = new pc.Vec3().cross(v1, v2);
+    const cosA = v1.dot(v2);
+    const k = 1.0 / (1.0 + cosA);
+    const result = new pc.Mat3();
+    result.set([
+      axis.x * axis.x * k + cosA,
+      axis.y * axis.x * k - axis.z,
+      axis.z * axis.x * k + axis.y,
+      axis.x * axis.y * k + axis.z,
+      axis.y * axis.y * k + cosA,
+      axis.z * axis.y * k - axis.x,
+      axis.x * axis.z * k - axis.y,
+      axis.y * axis.z * k + axis.x,
+      axis.z * axis.z * k + cosA,
+    ]);
+    return result;
+  }
 }

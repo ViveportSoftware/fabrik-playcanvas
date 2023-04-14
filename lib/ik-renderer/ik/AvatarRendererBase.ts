@@ -8,7 +8,6 @@ export class AvatarRendererBase {
   protected ik: IK | undefined;
   protected renderer: Renderer.AvatarRenderer | undefined;
   protected ikHumanoid?: Humanoid;
-  // protected avatarRenderer: AvatarRenderer = new AvatarRenderer();
   protected printOnceFlag = false;
 
   constructor(
@@ -19,18 +18,17 @@ export class AvatarRendererBase {
     this.renderer = renderer;
   }
 
-  public getSolver(): Fabrik.FabrikStructure3D {
+  public getSolver(): Fabrik.FabrikStructure3D | undefined {
     if (!this.ikHumanoid) {
-      throw new Error('ik is undefined');
+      return undefined;
     }
     return this.ikHumanoid.getSolver();
   }
 
   public solveForTargets(targets: Map<string, Fabrik.Vec3>): void {
-    if (!this.ikHumanoid) {
-      throw new Error('ik is undefined');
+    if (this.ikHumanoid) {
+      this.ikHumanoid.solveForTargets(targets);
     }
-    this.ikHumanoid.solveForTargets(targets);
   }
 
   public run(): void {

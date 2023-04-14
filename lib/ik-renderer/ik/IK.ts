@@ -5,7 +5,7 @@ import {Target} from './Target';
 export interface IK {
   getTarget(id: string): Target | undefined;
   getBoneFromCache(chainName: string, boneIndex: number): pc.Entity | undefined;
-  getSolver(): Fabrik.FabrikStructure3D;
+  getSolver(): Fabrik.FabrikStructure3D | undefined;
   setNeedToSolve(needToSolve: boolean): void;
   setRenderer(renderer: Renderer.Renderer | Renderer.AvatarRenderer): void;
   setRenderIKBone(renderIKBone: boolean): void;

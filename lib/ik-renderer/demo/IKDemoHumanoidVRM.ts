@@ -11,7 +11,7 @@ export class IKDemoHumanoidVRM extends IK.Base implements IK.IK {
     this.init();
   }
 
-  public getSolver(): Fabrik.FabrikStructure3D {
+  public getSolver(): Fabrik.FabrikStructure3D | undefined {
     if (!this.ikAvatarRenderer) {
       throw new Error('ikAvatarRenderer is undefined');
     }
@@ -44,26 +44,31 @@ export class IKDemoHumanoidVRM extends IK.Base implements IK.IK {
 
     const offsetX = 0;
 
-    this.addTarget(
-      IK.HumanoidPart.Spine,
-      new Fabrik.Vec3(offsetX + 0.001, 1.5, -0.01)
-    );
-    this.addTarget(
-      IK.HumanoidPart.Head,
-      new Fabrik.Vec3(offsetX + 0.001, 1.5, -0.01)
-    );
+    // this.addTarget(
+    //   IK.HumanoidPart.Spine,
+    //   new Fabrik.Vec3(offsetX + 0.001, 1.8, -0.01)
+    // );
+
+    // this.addTarget(
+    //   IK.HumanoidPart.Head,
+    //   new Fabrik.Vec3(offsetX + 0.001, 2, -0.01)
+    // );
+
     this.addTarget(
       IK.HumanoidPart.RightArm,
-      new Fabrik.Vec3(offsetX + 0.5, 1, -0.01)
+      new Fabrik.Vec3(offsetX + 1, 1.0, 0.5)
     );
+
     this.addTarget(
       IK.HumanoidPart.LeftArm,
-      new Fabrik.Vec3(offsetX - 0.5, 1, -0.01)
+      new Fabrik.Vec3(offsetX - 1, 2.0, 0.5)
     );
+
     // this.addTarget(
     //   IK.HumanoidPart.RightLeg,
     //   new Fabrik.Vec3(offsetX + 0.3, -3, -2)
     // );
+
     // this.addTarget(
     //   IK.HumanoidPart.LeftLeg,
     //   new Fabrik.Vec3(offsetX + -0.3, -3, 2)

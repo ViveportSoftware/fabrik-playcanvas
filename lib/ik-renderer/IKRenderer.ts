@@ -47,7 +47,6 @@ export class IKRenderer {
 
   private update(dt: number): void {
     this.ik?.update();
-
     this.updateTargetsByXRInputSources();
   }
 
@@ -63,17 +62,19 @@ export class IKRenderer {
               inputSource
             );
           }
-          const vrCameraPos = this.renderer.getVRCameraPos();
-          if (vrCameraPos) {
-            const target = this.ik.getTarget(HumanoidPart.Head);
-            target?.setPosition(
-              new Fabrik.Vec3(vrCameraPos?.x, vrCameraPos?.y, vrCameraPos?.z)
-            );
-            this.ik?.setNeedToSolve(true);
-            this.ik?.update();
-          }
         }
       });
+
+      const vrCameraPos = this.renderer.getVRCameraPos();
+
+      if (vrCameraPos) {
+        const target = this.ik.getTarget(HumanoidPart.Head);
+        target?.setPosition(
+          new Fabrik.Vec3(vrCameraPos?.x, vrCameraPos?.y, vrCameraPos?.z)
+        );
+        this.ik?.setNeedToSolve(true);
+        this.ik?.update();
+      }
     }
   }
 
@@ -83,10 +84,29 @@ export class IKRenderer {
   ): void {
     const target = this.ik.getTarget(targetPart);
     if (target && inputSource) {
-      const inputPos = inputSource.getLocalPosition() as pc.Vec3;
+      const inputPos = inputSource.getPosition() as pc.Vec3;
       const inputRotation = inputSource.getRotation() as pc.Quat;
       const targetPos = target.getPosition();
+      const targetLocalPos = target.getLocalPosition();
       const targetRotation = target.getRotation();
+
+      switch (targetPart) {
+        case HumanoidPart.LeftArm:
+          this.renderer.setTextTargetLeftPos(
+            `${targetLocalPos.x.toFixed(4)},${targetLocalPos.y.toFixed(
+              4
+            )},${targetLocalPos.z.toFixed(4)}`
+          );
+          break;
+        case HumanoidPart.RightArm:
+          this.renderer.setTextTargetRightPos(
+            `${targetLocalPos.x.toFixed(4)},${targetLocalPos.y.toFixed(
+              4
+            )},${targetLocalPos.z.toFixed(4)}`
+          );
+          break;
+      }
+
       if (
         !IKRenderer.equalV3BetweenPCV3(targetPos, inputPos) ||
         !IKRenderer.equalBetweenQuat(targetRotation, inputRotation)

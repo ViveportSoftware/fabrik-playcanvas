@@ -1,8 +1,11 @@
 import * as pc from 'playcanvas';
 import {fromEvent} from 'rxjs';
 
-// import assetsGLBAvatar from '../assets/glbs/avatar.glb?url';
-// import assetsImagesGrid from '../assets/images/grid.png';
+// font
+import RobotoMediumUrl from '../assets/fonts/Roboto-Medium.json?url';
+import RobotoMediumTextureUrl from '../assets/fonts/Roboto-Medium.png?url';
+import assetsGLBAvatar from '../assets/glbs/avatar.glb?url';
+import assetsImagesGrid from '../assets/images/grid.png';
 // @ts-ignore
 // import {createMouseInput} from '../playcanvas/scripts/mouse-input';
 // @ts-ignore
@@ -12,7 +15,18 @@ export class Renderer {
   protected app?: pc.Application;
 
   private camera?: pc.Entity;
-  private vrCamera?: pc.Entity;
+  protected vrCamera?: pc.Entity;
+
+  private hud?: pc.Entity;
+  protected textHMDPos?: pc.Entity;
+  protected textHMDRotation?: pc.Entity;
+  protected textInputSourceLeftPos?: pc.Entity;
+  protected textTargetLeftPos?: pc.Entity;
+  protected textInputSourceRightPos?: pc.Entity;
+  protected textTargetRightPos?: pc.Entity;
+  protected textAvatarForward?: pc.Entity;
+  protected textTargetRootForward?: pc.Entity;
+
   private xrInputSources: Array<pc.XrInputSource> = new Array();
   private xrStartCallback: (vrCamera: pc.Entity) => void = () => {};
 
@@ -53,22 +67,32 @@ export class Renderer {
     this.initApplication();
 
     await this.loadAssets();
+    await this.loadFontAssets();
 
     this.initVRCamera();
     this.initCamera();
     this.initLight();
     this.initPlane();
 
+    this.initHUD();
+    this.initTextHMDPos();
+    this.initTextHMDRotation();
+    this.initTextInputSourceLeftPos();
+    this.initTextTargetLeftPos();
+    this.initTextInputSourceRightPos();
+    this.initTextTargetRightPos();
+    this.initTextAvatarForward();
+
     this.runApplication();
 
     this.drawBaseLines();
 
     fromEvent<TouchEvent>(document, 'touchend').subscribe(e => {
-      // this.startXR();
+      this.startXR();
     });
 
     fromEvent<MouseEvent>(document, 'click').subscribe(e => {
-      // this.startXR();
+      this.startXR();
     });
 
     fromEvent<KeyboardEvent>(document, 'keyup').subscribe(e => {
@@ -117,13 +141,51 @@ export class Renderer {
   private async loadAssets(): Promise<void> {
     const assets: Array<pc.Asset> = [];
 
+    // console.error('RobotoMediumUrl:', RobotoMediumUrl);
+    // console.error('RobotoMediumTextureUrl:', RobotoMediumTextureUrl);
+
     if (this.isLocalDemo) {
-      // assets.push(new pc.Asset('grid', 'texture', {url: assetsImagesGrid}));
-      // assets.push(new pc.Asset('avatar', 'container', {url: assetsGLBAvatar}));
+      assets.push(new pc.Asset('grid', 'texture', {url: assetsImagesGrid}));
+      assets.push(new pc.Asset('avatar', 'container', {url: assetsGLBAvatar}));
+      assets.push(
+        new pc.Asset('RobotoMedium.json', 'json', {url: RobotoMediumUrl})
+      );
     }
 
     const assetListLoader = new pc.AssetListLoader(
       assets,
+      this.app?.assets as pc.AssetRegistry
+    );
+
+    return new Promise<void>((resolve, reject) => {
+      assetListLoader.load(() => {
+        resolve();
+      });
+    });
+  }
+
+  private async loadFontAssets(): Promise<void> {
+    const fontAssets: Array<pc.Asset> = [];
+    fontAssets.push(
+      new pc.Asset('RobotoMedium', 'font', {url: RobotoMediumTextureUrl})
+    );
+
+    fontAssets.forEach(fontAsset => {
+      const resource = this.app?.assets.find(
+        `${fontAsset.name}.json`
+      )?.resource;
+
+      if (resource) {
+        fontAsset.data = resource;
+      } else {
+        console.error(
+          `Font Loading: You did'nt loaded ${fontAsset.name} json file`
+        );
+      }
+    });
+
+    const assetListLoader = new pc.AssetListLoader(
+      fontAssets,
       this.app?.assets as pc.AssetRegistry
     );
 
@@ -164,18 +226,178 @@ export class Renderer {
 
     this.vrCamera.addComponent('camera', {
       clearColor: new pc.Color(0.5, 0.6, 0.9),
-      nearClip: 0.1,
+      nearClip: 0.001,
       farClip: 1000,
       // fov: 55,
     });
 
-    this.vrCamera.setPosition(0, 4, 16);
+    this.vrCamera.setPosition(0, 0, 0);
 
     if (this.rootEntity) {
       this.rootEntity.addChild(this.vrCamera);
     } else {
       this.app?.root.addChild(this.vrCamera);
     }
+  }
+
+  private initHUD(): void {
+    this.hud = new pc.Entity('HUD');
+
+    this.hud.addComponent('screen', {
+      screenSpace: true,
+      referenceResolution: new pc.Vec2(1280, 720),
+      scaleBlend: 0.5,
+      scaleMode: pc.SCALEMODE_BLEND,
+    });
+
+    this.app?.root.addChild(this.hud);
+
+    this.hud.setPosition(0, 4, 0);
+  }
+
+  private initTextHMDPos(): void {
+    this.textHMDPos = new pc.Entity('HMDPos');
+    this.textHMDPos.addComponent('element', {
+      anchor: [0.5, 0.5, 0.5, 0.5],
+      pivot: [0.5, 0.5],
+      fontSize: 24,
+      autoWidth: true,
+      autoHeight: true,
+      type: pc.ELEMENTTYPE_TEXT,
+      color: new pc.Color().fromString('#FF0000'),
+      alignment: [0.5, 0.5],
+      useInput: true,
+      text: '0,0,0',
+      fontAsset: this.app?.assets.find('RobotoMedium'),
+    });
+
+    this.hud?.addChild(this.textHMDPos);
+  }
+
+  private initTextHMDRotation(): void {
+    this.textHMDRotation = new pc.Entity('HMDRotation');
+    this.textHMDRotation.addComponent('element', {
+      anchor: [0.5, 0.5, 0.5, 0.5],
+      pivot: [0.5, 0.5],
+      fontSize: 24,
+      autoWidth: true,
+      autoHeight: true,
+      type: pc.ELEMENTTYPE_TEXT,
+      color: new pc.Color().fromString('#00FF00'),
+      alignment: [0.5, 0.5],
+      useInput: true,
+      text: '0,0,0,0',
+      fontAsset: this.app?.assets.find('RobotoMedium'),
+    });
+
+    this.textHMDRotation.setLocalPosition(0, 32, 0);
+
+    this.hud?.addChild(this.textHMDRotation);
+  }
+
+  private initTextInputSourceLeftPos(): void {
+    this.textInputSourceLeftPos = new pc.Entity('InputSourceLeftPos');
+    this.textInputSourceLeftPos.addComponent('element', {
+      anchor: [0.5, 0.5, 0.5, 0.5],
+      pivot: [0.5, 0.5],
+      fontSize: 24,
+      autoWidth: true,
+      autoHeight: true,
+      type: pc.ELEMENTTYPE_TEXT,
+      color: new pc.Color().fromString('#FFFF00'),
+      alignment: [0.5, 0.5],
+      useInput: true,
+      text: '0,0,0',
+      fontAsset: this.app?.assets.find('RobotoMedium'),
+    });
+
+    this.textInputSourceLeftPos.setLocalPosition(-128, 128, 0);
+
+    this.hud?.addChild(this.textInputSourceLeftPos);
+  }
+
+  private initTextTargetLeftPos(): void {
+    this.textTargetLeftPos = new pc.Entity('TargetLeftPos');
+    this.textTargetLeftPos.addComponent('element', {
+      anchor: [0.5, 0.5, 0.5, 0.5],
+      pivot: [0.5, 0.5],
+      fontSize: 24,
+      autoWidth: true,
+      autoHeight: true,
+      type: pc.ELEMENTTYPE_TEXT,
+      color: new pc.Color().fromString('#FFFF00'),
+      alignment: [0.5, 0.5],
+      useInput: true,
+      text: '0,0,0',
+      fontAsset: this.app?.assets.find('RobotoMedium'),
+    });
+
+    this.textTargetLeftPos.setLocalPosition(-128, 160, 0);
+
+    this.hud?.addChild(this.textTargetLeftPos);
+  }
+
+  private initTextInputSourceRightPos(): void {
+    this.textInputSourceRightPos = new pc.Entity('InputSourceRightPos');
+    this.textInputSourceRightPos.addComponent('element', {
+      anchor: [0.5, 0.5, 0.5, 0.5],
+      pivot: [0.5, 0.5],
+      fontSize: 24,
+      autoWidth: true,
+      autoHeight: true,
+      type: pc.ELEMENTTYPE_TEXT,
+      color: new pc.Color().fromString('#FFFF00'),
+      alignment: [0.5, 0.5],
+      useInput: true,
+      text: '0,0,0',
+      fontAsset: this.app?.assets.find('RobotoMedium'),
+    });
+
+    this.textInputSourceRightPos.setLocalPosition(128, 128, 0);
+
+    this.hud?.addChild(this.textInputSourceRightPos);
+  }
+
+  private initTextTargetRightPos(): void {
+    this.textTargetRightPos = new pc.Entity('TargetRightPos');
+    this.textTargetRightPos.addComponent('element', {
+      anchor: [0.5, 0.5, 0.5, 0.5],
+      pivot: [0.5, 0.5],
+      fontSize: 24,
+      autoWidth: true,
+      autoHeight: true,
+      type: pc.ELEMENTTYPE_TEXT,
+      color: new pc.Color().fromString('#FFFF00'),
+      alignment: [0.5, 0.5],
+      useInput: true,
+      text: '0,0,0',
+      fontAsset: this.app?.assets.find('RobotoMedium'),
+    });
+
+    this.textTargetRightPos.setLocalPosition(128, 160, 0);
+
+    this.hud?.addChild(this.textTargetRightPos);
+  }
+
+  private initTextAvatarForward(): void {
+    this.textAvatarForward = new pc.Entity('AvatarForward');
+    this.textAvatarForward.addComponent('element', {
+      anchor: [0.5, 0.5, 0.5, 0.5],
+      pivot: [0.5, 0.5],
+      fontSize: 24,
+      autoWidth: true,
+      autoHeight: true,
+      type: pc.ELEMENTTYPE_TEXT,
+      color: new pc.Color().fromString('#0000FF'),
+      alignment: [0.5, 0.5],
+      useInput: true,
+      text: '0,0,0',
+      fontAsset: this.app?.assets.find('RobotoMedium'),
+    });
+
+    this.textAvatarForward.setLocalPosition(0, 64, 0);
+
+    this.hud?.addChild(this.textAvatarForward);
   }
 
   private initLight(): void {
@@ -285,8 +507,8 @@ export class Renderer {
     return jointEntity;
   }
 
-  public addTarget(): pc.Entity {
-    const targetEntity = new pc.Entity('target');
+  public addTarget(name: string = 'target'): pc.Entity {
+    const targetEntity = new pc.Entity(name);
 
     const graphicsDevice = this.app?.graphicsDevice as pc.GraphicsDevice;
 
@@ -304,11 +526,7 @@ export class Renderer {
       renderStyle: pc.RENDERSTYLE_WIREFRAME,
     });
 
-    if (this.rootEntity) {
-      this.rootEntity.addChild(targetEntity);
-    } else {
-      this.app?.root.addChild(targetEntity);
-    }
+    this.app?.root.addChild(targetEntity);
 
     return targetEntity;
   }
@@ -358,9 +576,68 @@ export class Renderer {
         this.registerXRInputEvent();
 
         this.app.xr.on('start', () => {
+          if (this.vrCamera && this.vrCamera.camera) {
+            this.vrCamera.camera.rect = new pc.Vec4(0, 0, 1, 1);
+          }
+          if (this.camera && this.camera.camera) {
+            this.camera.camera.rect = new pc.Vec4(0, 0, 1, 0);
+          }
+
           if (this.vrCamera) {
             this.xrStartCallback.call(this, this.vrCamera);
           }
+        });
+
+        this.app.xr.on('end', () => {
+          if (this.vrCamera && this.vrCamera.camera) {
+            this.vrCamera.camera.rect = new pc.Vec4(0, 0, 1, 0);
+          }
+          if (this.camera && this.camera.camera) {
+            this.camera.camera.rect = new pc.Vec4(0, 0, 1, 1);
+          }
+        });
+
+        this.app.xr.on('update', () => {
+          if (this.vrCamera && this.vrCamera.camera) {
+            const vrCameraPos = this.vrCamera.getPosition();
+            if (
+              this.textHMDPos &&
+              this.textHMDPos.element &&
+              this.textHMDPos.element.text &&
+              this.isLocalDemo
+            ) {
+              this.textHMDPos.element.text = `${vrCameraPos.x.toFixed(
+                4
+              )}, ${vrCameraPos.y.toFixed(4)}, ${vrCameraPos.z.toFixed(4)}`;
+            }
+          }
+
+          this.xrInputSources.forEach(inputSource => {
+            if (inputSource) {
+              const inputPos = inputSource.getPosition() as pc.Vec3;
+              if (inputSource.handedness === pc.XRHAND_LEFT) {
+                if (
+                  this.textInputSourceLeftPos &&
+                  this.textInputSourceLeftPos.element &&
+                  this.textInputSourceLeftPos.element.text
+                ) {
+                  this.textInputSourceLeftPos.element.text = `${inputPos.x.toFixed(
+                    4
+                  )},${inputPos.y.toFixed(4)},${inputPos.z.toFixed(4)}`;
+                }
+              } else {
+                if (
+                  this.textInputSourceRightPos &&
+                  this.textInputSourceRightPos.element &&
+                  this.textInputSourceRightPos.element.text
+                ) {
+                  this.textInputSourceRightPos.element.text = `${inputPos.x.toFixed(
+                    4
+                  )},${inputPos.y.toFixed(4)},${inputPos.z.toFixed(4)}`;
+                }
+              }
+            }
+          });
         });
 
         this.vrCamera?.camera?.startXr(pc.XRTYPE_VR, pc.XRSPACE_LOCALFLOOR, {
@@ -369,17 +646,54 @@ export class Renderer {
           },
         });
       }
-
-      // if (this.vrCamera && this.vrCamera.camera) {
-      //   this.vrCamera.camera.rect = new pc.Vec4(0, 0.5, 1, 0.5);
-      // }
-      // if (this.camera && this.camera.camera) {
-      //   this.camera.camera.rect = new pc.Vec4(0, 0, 1, 0.5);
-      // }
     }
   }
 
   public getVRCameraPos(): pc.Vec3 | undefined {
     return this.vrCamera?.getPosition();
+  }
+
+  public setTextInputSourceLeftPos(text: string): void {
+    if (
+      this.textInputSourceLeftPos &&
+      this.textInputSourceLeftPos.element &&
+      this.textInputSourceLeftPos.element.text &&
+      this.isLocalDemo
+    ) {
+      this.textInputSourceLeftPos.element.text = text;
+    }
+  }
+
+  public setTextTargetLeftPos(text: string): void {
+    if (
+      this.textTargetLeftPos &&
+      this.textTargetLeftPos.element &&
+      this.textTargetLeftPos.element.text &&
+      this.isLocalDemo
+    ) {
+      this.textTargetLeftPos.element.text = text;
+    }
+  }
+
+  public setTextInputSourceRightPos(text: string): void {
+    if (
+      this.textInputSourceRightPos &&
+      this.textInputSourceRightPos.element &&
+      this.textInputSourceRightPos.element.text &&
+      this.isLocalDemo
+    ) {
+      this.textInputSourceRightPos.element.text = text;
+    }
+  }
+
+  public setTextTargetRightPos(text: string): void {
+    if (
+      this.textTargetRightPos &&
+      this.textTargetRightPos.element &&
+      this.textTargetRightPos.element.text &&
+      this.isLocalDemo
+    ) {
+      this.textTargetRightPos.element.text = text;
+    }
   }
 }

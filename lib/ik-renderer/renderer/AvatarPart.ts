@@ -5,6 +5,8 @@ export enum AvatarPart {
   Chest = 'J_Bip_C_Chest',
   Neck = 'J_Bip_C_Neck',
   Head = 'J_Bip_C_Head',
+  RightEye = 'J_Adj_R_FaceEye',
+  LeftEye = 'J_Adj_L_FaceEye',
 
   RightShoulder = 'J_Bip_R_Shoulder',
   RightUpperArm = 'J_Bip_R_UpperArm',

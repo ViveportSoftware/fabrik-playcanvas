@@ -3,11 +3,21 @@ import {AvatarPart} from './AvatarPart';
 import {Renderer} from './Renderer';
 
 export class AvatarRenderer extends Renderer {
-  private avatarEntity?: pc.Entity;
+  public avatarEntity?: pc.Entity;
+
+  private ikBoneRootEntity?: pc.Entity;
 
   private isRenderForwardLines: boolean = false;
 
   private boneLengthMap: Map<AvatarPart, number> = new Map();
+
+  private scale: number = 1;
+
+  private localTargetMap: Map<string, pc.Entity> = new Map();
+
+  private xrCalculateScaleCallback: Array<
+    (boneLengthMap: Map<AvatarPart, number>) => void
+  > = new Array();
 
   constructor(
     app: pc.Application | undefined = undefined,
@@ -27,17 +37,62 @@ export class AvatarRenderer extends Renderer {
       this.avatarEntity = this.addAvatar();
     }
 
-    this.addXRStartCallback(
-      ((vrCamera: pc.Entity) => {
-        if (this.avatarEntity) {
-          const head = this.avatarEntity.findByName(AvatarPart.Head);
-          if (head) {
-            vrCamera.setPosition(head.getPosition());
-            head.setLocalScale(0, 0, 0);
+    if (!this.ikBoneRootEntity) {
+      this.ikBoneRootEntity = new pc.Entity('ikBoneRootEntity');
+      if (this.rootEntity) {
+        this.rootEntity.addChild(this.ikBoneRootEntity);
+      } else {
+        this.app?.root.addChild(this.ikBoneRootEntity);
+      }
+    }
+
+    this.app?.xr.once('update', () => {
+      this.calculateAvatarScaleWithHMD();
+    });
+
+    if (this.isLocalDemo) {
+      this.app?.xr.on('update', frame => {
+        if (frame) {
+          // @ts-ignore
+          const pose = frame.getViewerPose(this.app?.xr._referenceSpace);
+          const position = pose.transform.position;
+          const orientation = pose.transform.orientation;
+
+          this.avatarEntity?.setLocalPosition(
+            position.x,
+            this.avatarEntity.getLocalPosition().y,
+            position.z
+          );
+
+          if (
+            this.textHMDRotation &&
+            this.textHMDRotation.element &&
+            this.textHMDRotation.element.text &&
+            this.isLocalDemo
+          ) {
+            this.textHMDRotation.element.text = `${orientation.x.toFixed(
+              4
+            )}, ${orientation.y.toFixed(4)}, ${orientation.z.toFixed(
+              4
+            )}, ${orientation.w.toFixed(4)}`;
+          }
+
+          this.avatarEntity?.setLocalRotation(0, orientation.y, 0, 1);
+
+          if (
+            this.textAvatarForward &&
+            this.textAvatarForward.element &&
+            this.textAvatarForward.element.text &&
+            this.isLocalDemo
+          ) {
+            const forward = this.avatarEntity?.forward;
+            this.textAvatarForward.element.text = `${forward?.x.toFixed(
+              4
+            )}, ${forward?.y.toFixed(4)}, ${forward?.z.toFixed(4)}`;
           }
         }
-      }).bind(this)
-    );
+      });
+    }
   }
 
   public addAvatar(): pc.Entity | undefined {
@@ -49,13 +104,18 @@ export class AvatarRenderer extends Renderer {
       ).instantiateRenderEntity();
 
       // entity.setLocalScale(6, 6, 6);
-      // entity.setLocalPosition(0, -4.5, 0);
+      entity.setLocalPosition(0, 0, 0.2);
+      // entity.setLocalRotation(0, -0.2, 0, 1);
+
+      // entity.setEulerAngles(0, 0, 0);
 
       // const hips = entity?.findByName(AvatarPart.Hips);
       // if (hips) {
       //   const hipsPos = hips?.getPosition();
       //   entity.setPosition(0, -1 * hipsPos?.y, -0.2);
       // }
+
+      // console.error('addAvatar:', entity);
 
       if (this.rootEntity) {
         this.rootEntity.addChild(entity);
@@ -80,6 +140,141 @@ export class AvatarRenderer extends Renderer {
       return hipsPos;
     }
     return;
+  }
+
+  public addBone(length: number, color: pc.Color, prefix = ''): pc.Entity {
+    const jointEntity = new pc.Entity(`${prefix}_joint`);
+
+    const graphicsDevice = this.app?.graphicsDevice as pc.GraphicsDevice;
+
+    const jointMesh = pc.createSphere(graphicsDevice, {
+      radius: 0.02,
+    });
+
+    const jointMaterial = new pc.BasicMaterial();
+    jointMaterial.color = pc.Color.RED;
+
+    const jointMeshInstance = new pc.MeshInstance(jointMesh, jointMaterial);
+
+    jointEntity.addComponent('render', {
+      meshInstances: [jointMeshInstance],
+      renderStyle: pc.RENDERSTYLE_WIREFRAME,
+    });
+
+    const boneEntity = new pc.Entity(`${prefix}_bone`);
+
+    const boneMesh = pc.createCone(graphicsDevice, {
+      baseRadius: 0.02,
+      peakRadius: 0.005,
+      height: length,
+      capSegments: 5,
+    });
+
+    let m = new pc.StandardMaterial();
+
+    m.emissive = color;
+    m.update();
+
+    const boneMeshInstance = new pc.MeshInstance(boneMesh, m);
+
+    boneEntity.addComponent('render', {
+      meshInstances: [boneMeshInstance],
+      renderStyle: pc.RENDERSTYLE_WIREFRAME,
+    });
+
+    // https://developer.playcanvas.com/en/api/pc.Entity.html#lookAt
+    // Reorients the graph node so that the negative z-axis points towards the target.
+    //
+    // Force bone grow on Z_NEG (-Z)
+    boneEntity.rotate(-90, 0, 0);
+    boneEntity.translate(0, 0, -length * 0.5);
+
+    jointEntity.addChild(boneEntity);
+
+    this.ikBoneRootEntity?.addChild(jointEntity);
+
+    return jointEntity;
+  }
+
+  public addTarget(name: string = 'target'): pc.Entity {
+    const targetEntity = new pc.Entity(name);
+
+    const graphicsDevice = this.app?.graphicsDevice as pc.GraphicsDevice;
+
+    const mesh = pc.createSphere(graphicsDevice, {
+      radius: 0.02,
+    });
+
+    const material = new pc.BasicMaterial();
+    material.color = pc.Color.YELLOW;
+
+    const meshInstance = new pc.MeshInstance(mesh, material);
+
+    targetEntity.addComponent('render', {
+      meshInstances: [meshInstance],
+      renderStyle: pc.RENDERSTYLE_WIREFRAME,
+    });
+
+    this.avatarEntity?.addChild(targetEntity);
+
+    this.addLocalTarget(name);
+
+    return targetEntity;
+  }
+
+  public addLocalTarget(name: string = 'target'): void {
+    const targetEntity = new pc.Entity(name);
+
+    const graphicsDevice = this.app?.graphicsDevice as pc.GraphicsDevice;
+
+    const mesh = pc.createSphere(graphicsDevice, {
+      radius: 0.02,
+    });
+
+    const material = new pc.BasicMaterial();
+    material.color = pc.Color.BLUE;
+
+    const meshInstance = new pc.MeshInstance(mesh, material);
+
+    targetEntity.addComponent('render', {
+      meshInstances: [meshInstance],
+      renderStyle: pc.RENDERSTYLE_WIREFRAME,
+    });
+
+    this.ikBoneRootEntity?.addChild(targetEntity);
+
+    this.localTargetMap.set(name, targetEntity);
+  }
+
+  private addLocalForwardPoint(): void {
+    const e = new pc.Entity('forward-point');
+
+    const graphicsDevice = this.app?.graphicsDevice as pc.GraphicsDevice;
+
+    const mesh = pc.createSphere(graphicsDevice, {
+      radius: 0.02,
+    });
+
+    const material = new pc.BasicMaterial();
+    material.color = pc.Color.BLUE;
+
+    const meshInstance = new pc.MeshInstance(mesh, material);
+
+    e.addComponent('render', {
+      meshInstances: [meshInstance],
+      renderStyle: pc.RENDERSTYLE_WIREFRAME,
+    });
+
+    e.setLocalPosition(0, 1.6, -1);
+
+    this.avatarEntity?.addChild(e);
+  }
+
+  public setLocalTargetWithLocalPos(name: string, localPos: pc.Vec3): void {
+    const target = this.localTargetMap.get(name);
+    if (target) {
+      target.setLocalPosition(localPos);
+    }
   }
 
   public update(): void {
@@ -249,7 +444,7 @@ export class AvatarRenderer extends Renderer {
 
     this.boneLengthMap.set(AvatarPart.LeftShoulder, leftShoulderBoneLength);
     this.boneLengthMap.set(AvatarPart.LeftUpperArm, leftUpperArmBoneLength);
-    this.boneLengthMap.set(AvatarPart.LeftUpperArm, leftLowerArmBoneLength);
+    this.boneLengthMap.set(AvatarPart.LeftLowerArm, leftLowerArmBoneLength);
     this.boneLengthMap.set(AvatarPart.LeftHand, leftHandBoneLength);
 
     this.boneLengthMap.set(AvatarPart.RightHip, rightHipBoneLength);
@@ -261,34 +456,6 @@ export class AvatarRenderer extends Renderer {
     this.boneLengthMap.set(AvatarPart.LeftUpperLeg, leftUpperLegBoneLength);
     this.boneLengthMap.set(AvatarPart.LeftLowerLeg, leftLowerLegBoneLength);
     this.boneLengthMap.set(AvatarPart.LeftFoot, leftFootBoneLength);
-
-    // console.error('======== calculateBoneLenth ========');
-    // console.error('neckBoneLength:', neckBoneLength);
-
-    // console.error('hipsBoneLength:', hipsBoneLength);
-    // console.error('spineBoneLength:', spineBoneLength);
-    // console.error('chestBoneLength:', chestBoneLength);
-    // console.error('upperChestBoneLength:', upperChestBoneLength);
-
-    // console.error('rightShoulderBoneLength:', rightShoulderBoneLength);
-    // console.error('rightUpperArmBoneLength:', rightUpperArmBoneLength);
-    // console.error('rightLowerArmBoneLength:', rightLowerArmBoneLength);
-    // console.error('rightHandBoneLength:', rightHandBoneLength);
-
-    // console.error('leftShoulderBoneLength:', leftShoulderBoneLength);
-    // console.error('leftUpperArmBoneLength:', leftUpperArmBoneLength);
-    // console.error('leftLowerArmBoneLength:', leftLowerArmBoneLength);
-    // console.error('leftHandBoneLength:', leftHandBoneLength);
-
-    // console.error('rightHipBoneLength:', rightHipBoneLength);
-    // console.error('rightUpperLegBoneLength:', rightUpperLegBoneLength);
-    // console.error('rightLowerLegBoneLength:', rightLowerLegBoneLength);
-    // console.error('rightFootBoneLength:', rightFootBoneLength);
-
-    // console.error('leftHipBoneLength:', leftHipBoneLength);
-    // console.error('leftUpperLegBoneLength:', leftUpperLegBoneLength);
-    // console.error('leftLowerLegBoneLength:', leftLowerLegBoneLength);
-    // console.error('leftFootBoneLength:', leftFootBoneLength);
 
     return this.boneLengthMap;
   }
@@ -669,5 +836,44 @@ export class AvatarRenderer extends Renderer {
     }
 
     return 0;
+  }
+
+  public addXRCalculateScaleCallback(
+    fn: (boneLengthMap: Map<AvatarPart, number>) => void
+  ): void {
+    this.xrCalculateScaleCallback.push(fn);
+  }
+
+  private calculateAvatarScaleWithHMD(): void {
+    if (this.vrCamera) {
+      const vrCameraPos = this.vrCamera.getLocalPosition();
+      if (this.avatarEntity) {
+        const head = this.avatarEntity.findByName(AvatarPart.Head);
+        if (head) {
+          const headPos = head.getPosition();
+          head.setLocalScale(0, 0, 0);
+
+          this.addLocalForwardPoint();
+
+          this.scale = vrCameraPos.y / headPos.y;
+
+          this.avatarEntity.setLocalScale(this.scale, this.scale, this.scale);
+
+          this.calculateBoneLenth();
+
+          this.xrCalculateScaleCallback.forEach(fn => {
+            fn.call(this, this.boneLengthMap);
+          });
+        }
+      }
+    }
+  }
+
+  public getAvatarEntityForward(): pc.Vec3 | undefined {
+    return this.avatarEntity?.forward;
+  }
+
+  public getAvatarScale(): number {
+    return this.scale;
   }
 }

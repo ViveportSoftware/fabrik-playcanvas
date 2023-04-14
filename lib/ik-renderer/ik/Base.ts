@@ -3,6 +3,7 @@ import * as pc from 'playcanvas';
 
 import * as Fabrik from '../../fabrik';
 import * as Renderer from '../renderer';
+import {HumanoidPart} from './HumanoidPart';
 import {IK} from './IK';
 import {Target} from './Target';
 
@@ -38,12 +39,12 @@ export class Base implements IK {
   ): void {
     const cacheTarget = this.targetCacheMap.get(id);
     if (cacheTarget) {
-      cacheTarget.entity.setLocalPosition(pos.x, pos.y, pos.z);
+      cacheTarget.entity.setPosition(pos.x, pos.y, pos.z);
     } else {
-      const targetEntity = this.renderer?.addTarget();
+      const targetEntity = this.renderer?.addTarget(id);
       if (targetEntity) {
-        targetEntity.setLocalPosition(pos.x, pos.y, pos.z);
-        const target = new Target(id, pos, targetEntity);
+        targetEntity.setPosition(pos.x, pos.y, pos.z);
+        const target = new Target(id, targetEntity);
         this.targetCacheMap.set(target.id, target);
         if (!this.renderIKBone) {
           targetEntity.enabled = false;
@@ -70,7 +71,7 @@ export class Base implements IK {
 
     if (!target) return;
 
-    new TWEEN.Tween(target.pos)
+    new TWEEN.Tween(target.getPosition())
       .to(
         {
           x: randX,
@@ -83,7 +84,7 @@ export class Base implements IK {
       .onUpdate(() => {
         this.solveIK();
         this.render();
-        tick.call(this, target.pos);
+        tick.call(this, target.getPosition());
       })
       .onComplete(() => {
         this.randomMoveTarget(id, max, min, tick);
@@ -99,13 +100,70 @@ export class Base implements IK {
     if (this.needToSolve) {
       const targetPosMap: Map<string, Fabrik.Vec3> = new Map();
 
-      this.targetCacheMap.forEach(target => {
-        targetPosMap.set(target.id, target.pos);
-        target.entity.setLocalPosition(
-          target.pos.x,
-          target.pos.y,
-          target.pos.z
+      // scaling entity not effect local position
+      const avatarScale = (
+        this.renderer as Renderer.AvatarRenderer
+      ).getAvatarScale();
+
+      this.targetCacheMap.forEach((target, part) => {
+        const localPos = target.getLocalPosition();
+        const globalPos = target.getPosition();
+
+        switch (part) {
+          case HumanoidPart.RightArm:
+            this.renderer?.setTextInputSourceRightPos(
+              `${globalPos.x.toFixed(4)},${globalPos.y.toFixed(
+                4
+              )},${globalPos.z.toFixed(4)}`
+            );
+
+            this.renderer?.setTextTargetRightPos(
+              `${(localPos.x * avatarScale).toFixed(4)},${(
+                localPos.y * avatarScale
+              ).toFixed(4)},${(localPos.z * avatarScale).toFixed(4)}`
+            );
+            break;
+
+          case HumanoidPart.LeftArm:
+            this.renderer?.setTextInputSourceLeftPos(
+              `${globalPos.x.toFixed(4)},${globalPos.y.toFixed(
+                4
+              )},${globalPos.z.toFixed(4)}`
+            );
+
+            this.renderer?.setTextTargetLeftPos(
+              `${(localPos.x * avatarScale).toFixed(4)},${(
+                localPos.y * avatarScale
+              ).toFixed(4)},${(localPos.z * avatarScale).toFixed(4)}`
+            );
+            break;
+        }
+
+        const hipsPos = (
+          this.renderer as Renderer.AvatarRenderer
+        ).getAvatarHipsPosition();
+
+        if (hipsPos) {
+          (this.renderer as Renderer.AvatarRenderer).setLocalTargetWithLocalPos(
+            target.entity.name,
+            new pc.Vec3(
+              localPos.x * avatarScale,
+              localPos.y * avatarScale,
+              localPos.z * avatarScale
+            )
+          );
+        }
+
+        targetPosMap.set(
+          target.id,
+          new Fabrik.Vec3(
+            localPos.x * avatarScale,
+            localPos.y * avatarScale,
+            localPos.z * avatarScale
+          )
         );
+
+        // targetPosMap.set(target.id, target.getPosition());
       });
 
       this.solveForTargets(targetPosMap);
@@ -145,8 +203,11 @@ export class Base implements IK {
     );
   }
 
-  public render() {
+  public render(): void {
     const ikSolver = this.getSolver();
+    if (!ikSolver) {
+      return;
+    }
     const numChains = ikSolver.getNumChains();
 
     for (let chainIndex = 0; chainIndex < numChains; chainIndex++) {
@@ -253,7 +314,7 @@ export class Base implements IK {
     );
   }
 
-  public getSolver(): Fabrik.FabrikStructure3D {
+  public getSolver(): Fabrik.FabrikStructure3D | undefined {
     throw new Error('Method not implemented.');
   }
 
