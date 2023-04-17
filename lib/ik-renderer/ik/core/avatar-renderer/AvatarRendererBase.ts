@@ -1,8 +1,7 @@
-import * as Fabrik from '../../fabrik';
-import * as Renderer from '../renderer';
-
-import {Humanoid} from './core/humanoid/Humanoid';
-import {IK} from './core/IK';
+import * as Fabrik from '../../../../fabrik';
+import * as Renderer from '../../../renderer';
+import {IK} from '../IK';
+import {Humanoid} from '../humanoid/Humanoid';
 
 export class AvatarRendererBase {
   protected ik: IK | undefined;
