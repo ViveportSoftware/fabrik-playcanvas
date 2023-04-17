@@ -38,6 +38,7 @@ export class AvatarRendererNormal
 
   public update(): void {
     const avatarEntity = this.renderer?.getAvatarEntity();
+    console.error('[FIK][AvatarRendererNormal][update]:', avatarEntity);
     if (avatarEntity) {
       this.applyIKToAvatar(avatarEntity);
     }
