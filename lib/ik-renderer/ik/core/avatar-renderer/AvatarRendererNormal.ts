@@ -38,7 +38,6 @@ export class AvatarRendererNormal
 
   public update(): void {
     const avatarEntity = this.renderer?.getAvatarEntity();
-    console.error('[FIK][AvatarRendererNormal][update]:', avatarEntity);
     if (avatarEntity) {
       this.applyIKToAvatar(avatarEntity);
     }
@@ -396,6 +395,10 @@ export class AvatarRendererNormal
   }
 
   private applyIKToAvatar(avatarEntity: pc.Entity): void {
+    console.error(
+      '[FIK][AvatarRendererNormal][applyIKToAvatar]:this.getSolver()',
+      this.getSolver()
+    );
     if (!this.getSolver()) return;
 
     // this.applyIKToAvatarSpine(avatarEntity);
