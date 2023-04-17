@@ -91,9 +91,6 @@ export class IKRenderer {
     inputSource: pc.XrInputSource
   ): void {
     const target = this.ik.getTarget(targetPart);
-    if (this.debug) {
-      console.error('[FIK DEBUG]', target, inputSource);
-    }
     if (target && inputSource) {
       const inputPos = inputSource.getPosition() as pc.Vec3;
       const inputRotation = inputSource.getRotation() as pc.Quat;
@@ -124,6 +121,10 @@ export class IKRenderer {
         !IKRenderer.equalV3BetweenPCV3(targetPos, inputPos) ||
         !IKRenderer.equalBetweenQuat(targetRotation, inputRotation)
       ) {
+        if (this.debug) {
+          console.error('[FIK DEBUG] need to solve', target, inputSource);
+        }
+
         target.setPosition(
           new Fabrik.Vec3(inputPos?.x, inputPos?.y, inputPos?.z)
         );
