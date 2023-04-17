@@ -117,27 +117,10 @@ export class IKRenderer {
         }
       }
 
-      if (this.debug) {
-        console.error(
-          '[FIK DEBUG] IKRenderer.equalV3BetweenPCV3',
-          targetPos,
-          inputPos
-        );
-        console.error(
-          '[FIK DEBUG] IKRenderer.equalBetweenQuat',
-          targetRotation,
-          inputRotation
-        );
-      }
-
       if (
         !IKRenderer.equalV3BetweenPCV3(targetPos, inputPos) ||
         !IKRenderer.equalBetweenQuat(targetRotation, inputRotation)
       ) {
-        if (this.debug) {
-          console.error('[FIK DEBUG] need to solve', target, inputSource);
-        }
-
         target.setPosition(
           new Fabrik.Vec3(inputPos?.x, inputPos?.y, inputPos?.z)
         );

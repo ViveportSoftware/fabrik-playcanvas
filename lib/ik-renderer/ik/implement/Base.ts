@@ -17,6 +17,7 @@ export class Base implements IK {
   protected renderer: Renderer.Renderer | Renderer.AvatarRenderer | undefined;
 
   private renderIKBone: boolean = true;
+  private debug: boolean = false;
 
   constructor() {}
 
@@ -28,6 +29,10 @@ export class Base implements IK {
 
   public setRenderIKBone(renderIKBone: boolean): void {
     this.renderIKBone = renderIKBone;
+  }
+
+  public setDebug(debug: boolean): void {
+    this.debug = debug;
   }
 
   public addTarget(
@@ -106,9 +111,19 @@ export class Base implements IK {
         this.renderer as Renderer.AvatarRenderer
       ).getAvatarScale();
 
+      if (this.debug) {
+        console.error(`[FIK][IK][SolveIK]: avatarScale: ${avatarScale}`);
+      }
+
       this.targetCacheMap.forEach((target, part) => {
         const localPos = target.getLocalPosition();
         const globalPos = target.getPosition();
+
+        if (this.debug) {
+          console.error(
+            `[FIK][IK][SolveIK]: part: ${part}, localPos:${localPos}`
+          );
+        }
 
         switch (part) {
           case HumanoidPart.RightArm:
@@ -140,20 +155,14 @@ export class Base implements IK {
             break;
         }
 
-        const hipsPos = (
-          this.renderer as Renderer.AvatarRenderer
-        ).getAvatarHipsPosition();
-
-        if (hipsPos) {
-          (this.renderer as Renderer.AvatarRenderer).setLocalTargetWithLocalPos(
-            target.entity.name,
-            new pc.Vec3(
-              localPos.x * avatarScale,
-              localPos.y * avatarScale,
-              localPos.z * avatarScale
-            )
-          );
-        }
+        (this.renderer as Renderer.AvatarRenderer).setLocalTargetWithLocalPos(
+          target.entity.name,
+          new pc.Vec3(
+            localPos.x * avatarScale,
+            localPos.y * avatarScale,
+            localPos.z * avatarScale
+          )
+        );
 
         targetPosMap.set(
           target.id,
@@ -163,8 +172,6 @@ export class Base implements IK {
             localPos.z * avatarScale
           )
         );
-
-        // targetPosMap.set(target.id, target.getPosition());
       });
 
       this.solveForTargets(targetPosMap);

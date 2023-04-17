@@ -9,6 +9,7 @@ export interface IK {
   setNeedToSolve(needToSolve: boolean): void;
   setRenderer(renderer: Renderer.Renderer | Renderer.AvatarRenderer): void;
   setRenderIKBone(renderIKBone: boolean): void;
+  setDebug(debug: boolean): void;
   solveForTargets(targets: Map<string, Fabrik.Vec3>): void;
   run(): void;
   update(): void;
