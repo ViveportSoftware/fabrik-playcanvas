@@ -111,19 +111,9 @@ export class Base implements IK {
         this.renderer as Renderer.AvatarRenderer
       ).getAvatarScale();
 
-      if (this.debug) {
-        console.error(`[FIK][IK][SolveIK]: avatarScale: ${avatarScale}`);
-      }
-
       this.targetCacheMap.forEach((target, part) => {
         const localPos = target.getLocalPosition();
         const globalPos = target.getPosition();
-
-        if (this.debug) {
-          console.error(
-            `[FIK][IK][SolveIK]: part: ${part}, localPos:${localPos}`
-          );
-        }
 
         switch (part) {
           case HumanoidPart.RightArm:

@@ -187,6 +187,10 @@ export class AvatarRendererNormal
 
     if (!this.printOnceFlag) {
       this.printOnceFlag = true;
+      console.error(
+        `[FIK][applyIKToAvatarRightArm] avatarEntity: ${avatarEntity}`
+      );
+      console.error(`[FIK][applyIKToAvatarRightArm] chain: ${chain}`);
     }
 
     if (
