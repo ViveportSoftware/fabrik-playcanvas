@@ -700,4 +700,8 @@ export class Renderer {
       this.textTargetRightPos.element.text = text;
     }
   }
+
+  public setVRCamera(vrCamera: pc.Entity): void {
+    this.vrCamera = vrCamera;
+  }
 }
