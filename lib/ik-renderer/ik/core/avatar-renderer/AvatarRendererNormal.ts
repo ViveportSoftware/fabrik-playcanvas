@@ -395,10 +395,6 @@ export class AvatarRendererNormal
   }
 
   private applyIKToAvatar(avatarEntity: pc.Entity): void {
-    console.error(
-      '[FIK][AvatarRendererNormal][applyIKToAvatar]:this.getSolver()',
-      this.getSolver()
-    );
     if (!this.getSolver()) return;
 
     // this.applyIKToAvatarSpine(avatarEntity);

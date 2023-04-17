@@ -844,7 +844,7 @@ export class AvatarRenderer extends Renderer {
     this.xrCalculateScaleCallback.push(fn);
   }
 
-  private calculateAvatarScaleWithHMD(): void {
+  public calculateAvatarScaleWithHMD(): void {
     if (this.vrCamera) {
       const vrCameraPos = this.vrCamera.getLocalPosition();
       if (this.avatarEntity) {
