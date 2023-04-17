@@ -9,6 +9,7 @@ import * as Renderer from './renderer';
 export class IKRenderer {
   private ik: IK.IK = new IM01();
   private renderer: Renderer.Renderer | Renderer.AvatarRenderer;
+  private debug: boolean = false;
 
   public static pcV3ToFabrikV3(v: pc.Vec3): Fabrik.Vec3 {
     return new Fabrik.Vec3(v.x, v.y, v.z);
@@ -42,6 +43,10 @@ export class IKRenderer {
   public setIK(ik: IK.IK): void {
     this.ik = ik;
     this.ik.setRenderer(this.renderer);
+  }
+
+  public setDebug(debug: boolean): void {
+    this.debug = debug;
   }
 
   public run(): void {
@@ -86,6 +91,9 @@ export class IKRenderer {
     inputSource: pc.XrInputSource
   ): void {
     const target = this.ik.getTarget(targetPart);
+    if (this.debug) {
+      console.error('[FIK DEBUG]', target, inputSource);
+    }
     if (target && inputSource) {
       const inputPos = inputSource.getPosition() as pc.Vec3;
       const inputRotation = inputSource.getRotation() as pc.Quat;
