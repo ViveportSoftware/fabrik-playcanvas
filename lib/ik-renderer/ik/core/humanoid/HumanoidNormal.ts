@@ -1,10 +1,10 @@
-import * as Fabrik from '../../fabrik';
-import {AvatarPart} from '../renderer';
+import * as Fabrik from '../../../../fabrik';
+import {AvatarPart} from '../../../renderer';
+import {Util} from '../Util';
 import {Humanoid} from './Humanoid';
 import {HumanoidBase} from './HumanoidBase';
 import {HumanoidBoneLength} from './HumanoidBoneLength';
 import {HumanoidPart} from './HumanoidPart';
-import {Util} from './Util';
 
 export class HumanoidNormal extends HumanoidBase implements Humanoid {
   private boneLengthMap: Map<AvatarPart, number> = new Map();

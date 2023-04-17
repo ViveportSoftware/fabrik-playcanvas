@@ -1,5 +1,5 @@
 import * as pc from 'playcanvas';
-import * as Fabrik from '../../fabrik';
+import * as Fabrik from '../../../fabrik';
 
 export class Target {
   public id: string;

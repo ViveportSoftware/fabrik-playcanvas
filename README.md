@@ -2,6 +2,16 @@
 
 [Fabrik](http://www.andreasaristidou.com/FABRIK.html) algorithm rendered with [PlayCanvas](https://playcanvas.com/).
 
+## Project layout
+
+- `fabrik` - porting from [caliko](https://github.com/FedUni/caliko) to typescript
+
+- `ik-renderer`
+
+  - `ik` - implement Fabrik for humanoid
+
+  - `renderer` - play canvas renderder
+
 ## Class Diagram
 
 ```mermaid
@@ -22,7 +32,7 @@ classDiagram
       +update(): void;
     }
 
-    IK <|-- IKDemoHumanoidVRM: implement
+    IK <|-- HumanoidVRM: implement
 
     class Renderer {
 
@@ -40,3 +50,34 @@ classDiagram
 
 
 ```
+
+## How to use
+
+```
+  // get your VRM avatar
+  const avatar = this.avatarRoot.findByName('VRM_AVATAR_RENDER');
+
+  // init FIK.Renderer.AvatarRenderer with PlayCanvas application
+  const renderer = new FIK.Renderer.AvatarRenderer(
+    this.app,
+    this.app.root,
+    avatar,
+    false
+  );
+
+  // init FIK.IKRenderer
+  this.ikRenderer = new FIK.IKRenderer(renderer);
+
+  // init IK implement
+  const ik = new FIK.Implement.HumanoidVRM();
+
+  // render IK bone for debug
+  ik.setRenderIKBone(true);
+
+  this.ikRenderer.setIK(ik);
+  this.ikRenderer.run();
+```
+
+## Todos
+
+- More IK algorithms (ideally, like [FinalIK](http://www.root-motion.com/finalikdox/html/index.html))

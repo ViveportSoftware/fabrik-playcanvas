@@ -1,39 +1,27 @@
 import * as pc from 'playcanvas';
-import * as Fabrik from '../../fabrik';
-import {AvatarPart} from '../renderer/AvatarPart';
+import * as Fabrik from '../../../../fabrik';
 
-import {IK} from '.';
-import {IKRenderer} from '../IKRenderer';
-import * as Renderer from '../renderer';
+import * as Renderer from '../../../renderer';
+import {Base} from '../../implement/Base';
+import {Util} from '../Util';
+import {HumanoidLocalHinge} from '../humanoid/HumanoidLocalHinge';
+import {HumanoidPart} from '../humanoid/HumanoidPart';
 import {AvatarRenderer} from './AvatarRenderer';
 import {AvatarRendererBase} from './AvatarRendererBase';
-import {HumanoidNormal} from './HumanoidNormal';
-import {HumanoidPart} from './HumanoidPart';
-import {Util} from './Util';
 
-export class AvatarRendererNormal
+export class AvatarRendererLocalHinge
   extends AvatarRendererBase
   implements AvatarRenderer
 {
   constructor(
-    ik: IK | undefined,
+    ik: Base | undefined,
     renderer: Renderer.AvatarRenderer | undefined
   ) {
     super(ik, renderer);
+    this.ik = ik;
 
-    if (this.renderer) {
-      this.renderer.addXRCalculateScaleCallback(boneLengthMap => {
-        const hipsPos = this.renderer?.getAvatarHipsPosition();
-        if (hipsPos) {
-          const fabrikHipsPos = IKRenderer.pcV3ToFabrikV3(hipsPos);
-
-          this.ikHumanoid = new HumanoidNormal(fabrikHipsPos, boneLengthMap);
-        }
-      });
-    }
+    this.ikHumanoid = new HumanoidLocalHinge();
   }
-
-  public run(): void {}
 
   public update(): void {
     if (this.renderer) {
@@ -53,43 +41,7 @@ export class AvatarRendererNormal
   ): void {
     const q1 = src.getRotation();
     const q2 = new pc.Quat().setFromEulerAngles(angles.x, angles.y, angles.z);
-
-    const avatarAngles = this.renderer?.getAvatarEntity()?.getEulerAngles();
-    if (avatarAngles) {
-      const q3 = new pc.Quat().setFromEulerAngles(0, avatarAngles.y, 0);
-      dest.setRotation(q3.mul(q1).mul(q2));
-    } else {
-      dest.setRotation(q1.mul(q2));
-    }
-  }
-
-  private applyRotationByInputSource(
-    src: pc.Entity,
-    dest: pc.GraphNode,
-    angles: Fabrik.Vec3,
-    q: pc.Quat
-  ): void {
-    const q1 = src.getRotation();
-    const q2 = new pc.Quat().setFromEulerAngles(angles.x, angles.y, angles.z);
-    dest.setRotation(q1.mul2(q, q2));
-  }
-
-  private applyRotationForceFront(
-    src: pc.Entity,
-    dest: pc.GraphNode,
-    angles: Fabrik.Vec3
-  ): void {
-    const q1 = src.getRotation();
-    const q2 = new pc.Quat().setFromEulerAngles(angles.x, angles.y, angles.z);
-
-    let q = q1.mul(q2);
-
-    dest.setRotation(q);
-
-    if (dest.forward.z > 0.01) {
-      // console.log(dest.forward.z);
-      dest.rotateLocal(0, 180, 0);
-    }
+    dest.setRotation(q1.mul(q2));
   }
 
   private applyRotationByJoints(
@@ -115,11 +67,13 @@ export class AvatarRendererNormal
   }
 
   private applyIKToAvatarSpine(avatarEntity: pc.Entity): void {
-    const avatarHead = avatarEntity.findByName(AvatarPart.Head);
-    const avatarChest = avatarEntity.findByName(AvatarPart.Chest);
-    const avatarUpperChest = avatarEntity.findByName(AvatarPart.UpperChest);
+    const avatarHips = avatarEntity.findByName(Renderer.AvatarPart.Head);
+    const avatarChest = avatarEntity.findByName(Renderer.AvatarPart.Chest);
+    const avatarUpperChest = avatarEntity.findByName(
+      Renderer.AvatarPart.UpperChest
+    );
 
-    const chain = this.getSolver()?.getChainByName(HumanoidPart.Spine);
+    const chain = this.getSolver()?.getChainByName(Renderer.AvatarPart.Spine);
     const chainName = chain?.getName() as string;
 
     const ikChest = chain?.getBone(1);
@@ -144,7 +98,7 @@ export class AvatarRendererNormal
   }
 
   private applyIKToAvatarHead(avatarEntity: pc.Entity): void {
-    const avatarNeck = avatarEntity.findByName(AvatarPart.Neck);
+    const avatarNeck = avatarEntity.findByName(Renderer.AvatarPart.Neck);
 
     const chain = this.getSolver()?.getChainByName(HumanoidPart.Head);
     const chainName = chain?.getName() as string;
@@ -162,43 +116,80 @@ export class AvatarRendererNormal
 
   private applyIKToAvatarRightArm(avatarEntity: pc.Entity): void {
     const avatarRightUpperArm = avatarEntity.findByName(
-      AvatarPart.RightUpperArm
+      Renderer.AvatarPart.RightUpperArm
     );
     const avatarRightLowerArm = avatarEntity.findByName(
-      AvatarPart.RightLowerArm
+      Renderer.AvatarPart.RightLowerArm
     );
-    const avatarRightHand = avatarEntity.findByName(AvatarPart.RightHand);
+    const avatarRightHand = avatarEntity.findByName(
+      Renderer.AvatarPart.RightHand
+    );
 
     const chain = this.getSolver()?.getChainByName(HumanoidPart.RightArm);
     const chainName = chain?.getName() as string;
 
     const ikRightSoulderBone = chain?.getBone(1);
     const ikRightUpperArmBone01 = chain?.getBone(2);
-    const ikRightLowerArmBone01 = chain?.getBone(3);
-    const ikRightHandBone = chain?.getBone(4);
+    const ikRightUpperArmBone02 = chain?.getBone(3);
+    const ikRightUpperArmBone03 = chain?.getBone(4);
+    const ikRightLowerArmBone01 = chain?.getBone(4);
+    const ikRightLowerArmBone02 = chain?.getBone(6);
+    const ikRightLowerArmBone03 = chain?.getBone(7);
+    const ikRightHandBone = chain?.getBone(8);
 
     const ikRightSoulderBoneEntity = this.ik?.getBoneFromCache(chainName, 1);
     const ikRightUpperArmBoneEntity01 = this.ik?.getBoneFromCache(chainName, 2);
-    const ikRightLowerArmBoneEntity01 = this.ik?.getBoneFromCache(chainName, 3);
-    const ikRightHandBoneEntity = this.ik?.getBoneFromCache(chainName, 4);
+    const ikRightUpperArmBoneEntity02 = this.ik?.getBoneFromCache(chainName, 3);
+    const ikRightUpperArmBoneEntity03 = this.ik?.getBoneFromCache(chainName, 4);
+    const ikRightLowerArmBoneEntity01 = this.ik?.getBoneFromCache(chainName, 4);
+    const ikRightLowerArmBoneEntity02 = this.ik?.getBoneFromCache(chainName, 6);
+    const ikRightLowerArmBoneEntity03 = this.ik?.getBoneFromCache(chainName, 7);
+    const ikRightHandBoneEntity = this.ik?.getBoneFromCache(chainName, 8);
 
     const eulerAnglesRightArm = new Fabrik.Vec3(
       Util.applyApproximatelyEqualsTolerance(0),
-      Util.applyApproximatelyEqualsTolerance(90),
+      Util.applyApproximatelyEqualsTolerance(-90),
       Util.applyApproximatelyEqualsTolerance(0)
     );
 
     if (!this.printOnceFlag) {
       this.printOnceFlag = true;
+      // console.log('ikRightUpperArmBone01:', ikRightUpperArmBone01);
+      // console.log('ikRightUpperArmBone02:', ikRightUpperArmBone02);
+      // console.log('ikRightUpperArmBone03:', ikRightUpperArmBone03);
+
+      // console.log('ikRightUpperArmBoneEntity01:', ikRightUpperArmBoneEntity01);
+      // console.log('ikRightUpperArmBoneEntity02:', ikRightUpperArmBoneEntity02);
+      // console.log('ikRightUpperArmBoneEntity03:', ikRightUpperArmBoneEntity03);
+
+      // console.log(
+      //   'ikRightUpperArmBoneEntity01:',
+      //   ikRightUpperArmBoneEntity01?.getEulerAngles()
+      // );
+      // console.log(
+      //   'ikRightUpperArmBoneEntity02:',
+      //   ikRightUpperArmBoneEntity02?.getEulerAngles()
+      // );
+      // console.log(
+      //   'ikRightUpperArmBoneEntity03:',
+      //   ikRightUpperArmBoneEntity03?.getEulerAngles()
+      // );
+      console.log('ikRightLowerArmBone01:', ikRightLowerArmBone01);
+      console.log('ikRightLowerArmBoneEntity01:', ikRightLowerArmBoneEntity01);
     }
 
     if (
       avatarRightUpperArm &&
       ikRightUpperArmBone01 &&
-      ikRightUpperArmBoneEntity01
+      ikRightUpperArmBone02 &&
+      // ikRightUpperArmBone03
+      ikRightUpperArmBoneEntity01 &&
+      ikRightUpperArmBoneEntity02
+      // ikRightUpperArmBoneEntity03
     ) {
-      this.applyRotation(
-        ikRightUpperArmBoneEntity01,
+      this.applyRotationByJoints(
+        // [ikRightUpperArmBone01, ikRightUpperArmBone02, ikRightUpperArmBone03],
+        [ikRightUpperArmBone01, ikRightUpperArmBone02],
         avatarRightUpperArm,
         eulerAnglesRightArm
       );
@@ -212,36 +203,33 @@ export class AvatarRendererNormal
       this.applyRotation(
         ikRightLowerArmBoneEntity01,
         avatarRightLowerArm,
-        eulerAnglesRightArm
+        new Fabrik.Vec3(
+          Util.applyApproximatelyEqualsTolerance(0),
+          Util.applyApproximatelyEqualsTolerance(90),
+          Util.applyApproximatelyEqualsTolerance(0)
+        )
       );
     }
 
     if (avatarRightHand && ikRightHandBone && ikRightHandBoneEntity) {
-      const target = this.ik?.getTarget(HumanoidPart.RightArm);
-      if (target) {
-        const rotation = target?.getRotation();
-        if (this.renderer?.isInXR()) {
-          this.applyRotationByInputSource(
-            ikRightHandBoneEntity,
-            avatarRightHand,
-            eulerAnglesRightArm,
-            rotation
-          );
-        } else {
-          this.applyRotation(
-            ikRightHandBoneEntity,
-            avatarRightHand,
-            eulerAnglesRightArm
-          );
-        }
-      }
+      this.applyRotation(
+        ikRightHandBoneEntity,
+        avatarRightHand,
+        eulerAnglesRightArm
+      );
     }
   }
 
   private applyIKToAvatarLeftArm(avatarEntity: pc.Entity): void {
-    const avatarLeftUpperArm = avatarEntity.findByName(AvatarPart.LeftUpperArm);
-    const avatarLeftLowerArm = avatarEntity.findByName(AvatarPart.LeftLowerArm);
-    const avatarLeftHand = avatarEntity.findByName(AvatarPart.LeftHand);
+    const avatarLeftUpperArm = avatarEntity.findByName(
+      Renderer.AvatarPart.LeftUpperArm
+    );
+    const avatarLeftLowerArm = avatarEntity.findByName(
+      Renderer.AvatarPart.LeftLowerArm
+    );
+    const avatarLeftHand = avatarEntity.findByName(
+      Renderer.AvatarPart.LeftHand
+    );
 
     const chain = this.getSolver()?.getChainByName(HumanoidPart.LeftArm);
     const chainName = chain?.getName() as string;
@@ -275,35 +263,24 @@ export class AvatarRendererNormal
     }
 
     if (avatarLeftHand && ikLeftHandBone && ikLeftHandBoneEntity) {
-      const target = this.ik?.getTarget(HumanoidPart.LeftArm);
-      if (target) {
-        const rotation = target?.getRotation();
-        if (this.renderer?.isInXR()) {
-          this.applyRotationByInputSource(
-            ikLeftHandBoneEntity,
-            avatarLeftHand,
-            eulerAnglesLeftArm,
-            rotation
-          );
-        } else {
-          this.applyRotation(
-            ikLeftHandBoneEntity,
-            avatarLeftHand,
-            eulerAnglesLeftArm
-          );
-        }
-      }
+      this.applyRotation(
+        ikLeftHandBoneEntity,
+        avatarLeftHand,
+        eulerAnglesLeftArm
+      );
     }
   }
 
   private applyIKToAvatarRightLeg(avatarEntity: pc.Entity): void {
     const avatarRightUpperLeg = avatarEntity.findByName(
-      AvatarPart.RightUpperLeg
+      Renderer.AvatarPart.RightUpperLeg
     );
     const avatarRightLowerLeg = avatarEntity.findByName(
-      AvatarPart.RightLowerLeg
+      Renderer.AvatarPart.RightLowerLeg
     );
-    const avatarRightFoot = avatarEntity.findByName(AvatarPart.RightFoot);
+    const avatarRightFoot = avatarEntity.findByName(
+      Renderer.AvatarPart.RightFoot
+    );
 
     const chain = this.getSolver()?.getChainByName(HumanoidPart.RightLeg);
     const chainName = chain?.getName() as string;
@@ -316,8 +293,7 @@ export class AvatarRendererNormal
     const ikRightLowerLegBoneEntity = this.ik?.getBoneFromCache(chainName, 3);
     const ikRightFootBoneEntity = this.ik?.getBoneFromCache(chainName, 4);
 
-    const eulerAngles = new Fabrik.Vec3(90, 0, 90);
-
+    const eulerAngles = new Fabrik.Vec3(90, 0, 0);
     if (
       avatarRightUpperLeg &&
       ikRightUpperLegBone &&
@@ -342,19 +318,21 @@ export class AvatarRendererNormal
       );
     }
 
-    // if (avatarRightFoot && ikRightFootBone && ikRightFootBoneEntity) {
-    //   this.applyRotation(
-    //     ikRightFootBoneEntity,
-    //     avatarRightFoot,
-    //     new Fabrik.Vec3(0, 0, 0)
-    //   );
-    // }
+    if (avatarRightFoot && ikRightFootBone && ikRightFootBoneEntity) {
+      this.applyRotation(ikRightFootBoneEntity, avatarRightFoot, eulerAngles);
+    }
   }
 
   private applyIKToAvatarLeftLeg(avatarEntity: pc.Entity): void {
-    const avatarLeftUpperLeg = avatarEntity.findByName(AvatarPart.LeftUpperLeg);
-    const avatarLeftLowerLeg = avatarEntity.findByName(AvatarPart.LeftLowerLeg);
-    const avatarLeftFoot = avatarEntity.findByName(AvatarPart.LeftFoot);
+    const avatarLeftUpperLeg = avatarEntity.findByName(
+      Renderer.AvatarPart.LeftUpperLeg
+    );
+    const avatarLeftLowerLeg = avatarEntity.findByName(
+      Renderer.AvatarPart.LeftLowerLeg
+    );
+    const avatarLeftFoot = avatarEntity.findByName(
+      Renderer.AvatarPart.LeftFoot
+    );
 
     const chain = this.getSolver()?.getChainByName(HumanoidPart.LeftLeg);
     const chainName = chain?.getName() as string;
@@ -367,7 +345,7 @@ export class AvatarRendererNormal
     const ikLeftLowerLegBoneEntity = this.ik?.getBoneFromCache(chainName, 3);
     const ikLeftFootBoneEntity = this.ik?.getBoneFromCache(chainName, 4);
 
-    const eulerAngles = new Fabrik.Vec3(90, 0, 90);
+    const eulerAngles = new Fabrik.Vec3(90, 0, 0);
     if (avatarLeftUpperLeg && ikLeftUpperLegBone && ikLeftUpperLegBoneEntity) {
       this.applyRotation(
         ikLeftUpperLegBoneEntity,
@@ -384,23 +362,17 @@ export class AvatarRendererNormal
       );
     }
 
-    // if (avatarLeftFoot && ikLeftFootBone && ikLeftFootBoneEntity) {
-    //   this.applyRotation(
-    //     ikLeftFootBoneEntity,
-    //     avatarLeftFoot,
-    //     new Fabrik.Vec3(0, 0, 0)
-    //   );
-    // }
+    if (avatarLeftFoot && ikLeftFootBone && ikLeftFootBoneEntity) {
+      this.applyRotation(ikLeftFootBoneEntity, avatarLeftFoot, eulerAngles);
+    }
   }
 
   private applyIKToAvatar(avatarEntity: pc.Entity): void {
-    if (!this.getSolver()) return;
-
-    // this.applyIKToAvatarSpine(avatarEntity);
+    this.applyIKToAvatarSpine(avatarEntity);
     this.applyIKToAvatarHead(avatarEntity);
     this.applyIKToAvatarRightArm(avatarEntity);
     this.applyIKToAvatarLeftArm(avatarEntity);
-    // this.applyIKToAvatarRightLeg(avatarEntity);
-    // this.applyIKToAvatarLeftLeg(avatarEntity);
+    this.applyIKToAvatarRightLeg(avatarEntity);
+    this.applyIKToAvatarLeftLeg(avatarEntity);
   }
 }

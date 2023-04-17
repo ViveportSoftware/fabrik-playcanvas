@@ -1,20 +1,14 @@
 import * as pc from 'playcanvas';
 import * as Fabrik from '../fabrik';
 
-import {IKDemo01} from './demo/IKDemo01';
 import * as IK from './ik';
-import {HumanoidPart} from './ik/HumanoidPart';
+import {HumanoidPart} from './ik/core/humanoid/HumanoidPart';
+import {IM01} from './ik/implement/IM01';
 import * as Renderer from './renderer';
 
 export class IKRenderer {
-  private ik: IK.IK = new IKDemo01();
+  private ik: IK.IK = new IM01();
   private renderer: Renderer.Renderer | Renderer.AvatarRenderer;
-
-  constructor(renderer: Renderer.Renderer | Renderer.AvatarRenderer) {
-    this.renderer = renderer;
-    this.renderer.addUpdateCallback(this.update.bind(this));
-    this.renderer.init();
-  }
 
   public static pcV3ToFabrikV3(v: pc.Vec3): Fabrik.Vec3 {
     return new Fabrik.Vec3(v.x, v.y, v.z);
@@ -34,6 +28,15 @@ export class IKRenderer {
 
   public static equalBetweenQuat(q1: pc.Quat, q2: pc.Quat): boolean {
     return q1.x == q2.x && q1.y == q2.y && q1.z == q2.z && q1.w == q2.w;
+  }
+
+  constructor(renderer: Renderer.Renderer | Renderer.AvatarRenderer) {
+    if (!renderer) {
+      throw new Error('Renderer is undefined');
+    }
+    this.renderer = renderer;
+    this.renderer.addUpdateCallback(this.update.bind(this));
+    this.renderer.init();
   }
 
   public setIK(ik: IK.IK): void {
@@ -87,24 +90,26 @@ export class IKRenderer {
       const inputPos = inputSource.getPosition() as pc.Vec3;
       const inputRotation = inputSource.getRotation() as pc.Quat;
       const targetPos = target.getPosition();
-      const targetLocalPos = target.getLocalPosition();
       const targetRotation = target.getRotation();
 
-      switch (targetPart) {
-        case HumanoidPart.LeftArm:
-          this.renderer.setTextTargetLeftPos(
-            `${targetLocalPos.x.toFixed(4)},${targetLocalPos.y.toFixed(
-              4
-            )},${targetLocalPos.z.toFixed(4)}`
-          );
-          break;
-        case HumanoidPart.RightArm:
-          this.renderer.setTextTargetRightPos(
-            `${targetLocalPos.x.toFixed(4)},${targetLocalPos.y.toFixed(
-              4
-            )},${targetLocalPos.z.toFixed(4)}`
-          );
-          break;
+      if (this.renderer && this.renderer.isLocalDemo) {
+        const targetLocalPos = target.getLocalPosition();
+        switch (targetPart) {
+          case HumanoidPart.LeftArm:
+            this.renderer.setTextTargetLeftPos(
+              `${targetLocalPos.x.toFixed(4)},${targetLocalPos.y.toFixed(
+                4
+              )},${targetLocalPos.z.toFixed(4)}`
+            );
+            break;
+          case HumanoidPart.RightArm:
+            this.renderer.setTextTargetRightPos(
+              `${targetLocalPos.x.toFixed(4)},${targetLocalPos.y.toFixed(
+                4
+              )},${targetLocalPos.z.toFixed(4)}`
+            );
+            break;
+        }
       }
 
       if (

@@ -1,7 +1,7 @@
-import * as Fabrik from '../../fabrik';
-import * as IK from '../ik';
+import * as IK from '..';
+import * as Fabrik from '../../../fabrik';
 
-export class IKDemoHumanoid01 extends IK.Base implements IK.IK {
+export class Humanoid01 extends IK.Base implements IK.IK {
   private solver: Fabrik.FabrikStructure3D;
 
   private chains: Map<IK.HumanoidPart, Fabrik.FabrikChain3D> = new Map();

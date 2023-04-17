@@ -1,10 +1,10 @@
 import {fromEvent} from 'rxjs';
-import * as Fabrik from '../../fabrik';
-import * as IK from '../ik';
+import * as IK from '..';
+import * as Fabrik from '../../../fabrik';
 
 const targetDistance = 3;
 
-export class IKDemoRobotLeg extends IK.Base implements IK.IK {
+export class RobotLeg extends IK.Base implements IK.IK {
   private solver: Fabrik.FabrikStructure3D;
   private boneScale: number = 0.1;
   private targetIndex: number = 0;

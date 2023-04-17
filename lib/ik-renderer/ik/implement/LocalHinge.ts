@@ -1,11 +1,12 @@
 import {fromEvent} from 'rxjs';
-import * as Fabrik from '../../fabrik';
-import * as IK from '../ik';
+import * as IK from '..';
+import * as Fabrik from '../../../fabrik';
 
 const NameChainHingeRotateY = 'chainHingeRotateY';
 const NameChainHingeRotateX = 'chainHingeRotateX';
 const NameChainHingeRotateZ = 'chainHingeRotateZ';
-export class IKDemoLocalHinge extends IK.Base implements IK.IK {
+
+export class LocalHinge extends IK.Base implements IK.IK {
   private solver: Fabrik.FabrikStructure3D;
   private angle: number = 0;
 

@@ -1,8 +1,8 @@
-import * as Fabrik from '../../fabrik';
-import * as IK from '../ik';
-import * as Renderer from '../renderer';
+import * as IK from '..';
+import * as Fabrik from '../../../fabrik';
+import * as Renderer from '../../renderer';
 
-export class IKDemoHumanoidVRM extends IK.Base implements IK.IK {
+export class HumanoidVRM extends IK.Base implements IK.IK {
   private ikAvatarRenderer: IK.AvatarRenderer | undefined;
 
   constructor() {

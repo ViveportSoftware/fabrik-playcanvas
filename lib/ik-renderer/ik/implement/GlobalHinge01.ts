@@ -1,12 +1,12 @@
 import {fromEvent} from 'rxjs';
-import * as Fabrik from '../../fabrik';
-import * as IK from '../ik';
+import * as IK from '..';
+import * as Fabrik from '../../../fabrik';
 
 const NameChainHingeRotateY = 'chainHingeRotateY';
 const NameChainHingeRotateX = 'chainHingeRotateX';
 const NameChainHingeRotateZ = 'chainHingeRotateZ';
 
-export class IKDemoGlobalHinge02 extends IK.Base implements IK.IK {
+export class GlobalHinge01 extends IK.Base implements IK.IK {
   private solver: Fabrik.FabrikStructure3D;
   private angle: number = 0;
 
@@ -47,24 +47,24 @@ export class IKDemoGlobalHinge02 extends IK.Base implements IK.IK {
       NameChainHingeRotateY,
       new Fabrik.Vec3(
         IK.Util.applyApproximatelyEqualsTolerance(0),
-        IK.Util.applyApproximatelyEqualsTolerance(1),
-        IK.Util.applyApproximatelyEqualsTolerance(-1)
+        IK.Util.applyApproximatelyEqualsTolerance(3),
+        IK.Util.applyApproximatelyEqualsTolerance(-3)
       )
     );
     this.addTarget(
       NameChainHingeRotateX,
       new Fabrik.Vec3(
         IK.Util.applyApproximatelyEqualsTolerance(1),
-        IK.Util.applyApproximatelyEqualsTolerance(1),
-        IK.Util.applyApproximatelyEqualsTolerance(-1)
+        IK.Util.applyApproximatelyEqualsTolerance(3),
+        IK.Util.applyApproximatelyEqualsTolerance(-3)
       )
     );
     this.addTarget(
       NameChainHingeRotateZ,
       new Fabrik.Vec3(
         IK.Util.applyApproximatelyEqualsTolerance(-1),
-        IK.Util.applyApproximatelyEqualsTolerance(1),
-        IK.Util.applyApproximatelyEqualsTolerance(-1)
+        IK.Util.applyApproximatelyEqualsTolerance(3),
+        IK.Util.applyApproximatelyEqualsTolerance(-3)
       )
     );
 
@@ -72,20 +72,8 @@ export class IKDemoGlobalHinge02 extends IK.Base implements IK.IK {
     // this.randomMoveTarget(NameChainHingeRotateX);
     // this.randomMoveTarget(NameChainHingeRotateZ);
 
-    console.log('======== all constraint angles zero ========');
-
     this.addChains();
 
-    this.solveIK();
-    this.render();
-
-    this.printRotation();
-
-    console.log('======== update all constraint angles to 90 degree ========');
-
-    this.updateChainsConstraint(0);
-
-    this.setNeedToSolve(true);
     this.solveIK();
     this.render();
 
@@ -104,25 +92,17 @@ export class IKDemoGlobalHinge02 extends IK.Base implements IK.IK {
     const basebone = IK.Util.createRootBone(
       new Fabrik.Vec3(0, 0, 0),
       Fabrik.Y_AXE,
-      1
+      0.5
     );
 
     chain.addBone(basebone);
 
-    chain.addConsecutiveHingedBone(
-      Fabrik.Y_AXE,
-      0.5,
-      Fabrik.JointType.GLOBAL_HINGE,
+    chain.setHingeBaseboneConstraint(
+      Fabrik.BaseboneConstraintType3D.GLOBAL_HINGE,
       Fabrik.Y_AXE,
       IK.Util.applyApproximatelyEqualsTolerance(0),
       IK.Util.applyApproximatelyEqualsTolerance(0),
       Fabrik.X_AXE
-    );
-
-    chain.setRotorBaseboneConstraint(
-      Fabrik.BaseboneConstraintType3D.GLOBAL_ROTOR,
-      Fabrik.Y_AXE,
-      IK.Util.applyApproximatelyEqualsTolerance(0)
     );
 
     this.solver.addChain(chain);
@@ -134,25 +114,17 @@ export class IKDemoGlobalHinge02 extends IK.Base implements IK.IK {
     const basebone = IK.Util.createRootBone(
       new Fabrik.Vec3(1, 0, 0),
       Fabrik.Y_AXE,
-      1
+      0.5
     );
 
     chain.addBone(basebone);
 
-    chain.addConsecutiveHingedBone(
-      Fabrik.Y_AXE,
-      0.5,
-      Fabrik.JointType.GLOBAL_HINGE,
+    chain.setHingeBaseboneConstraint(
+      Fabrik.BaseboneConstraintType3D.GLOBAL_HINGE,
       Fabrik.X_AXE,
       IK.Util.applyApproximatelyEqualsTolerance(0),
       IK.Util.applyApproximatelyEqualsTolerance(0),
       Fabrik.Z_NEG
-    );
-
-    chain.setRotorBaseboneConstraint(
-      Fabrik.BaseboneConstraintType3D.GLOBAL_ROTOR,
-      Fabrik.Y_AXE,
-      IK.Util.applyApproximatelyEqualsTolerance(0)
     );
 
     this.solver.addChain(chain);
@@ -164,38 +136,30 @@ export class IKDemoGlobalHinge02 extends IK.Base implements IK.IK {
     const basebone = IK.Util.createRootBone(
       new Fabrik.Vec3(-1, 0, 0),
       Fabrik.Y_AXE,
-      1
+      0.5
     );
 
     chain.addBone(basebone);
 
-    chain.addConsecutiveHingedBone(
-      Fabrik.Y_AXE,
-      0.5,
-      Fabrik.JointType.GLOBAL_HINGE,
+    chain.setHingeBaseboneConstraint(
+      Fabrik.BaseboneConstraintType3D.GLOBAL_HINGE,
       Fabrik.Z_AXE,
       IK.Util.applyApproximatelyEqualsTolerance(0),
       IK.Util.applyApproximatelyEqualsTolerance(0),
       Fabrik.X_AXE
     );
 
-    chain.setRotorBaseboneConstraint(
-      Fabrik.BaseboneConstraintType3D.GLOBAL_ROTOR,
-      Fabrik.Y_AXE,
-      IK.Util.applyApproximatelyEqualsTolerance(0)
-    );
-
     this.solver.addChain(chain);
   }
 
   private printRotation(): void {
-    const boneHingeRotateY = this.getBoneFromCache(NameChainHingeRotateY, 1);
-    const boneHingeRotateX = this.getBoneFromCache(NameChainHingeRotateX, 1);
-    const boneHingeRotateZ = this.getBoneFromCache(NameChainHingeRotateZ, 1);
+    const boneHingeRotateY = this.getBoneFromCache(NameChainHingeRotateY, 0);
+    const boneHingeRotateX = this.getBoneFromCache(NameChainHingeRotateX, 0);
+    const boneHingeRotateZ = this.getBoneFromCache(NameChainHingeRotateZ, 0);
 
-    console.log('boneHingeRotateY:', boneHingeRotateY?.getLocalEulerAngles());
-    console.log('boneHingeRotateX:', boneHingeRotateX?.getLocalEulerAngles());
-    console.log('boneHingeRotateZ:', boneHingeRotateZ?.getLocalEulerAngles());
+    console.log('boneHingeRotateY:', boneHingeRotateY?.getEulerAngles());
+    console.log('boneHingeRotateX:', boneHingeRotateX?.getEulerAngles());
+    console.log('boneHingeRotateZ:', boneHingeRotateZ?.getEulerAngles());
   }
 
   private updateChainsConstraint(angle: number): void {
@@ -209,27 +173,32 @@ export class IKDemoGlobalHinge02 extends IK.Base implements IK.IK {
       NameChainHingeRotateZ
     );
 
-    const boneHingeRotateY = chainHingeRotateY?.getBone(1);
-    const boneHingeRotateX = chainHingeRotateX?.getBone(1);
-    const boneHingeRotateZ = chainHingeRotateZ?.getBone(1);
+    console.log(chainHingeRotateY);
+    console.log(chainHingeRotateX);
+    console.log(chainHingeRotateZ);
 
-    console.log(boneHingeRotateY);
-    console.log(boneHingeRotateX);
-    console.log(boneHingeRotateZ);
-
-    boneHingeRotateY?.setHingeJointClockwiseConstraintDegs(0);
-    boneHingeRotateY?.setHingeJointAnticlockwiseConstraintDegs(
-      IK.Util.applyApproximatelyEqualsTolerance(angle)
+    chainHingeRotateY?.setHingeBaseboneConstraint(
+      Fabrik.BaseboneConstraintType3D.GLOBAL_HINGE,
+      Fabrik.Y_AXE,
+      IK.Util.applyApproximatelyEqualsTolerance(0),
+      IK.Util.applyApproximatelyEqualsTolerance(angle),
+      Fabrik.X_AXE
     );
 
-    boneHingeRotateX?.setHingeJointClockwiseConstraintDegs(angle);
-    boneHingeRotateX?.setHingeJointAnticlockwiseConstraintDegs(
-      IK.Util.applyApproximatelyEqualsTolerance(0)
+    chainHingeRotateX?.setHingeBaseboneConstraint(
+      Fabrik.BaseboneConstraintType3D.GLOBAL_HINGE,
+      Fabrik.X_AXE,
+      IK.Util.applyApproximatelyEqualsTolerance(angle),
+      IK.Util.applyApproximatelyEqualsTolerance(0),
+      Fabrik.Z_NEG
     );
 
-    boneHingeRotateZ?.setHingeJointClockwiseConstraintDegs(0);
-    boneHingeRotateZ?.setHingeJointAnticlockwiseConstraintDegs(
-      IK.Util.applyApproximatelyEqualsTolerance(angle)
+    chainHingeRotateZ?.setHingeBaseboneConstraint(
+      Fabrik.BaseboneConstraintType3D.GLOBAL_HINGE,
+      Fabrik.Z_AXE,
+      IK.Util.applyApproximatelyEqualsTolerance(0),
+      IK.Util.applyApproximatelyEqualsTolerance(angle),
+      Fabrik.X_AXE
     );
   }
 }

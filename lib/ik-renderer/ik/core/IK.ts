@@ -1,5 +1,5 @@
-import * as Fabrik from '../../fabrik';
-import * as Renderer from '../renderer';
+import * as Fabrik from '../../../fabrik';
+import * as Renderer from '../../renderer';
 import {Target} from './Target';
 
 export interface IK {

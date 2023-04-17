@@ -1,7 +1,7 @@
-import * as Fabrik from '../../fabrik';
-import * as IK from '../ik';
+import * as IK from '..';
+import * as Fabrik from '../../../fabrik';
 
-export class IKDemoConnectedChain extends IK.Base implements IK.IK {
+export class ConnectedChain extends IK.Base implements IK.IK {
   private solver: Fabrik.FabrikStructure3D;
 
   constructor() {

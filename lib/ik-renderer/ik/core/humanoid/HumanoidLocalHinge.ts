@@ -1,9 +1,9 @@
-import * as Fabrik from '../../fabrik';
+import * as Fabrik from '../../../../fabrik';
+import {Util} from '../Util';
 import {Humanoid} from './Humanoid';
 import {HumanoidBase} from './HumanoidBase';
 import {HumanoidBoneLength} from './HumanoidBoneLength';
 import {HumanoidPart} from './HumanoidPart';
-import {Util} from './Util';
 
 export class HumanoidLocalHinge extends HumanoidBase implements Humanoid {
   constructor() {

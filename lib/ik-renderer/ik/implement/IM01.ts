@@ -1,7 +1,9 @@
-import * as Fabrik from '../../fabrik';
-import * as IK from '../ik';
+import * as Fabrik from '../../../fabrik';
+import {IK} from '../core/IK';
+import {Util} from '../core/Util';
+import {Base} from './Base';
 
-export class IKDemo02 extends IK.Base implements IK.IK {
+export class IM01 extends Base implements IK {
   private solver: Fabrik.FabrikStructure3D;
 
   constructor() {
@@ -28,13 +30,7 @@ export class IKDemo02 extends IK.Base implements IK.IK {
 
     const chain = new Fabrik.FabrikChain3D('default');
 
-    const basebone = IK.Util.createRootBone(
-      new Fabrik.Vec3(0, 0, 0),
-      Fabrik.Y_AXE,
-      0.1
-    );
-
-    console.log(basebone);
+    const basebone = Util.createRootBone();
 
     chain.addBone(basebone);
 
@@ -42,12 +38,6 @@ export class IKDemo02 extends IK.Base implements IK.IK {
     chain.addConsecutiveRotorConstrainedBone(Fabrik.Y_AXE, 0.5, 90);
     chain.addConsecutiveRotorConstrainedBone(Fabrik.Y_AXE, 0.5, 90);
     chain.addConsecutiveRotorConstrainedBone(Fabrik.Y_AXE, 0.5, 90);
-
-    chain.setRotorBaseboneConstraint(
-      Fabrik.BaseboneConstraintType3D.GLOBAL_ROTOR,
-      Fabrik.Y_AXE,
-      45
-    );
 
     this.solver.addChain(chain);
 

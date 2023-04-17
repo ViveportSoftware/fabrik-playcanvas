@@ -1,4 +1,4 @@
-import * as Fabrik from '../../fabrik';
+import * as Fabrik from '../../../../fabrik';
 import {HumanoidPart} from './HumanoidPart';
 
 export class HumanoidBase {

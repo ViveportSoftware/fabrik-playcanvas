@@ -1,9 +1,10 @@
 import * as pc from 'playcanvas';
 import {fromEvent} from 'rxjs';
 
+// assets for local demo
 // font
 // import RobotoMediumUrl from '../assets/fonts/Roboto-Medium.json?url';
-// import RobotoMediumTextureUrl from '../assets/fonts/Roboto-Medium.png?url';
+// import RobotoMediumTextureUrl from '../assets/fonts/Roboto-Medium.png';
 // import assetsGLBAvatar from '../assets/glbs/avatar.glb?url';
 // import assetsImagesGrid from '../assets/images/grid.png';
 // @ts-ignore
@@ -61,6 +62,7 @@ export class Renderer {
 
   public async init() {
     if (this.app) {
+      console.warn('PlayCanvas application is already initial');
       return;
     }
 
@@ -140,9 +142,6 @@ export class Renderer {
 
   private async loadAssets(): Promise<void> {
     const assets: Array<pc.Asset> = [];
-
-    // console.error('RobotoMediumUrl:', RobotoMediumUrl);
-    // console.error('RobotoMediumTextureUrl:', RobotoMediumTextureUrl);
 
     if (this.isLocalDemo) {
       // assets.push(new pc.Asset('grid', 'texture', {url: assetsImagesGrid}));
@@ -655,6 +654,7 @@ export class Renderer {
   }
 
   public setTextInputSourceLeftPos(text: string): void {
+    if (!this.isLocalDemo) return;
     if (
       this.textInputSourceLeftPos &&
       this.textInputSourceLeftPos.element &&
@@ -666,6 +666,7 @@ export class Renderer {
   }
 
   public setTextTargetLeftPos(text: string): void {
+    if (!this.isLocalDemo) return;
     if (
       this.textTargetLeftPos &&
       this.textTargetLeftPos.element &&
@@ -677,6 +678,7 @@ export class Renderer {
   }
 
   public setTextInputSourceRightPos(text: string): void {
+    if (!this.isLocalDemo) return;
     if (
       this.textInputSourceRightPos &&
       this.textInputSourceRightPos.element &&
@@ -688,6 +690,7 @@ export class Renderer {
   }
 
   public setTextTargetRightPos(text: string): void {
+    if (!this.isLocalDemo) return;
     if (
       this.textTargetRightPos &&
       this.textTargetRightPos.element &&

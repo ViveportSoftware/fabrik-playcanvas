@@ -1,11 +1,12 @@
 import * as TWEEN from '@tweenjs/tween.js';
 import * as pc from 'playcanvas';
 
-import * as Fabrik from '../../fabrik';
-import * as Renderer from '../renderer';
-import {HumanoidPart} from './HumanoidPart';
-import {IK} from './IK';
-import {Target} from './Target';
+import * as Fabrik from '../../../fabrik';
+import * as Renderer from '../../renderer';
+
+import {IK} from '../core/IK';
+import {Target} from '../core/Target';
+import {HumanoidPart} from '../core/humanoid/HumanoidPart';
 
 export class Base implements IK {
   private boneEntityCacheMap: Map<string, Map<number, pc.Entity>> = new Map();

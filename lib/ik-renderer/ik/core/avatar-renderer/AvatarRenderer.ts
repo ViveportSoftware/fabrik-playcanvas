@@ -1,4 +1,4 @@
-import * as Fabrik from '../../fabrik';
+import * as Fabrik from '../../../../fabrik';
 
 export interface AvatarRenderer {
   getSolver(): Fabrik.FabrikStructure3D | undefined;
