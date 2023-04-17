@@ -47,6 +47,9 @@ export class IKRenderer {
 
   public setDebug(debug: boolean): void {
     this.debug = debug;
+    if (this.ik) {
+      this.ik.setDebug(debug);
+    }
   }
 
   public run(): void {
