@@ -846,9 +846,7 @@ export class AvatarRenderer extends Renderer {
   }
 
   public calculateAvatarScaleWithHMD(): void {
-    Logger.getInstance().log(
-      '[FIK][AvatarRender] calculateAvatarScaleWithHMD()'
-    );
+    Logger.getInstance().log('[AvatarRender] calculateAvatarScaleWithHMD()');
 
     if (this.vrCamera) {
       const vrCameraPos = this.vrCamera.getLocalPosition();
@@ -863,7 +861,7 @@ export class AvatarRenderer extends Renderer {
           this.scale = vrCameraPos.y / headPos.y;
 
           Logger.getInstance().log(
-            '[FIK][AvatarRender] calculateAvatarScaleWithHMD(): this.scale',
+            '[AvatarRender] calculateAvatarScaleWithHMD(): this.scale',
             this.scale
           );
 

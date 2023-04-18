@@ -29,19 +29,19 @@ class Logger {
 
   public log(...obj: any[]): void {
     if (this.debug) {
-      console.log(obj);
+      console.log('[FIK]', obj);
     }
   }
 
   public warn(...obj: any[]): void {
     if (this.debug) {
-      console.warn(obj);
+      console.warn('[FIK]', obj);
     }
   }
 
   public error(...obj: any[]): void {
     if (this.debug) {
-      console.error(obj);
+      console.error('[FIK]', obj);
     }
   }
 }
