@@ -29,19 +29,31 @@ class Logger {
 
   public log(message?: any, ...optionalParams: any[]): void {
     if (this.debug) {
-      console.log(`[FIK]${message}`, optionalParams);
+      if (optionalParams.length) {
+        console.log(`[FIK]${message}`, optionalParams);
+      } else {
+        console.log(`[FIK]${message}`);
+      }
     }
   }
 
   public warn(message?: any, ...optionalParams: any[]): void {
     if (this.debug) {
-      console.warn(`[FIK]${message}`, optionalParams);
+      if (optionalParams.length) {
+        console.warn(`[FIK]${message}`, optionalParams);
+      } else {
+        console.warn(`[FIK]${message}`);
+      }
     }
   }
 
   public error(message?: any, ...optionalParams: any[]): void {
     if (this.debug) {
-      console.error(`[FIK]${message}`, optionalParams);
+      if (optionalParams.length) {
+        console.error(`[FIK]${message}`, optionalParams);
+      } else {
+        console.error(`[FIK]${message}`);
+      }
     }
   }
 }
