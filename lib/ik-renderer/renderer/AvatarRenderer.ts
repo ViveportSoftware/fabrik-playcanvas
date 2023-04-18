@@ -46,11 +46,11 @@ export class AvatarRenderer extends Renderer {
       }
     }
 
-    this.app?.xr.once('update', () => {
-      this.calculateAvatarScaleWithHMD();
-    });
-
     if (this.isLocalDemo) {
+      this.app?.xr.once('update', () => {
+        this.calculateAvatarScaleWithHMD();
+      });
+
       this.app?.xr.on('update', frame => {
         if (frame) {
           // @ts-ignore
