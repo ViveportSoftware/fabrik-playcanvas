@@ -858,12 +858,13 @@ export class AvatarRenderer extends Renderer {
 
           this.addLocalForwardPoint();
 
+          Logger.getInstance().log(
+            `[AvatarRender] vrCameraPos.y: ${vrCameraPos.y}, headPos.y: ${headPos.y}`
+          );
+
           this.scale = vrCameraPos.y / headPos.y;
 
-          Logger.getInstance().log(
-            '[AvatarRender] calculateAvatarScaleWithHMD(): this.scale',
-            this.scale
-          );
+          Logger.getInstance().log(`[AvatarRender]this.scale: ${this.scale}`);
 
           this.avatarEntity.setLocalScale(this.scale, this.scale, this.scale);
 

@@ -191,9 +191,7 @@ export class AvatarRendererNormal
       Logger.getInstance().log(
         `[applyIKToAvatarRightArm] avatarEntity: ${avatarEntity}`
       );
-      Logger.getInstance().log(
-        `[FIK][applyIKToAvatarRightArm] chain: ${chain}`
-      );
+      Logger.getInstance().log(`[applyIKToAvatarRightArm] chain: ${chain}`);
     }
 
     if (
