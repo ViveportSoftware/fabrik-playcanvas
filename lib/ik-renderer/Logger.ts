@@ -27,21 +27,21 @@ class Logger {
     this.debug = debug;
   }
 
-  public log(...obj: any[]): void {
+  public log(message?: any, ...optionalParams: any[]): void {
     if (this.debug) {
-      console.log('[FIK]', obj);
+      console.log(`[FIK]${message}`, optionalParams);
     }
   }
 
-  public warn(...obj: any[]): void {
+  public warn(message?: any, ...optionalParams: any[]): void {
     if (this.debug) {
-      console.warn('[FIK]', obj);
+      console.warn(`[FIK]${message}`, optionalParams);
     }
   }
 
-  public error(...obj: any[]): void {
+  public error(message?: any, ...optionalParams: any[]): void {
     if (this.debug) {
-      console.error('[FIK]', obj);
+      console.error(`[FIK]${message}`, optionalParams);
     }
   }
 }
