@@ -17,7 +17,6 @@ export class Base implements IK {
   protected renderer: Renderer.Renderer | Renderer.AvatarRenderer | undefined;
 
   private renderIKBone: boolean = true;
-  private debug: boolean = false;
 
   constructor() {}
 
@@ -29,10 +28,6 @@ export class Base implements IK {
 
   public setRenderIKBone(renderIKBone: boolean): void {
     this.renderIKBone = renderIKBone;
-  }
-
-  public setDebug(debug: boolean): void {
-    this.debug = debug;
   }
 
   public addTarget(

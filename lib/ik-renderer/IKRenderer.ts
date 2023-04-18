@@ -1,6 +1,7 @@
 import * as pc from 'playcanvas';
 import * as Fabrik from '../fabrik';
 
+import {Logger} from './Logger';
 import * as IK from './ik';
 import {HumanoidPart} from './ik/core/humanoid/HumanoidPart';
 import {IM01} from './ik/implement/IM01';
@@ -9,7 +10,6 @@ import * as Renderer from './renderer';
 export class IKRenderer {
   private ik: IK.IK = new IM01();
   private renderer: Renderer.Renderer | Renderer.AvatarRenderer;
-  private debug: boolean = false;
 
   public static pcV3ToFabrikV3(v: pc.Vec3): Fabrik.Vec3 {
     return new Fabrik.Vec3(v.x, v.y, v.z);
@@ -46,9 +46,7 @@ export class IKRenderer {
   }
 
   public setDebug(debug: boolean): void {
-    this.debug = debug;
-    this.ik?.setDebug(debug);
-    this.renderer?.setDebug(debug);
+    Logger.getInstance().setDebug(debug);
   }
 
   public run(): void {

@@ -1,4 +1,5 @@
 import * as pc from 'playcanvas';
+import {Logger} from '../Logger';
 import {AvatarPart} from './AvatarPart';
 import {Renderer} from './Renderer';
 
@@ -845,9 +846,10 @@ export class AvatarRenderer extends Renderer {
   }
 
   public calculateAvatarScaleWithHMD(): void {
-    if (this.debug) {
-      console.log('[FIK][AvatarRender] calculateAvatarScaleWithHMD()');
-    }
+    Logger.getInstance().log(
+      '[FIK][AvatarRender] calculateAvatarScaleWithHMD()'
+    );
+
     if (this.vrCamera) {
       const vrCameraPos = this.vrCamera.getLocalPosition();
       if (this.avatarEntity) {
@@ -859,6 +861,11 @@ export class AvatarRenderer extends Renderer {
           this.addLocalForwardPoint();
 
           this.scale = vrCameraPos.y / headPos.y;
+
+          Logger.getInstance().log(
+            '[FIK][AvatarRender] calculateAvatarScaleWithHMD(): this.scale',
+            this.scale
+          );
 
           this.avatarEntity.setLocalScale(this.scale, this.scale, this.scale);
 
