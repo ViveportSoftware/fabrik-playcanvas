@@ -30,7 +30,7 @@ class Logger {
   public log(message?: any, ...optionalParams: any[]): void {
     if (this.debug) {
       if (optionalParams.length) {
-        console.log(`[FIK]${message}`, optionalParams);
+        console.log(`[FIK]${message}`, ...optionalParams);
       } else {
         console.log(`[FIK]${message}`);
       }
@@ -40,7 +40,7 @@ class Logger {
   public warn(message?: any, ...optionalParams: any[]): void {
     if (this.debug) {
       if (optionalParams.length) {
-        console.warn(`[FIK]${message}`, optionalParams);
+        console.warn(`[FIK]${message}`, ...optionalParams);
       } else {
         console.warn(`[FIK]${message}`);
       }
@@ -50,7 +50,7 @@ class Logger {
   public error(message?: any, ...optionalParams: any[]): void {
     if (this.debug) {
       if (optionalParams.length) {
-        console.error(`[FIK]${message}`, optionalParams);
+        console.error(`[FIK]${message}`, ...optionalParams);
       } else {
         console.error(`[FIK]${message}`);
       }
