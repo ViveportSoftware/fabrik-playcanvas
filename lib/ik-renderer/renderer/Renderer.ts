@@ -34,6 +34,7 @@ export class Renderer {
   private updateCallbacks: Array<(dt: number) => void> = new Array();
   protected rootEntity?: pc.Entity;
   public isLocalDemo: boolean = true;
+  protected debug: boolean = false;
 
   constructor(
     app: pc.Application | undefined = undefined,
@@ -703,5 +704,9 @@ export class Renderer {
 
   public setVRCamera(vrCamera: pc.Entity): void {
     this.vrCamera = vrCamera;
+  }
+
+  public setDebug(debug: boolean): void {
+    this.debug = debug;
   }
 }

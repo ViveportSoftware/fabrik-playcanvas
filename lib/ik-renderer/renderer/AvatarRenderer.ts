@@ -845,6 +845,9 @@ export class AvatarRenderer extends Renderer {
   }
 
   public calculateAvatarScaleWithHMD(): void {
+    if (this.debug) {
+      console.log('[FIK][AvatarRender] calculateAvatarScaleWithHMD()');
+    }
     if (this.vrCamera) {
       const vrCameraPos = this.vrCamera.getLocalPosition();
       if (this.avatarEntity) {
