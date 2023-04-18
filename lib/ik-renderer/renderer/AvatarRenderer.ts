@@ -116,7 +116,7 @@ export class AvatarRenderer extends Renderer {
       //   entity.setPosition(0, -1 * hipsPos?.y, -0.2);
       // }
 
-      // console.error('addAvatar:', entity);
+      Logger.getInstance().log('addAvatar:', entity);
 
       if (this.rootEntity) {
         this.rootEntity.addChild(entity);

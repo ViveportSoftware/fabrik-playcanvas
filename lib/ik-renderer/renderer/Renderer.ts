@@ -1,5 +1,6 @@
 import * as pc from 'playcanvas';
 import {fromEvent} from 'rxjs';
+import {Logger} from '../Logger';
 
 // assets for local demo
 // font
@@ -178,7 +179,7 @@ export class Renderer {
       if (resource) {
         fontAsset.data = resource;
       } else {
-        console.error(
+        Logger.getInstance().error(
           `Font Loading: You did'nt loaded ${fontAsset.name} json file`
         );
       }
@@ -642,7 +643,7 @@ export class Renderer {
 
         this.vrCamera?.camera?.startXr(pc.XRTYPE_VR, pc.XRSPACE_LOCALFLOOR, {
           callback: err => {
-            console.error('startXr callback err:', err);
+            Logger.getInstance().error('startXr callback err:', err);
           },
         });
       }

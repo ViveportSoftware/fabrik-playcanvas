@@ -2,6 +2,7 @@ import * as pc from 'playcanvas';
 import * as Fabrik from '../../../../fabrik';
 
 import {IKRenderer} from '../../../IKRenderer';
+import {Logger} from '../../../Logger';
 import * as Renderer from '../../../renderer';
 import {AvatarPart} from '../../../renderer';
 import {IK} from '../IK';
@@ -187,10 +188,12 @@ export class AvatarRendererNormal
 
     if (!this.printOnceFlag) {
       this.printOnceFlag = true;
-      console.error(
-        `[FIK][applyIKToAvatarRightArm] avatarEntity: ${avatarEntity}`
+      Logger.getInstance().log(
+        `[applyIKToAvatarRightArm] avatarEntity: ${avatarEntity}`
       );
-      console.error(`[FIK][applyIKToAvatarRightArm] chain: ${chain}`);
+      Logger.getInstance().log(
+        `[FIK][applyIKToAvatarRightArm] chain: ${chain}`
+      );
     }
 
     if (
