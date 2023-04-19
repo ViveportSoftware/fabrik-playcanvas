@@ -856,7 +856,7 @@ export class AvatarRenderer extends Renderer {
           const headPos = head.getPosition();
           head.setLocalScale(0, 0, 0);
 
-          this.addLocalForwardPoint();
+          // this.addLocalForwardPoint();
 
           Logger.getInstance().log(
             `[AvatarRender] vrCameraPos.y: ${vrCameraPos.y}, headPos.y: ${headPos.y}`

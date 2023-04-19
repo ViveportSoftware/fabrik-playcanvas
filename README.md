@@ -80,4 +80,6 @@ classDiagram
 
 ## Todos
 
+- `Fabrik` - local hinge with global axis constrained
+
 - More IK algorithms (ideally, like [FinalIK](http://www.root-motion.com/finalikdox/html/index.html))

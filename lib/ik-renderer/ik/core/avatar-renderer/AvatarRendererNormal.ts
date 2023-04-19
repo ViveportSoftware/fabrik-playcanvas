@@ -189,7 +189,8 @@ export class AvatarRendererNormal
     if (!this.printOnceFlag) {
       this.printOnceFlag = true;
       Logger.getInstance().log(
-        `[applyIKToAvatarRightArm] avatarEntity: ${avatarEntity}`
+        '[applyIKToAvatarRightArm] avatarEntity:',
+        avatarEntity
       );
       Logger.getInstance().log(`[applyIKToAvatarRightArm] chain: ${chain}`);
     }
