@@ -904,6 +904,9 @@ export class AvatarRenderer extends Renderer {
           );
 
           const xrCameraParentPos = this.xrCamera?.parent.getPosition();
+
+          Logger.getInstance().log(`[AvatarRender] `, xrCameraParentPos);
+
           this.xrCamera?.parent.setPosition(
             xrCameraParentPos.x,
             xrCameraParentPos.y + yOffset,
