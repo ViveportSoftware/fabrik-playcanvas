@@ -34,6 +34,10 @@ export class AvatarRendererNormal
       });
 
       this.renderer.addFitXRCameraToAvatarHeadCallback(boneLengthMap => {
+        Logger.getInstance().log(
+          'FitXRCameraToAvatarHeadCallback:',
+          boneLengthMap
+        );
         const hipsPos = this.renderer?.getAvatarHipsPosition();
         if (hipsPos) {
           const fabrikHipsPos = IKRenderer.pcV3ToFabrikV3(hipsPos);
