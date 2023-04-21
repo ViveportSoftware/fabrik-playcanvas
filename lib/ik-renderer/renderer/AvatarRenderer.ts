@@ -904,6 +904,8 @@ export class AvatarRenderer extends Renderer {
           );
 
           const xrCameraParentPos = this.xrCamera?.parent.getPosition();
+          const xrCameraParentLocalPos =
+            this.xrCamera?.parent.getLocalPosition();
 
           Logger.getInstance().log(
             `[AvatarRender] this.xrCamera?.parent:`,
@@ -917,10 +919,10 @@ export class AvatarRenderer extends Renderer {
             );
           }
 
-          this.xrCamera?.parent.setPosition(
-            xrCameraParentPos.x,
-            xrCameraParentPos.y,
-            xrCameraParentPos.z
+          this.xrCamera?.parent.setLocalPosition(
+            xrCameraParentLocalPos.x,
+            xrCameraParentLocalPos.y + yOffset,
+            xrCameraParentLocalPos.z
           );
 
           this.calculateBoneLenth();
