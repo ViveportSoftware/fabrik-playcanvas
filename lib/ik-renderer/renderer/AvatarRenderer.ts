@@ -919,7 +919,7 @@ export class AvatarRenderer extends Renderer {
 
           this.xrCamera?.parent.setPosition(
             xrCameraParentPos.x,
-            xrCameraParentPos.y + yOffset,
+            xrCameraParentPos.y,
             xrCameraParentPos.z
           );
 
