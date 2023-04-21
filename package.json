@@ -1,6 +1,6 @@
 {
   "name": "@viveportengineering/fabrik-playcanvas",
-  "version": "1.0.67",
+  "version": "1.0.68",
   "files": [
     "dist/lib"
   ],
