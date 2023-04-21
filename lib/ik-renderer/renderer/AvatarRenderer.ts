@@ -16,8 +16,12 @@ export class AvatarRenderer extends Renderer {
 
   private localTargetMap: Map<string, pc.Entity> = new Map();
 
-  private xrCalculateScaleCallback: Array<
+  private scaleAvatarWithHDMCallback: Array<
     (boneLengthMap: Map<AvatarPart, number>) => void
+  > = new Array();
+
+  private fitXRCameraToAvatarHeadCallback: Array<
+    (boneLengthMap: Map<AvatarPart, number>, yOffset?: number) => void
   > = new Array();
 
   constructor(
@@ -49,7 +53,9 @@ export class AvatarRenderer extends Renderer {
 
     if (this.isLocalDemo) {
       this.app?.xr.once('update', () => {
-        this.calculateAvatarScaleWithHMD();
+        // this.scaleAvatarWithHMD();
+
+        this.fitXRCameraToAvatarHead();
       });
 
       this.app?.xr.on('update', frame => {
@@ -839,30 +845,34 @@ export class AvatarRenderer extends Renderer {
     return 0;
   }
 
-  public addXRCalculateScaleCallback(
+  public addScaleAvatarWithHMDCallback(
     fn: (boneLengthMap: Map<AvatarPart, number>) => void
   ): void {
-    this.xrCalculateScaleCallback.push(fn);
+    this.scaleAvatarWithHDMCallback.push(fn);
   }
 
-  public calculateAvatarScaleWithHMD(): void {
+  public addFitXRCameraToAvatarHeadCallback(
+    fn: (boneLengthMap: Map<AvatarPart, number>) => void
+  ): void {
+    this.fitXRCameraToAvatarHeadCallback.push(fn);
+  }
+
+  public scaleAvatarWithHMD(): void {
     Logger.getInstance().log('[AvatarRender] calculateAvatarScaleWithHMD()');
 
-    if (this.vrCamera) {
-      const vrCameraPos = this.vrCamera.getLocalPosition();
+    if (this.xrCamera) {
+      const xrCameraPos = this.xrCamera.getLocalPosition();
       if (this.avatarEntity) {
         const head = this.avatarEntity.findByName(AvatarPart.Head);
         if (head) {
           const headPos = head.getPosition();
           head.setLocalScale(0, 0, 0);
 
-          // this.addLocalForwardPoint();
-
           Logger.getInstance().log(
-            `[AvatarRender] vrCameraPos.y: ${vrCameraPos.y}, headPos.y: ${headPos.y}`
+            `[AvatarRender] xrCameraPos.y: ${xrCameraPos.y}, headPos.y: ${headPos.y}`
           );
 
-          this.scale = vrCameraPos.y / headPos.y;
+          this.scale = xrCameraPos.y / headPos.y;
 
           Logger.getInstance().log(`[AvatarRender]this.scale: ${this.scale}`);
 
@@ -870,7 +880,38 @@ export class AvatarRenderer extends Renderer {
 
           this.calculateBoneLenth();
 
-          this.xrCalculateScaleCallback.forEach(fn => {
+          this.scaleAvatarWithHDMCallback.forEach(fn => {
+            fn.call(this, this.boneLengthMap);
+          });
+        }
+      }
+    }
+  }
+
+  public fitXRCameraToAvatarHead(): void {
+    if (this.xrCamera) {
+      const xrCameraPos = this.xrCamera.getLocalPosition();
+      if (this.avatarEntity) {
+        const head = this.avatarEntity.findByName(AvatarPart.Head);
+        if (head) {
+          const headPos = head.getPosition();
+          head.setLocalScale(0, 0, 0);
+
+          const yOffset = headPos.y - xrCameraPos.y;
+
+          Logger.getInstance().log(
+            `[AvatarRender] xrCameraPos.y: ${xrCameraPos.y}, headPos.y: ${headPos.y}, yOffset: ${yOffset}`
+          );
+
+          this.xrCameraRoot?.setPosition(0, yOffset, 0);
+
+          this.calculateBoneLenth();
+
+          // calculate scale after calculate bone length
+          // scale for controllers local position
+          this.scale = xrCameraPos.y / headPos.y;
+
+          this.fitXRCameraToAvatarHeadCallback.forEach(fn => {
             fn.call(this, this.boneLengthMap);
           });
         }

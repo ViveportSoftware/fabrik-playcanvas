@@ -4,20 +4,21 @@ import {Logger} from '../Logger';
 
 // assets for local demo
 // font
-// import RobotoMediumUrl from '../assets/fonts/Roboto-Medium.json?url';
-// import RobotoMediumTextureUrl from '../assets/fonts/Roboto-Medium.png';
-// import assetsGLBAvatar from '../assets/glbs/avatar.glb?url';
-// import assetsImagesGrid from '../assets/images/grid.png';
+import RobotoMediumUrl from '../assets/fonts/Roboto-Medium.json?url';
+import RobotoMediumTextureUrl from '../assets/fonts/Roboto-Medium.png';
+import assetsGLBAvatar from '../assets/glbs/avatar.glb?url';
+import assetsImagesGrid from '../assets/images/grid.png';
 // @ts-ignore
-// import {createMouseInput} from '../playcanvas/scripts/mouse-input';
+import {createMouseInput} from '../playcanvas/scripts/mouse-input';
 // @ts-ignore
-// import {createOrbitCamera} from '../playcanvas/scripts/orbit-camera';
+import {createOrbitCamera} from '../playcanvas/scripts/orbit-camera';
 
 export class Renderer {
   protected app?: pc.Application;
 
   private camera?: pc.Entity;
-  protected vrCamera?: pc.Entity;
+  protected xrCamera?: pc.Entity;
+  protected xrCameraRoot?: pc.Entity;
 
   private hud?: pc.Entity;
   protected textHMDPos?: pc.Entity;
@@ -30,7 +31,7 @@ export class Renderer {
   protected textTargetRootForward?: pc.Entity;
 
   private xrInputSources: Array<pc.XrInputSource> = new Array();
-  private xrStartCallback: (vrCamera: pc.Entity) => void = () => {};
+  private xrStartCallback: (xrCamera: pc.Entity) => void = () => {};
 
   private updateCallbacks: Array<(dt: number) => void> = new Array();
   protected rootEntity?: pc.Entity;
@@ -72,7 +73,7 @@ export class Renderer {
     await this.loadAssets();
     await this.loadFontAssets();
 
-    this.initVRCamera();
+    this.initXRCamera();
     this.initCamera();
     this.initLight();
     this.initPlane();
@@ -123,8 +124,8 @@ export class Renderer {
     this.app.setCanvasResolution(pc.RESOLUTION_AUTO);
 
     if (this.isLocalDemo) {
-      // createMouseInput();
-      // createOrbitCamera();
+      createMouseInput();
+      createOrbitCamera();
     }
 
     if (!this.rootEntity) {
@@ -145,11 +146,11 @@ export class Renderer {
     const assets: Array<pc.Asset> = [];
 
     if (this.isLocalDemo) {
-      // assets.push(new pc.Asset('grid', 'texture', {url: assetsImagesGrid}));
-      // assets.push(new pc.Asset('avatar', 'container', {url: assetsGLBAvatar}));
-      // assets.push(
-      //   new pc.Asset('RobotoMedium.json', 'json', {url: RobotoMediumUrl})
-      // );
+      assets.push(new pc.Asset('grid', 'texture', {url: assetsImagesGrid}));
+      assets.push(new pc.Asset('avatar', 'container', {url: assetsGLBAvatar}));
+      assets.push(
+        new pc.Asset('RobotoMedium.json', 'json', {url: RobotoMediumUrl})
+      );
     }
 
     const assetListLoader = new pc.AssetListLoader(
@@ -166,10 +167,10 @@ export class Renderer {
 
   private async loadFontAssets(): Promise<void> {
     const fontAssets: Array<pc.Asset> = [];
-    fontAssets
-      .push
+    fontAssets.push(
       // new pc.Asset('RobotoMedium', 'font', {url: RobotoMediumTextureUrl})
-      ();
+      new pc.Asset('RobotoMedium', 'font', {url: RobotoMediumTextureUrl})
+    );
 
     fontAssets.forEach(fontAsset => {
       const resource = this.app?.assets.find(
@@ -222,22 +223,25 @@ export class Renderer {
     this.app?.root.addChild(this.camera);
   }
 
-  private initVRCamera(): void {
-    this.vrCamera = new pc.Entity('vrCamera');
+  private initXRCamera(): void {
+    this.xrCamera = new pc.Entity('xrCamera');
 
-    this.vrCamera.addComponent('camera', {
+    this.xrCamera.addComponent('camera', {
       clearColor: new pc.Color(0.5, 0.6, 0.9),
       nearClip: 0.001,
       farClip: 1000,
       // fov: 55,
     });
 
-    this.vrCamera.setPosition(0, 0, 0);
+    this.xrCamera.setPosition(0, 0, 0);
+
+    this.xrCameraRoot = new pc.Entity('xrCamera');
+    this.xrCameraRoot.addChild(this.xrCamera);
 
     if (this.rootEntity) {
-      this.rootEntity.addChild(this.vrCamera);
+      this.rootEntity.addChild(this.xrCameraRoot);
     } else {
-      this.app?.root.addChild(this.vrCamera);
+      this.app?.root.addChild(this.xrCameraRoot);
     }
   }
 
@@ -545,7 +549,7 @@ export class Renderer {
     return this.xrInputSources;
   }
 
-  public addXRStartCallback(fn: (vrCamera: pc.Entity) => void): void {
+  public addXRStartCallback(fn: (xrCamera: pc.Entity) => void): void {
     this.xrStartCallback = fn;
   }
 
@@ -577,21 +581,21 @@ export class Renderer {
         this.registerXRInputEvent();
 
         this.app.xr.on('start', () => {
-          if (this.vrCamera && this.vrCamera.camera) {
-            this.vrCamera.camera.rect = new pc.Vec4(0, 0, 1, 1);
+          if (this.xrCamera && this.xrCamera.camera) {
+            this.xrCamera.camera.rect = new pc.Vec4(0, 0, 1, 1);
           }
           if (this.camera && this.camera.camera) {
             this.camera.camera.rect = new pc.Vec4(0, 0, 1, 0);
           }
 
-          if (this.vrCamera) {
-            this.xrStartCallback.call(this, this.vrCamera);
+          if (this.xrCamera) {
+            this.xrStartCallback.call(this, this.xrCamera);
           }
         });
 
         this.app.xr.on('end', () => {
-          if (this.vrCamera && this.vrCamera.camera) {
-            this.vrCamera.camera.rect = new pc.Vec4(0, 0, 1, 0);
+          if (this.xrCamera && this.xrCamera.camera) {
+            this.xrCamera.camera.rect = new pc.Vec4(0, 0, 1, 0);
           }
           if (this.camera && this.camera.camera) {
             this.camera.camera.rect = new pc.Vec4(0, 0, 1, 1);
@@ -599,17 +603,17 @@ export class Renderer {
         });
 
         this.app.xr.on('update', () => {
-          if (this.vrCamera && this.vrCamera.camera) {
-            const vrCameraPos = this.vrCamera.getPosition();
+          if (this.xrCamera && this.xrCamera.camera) {
+            const xrCameraPos = this.xrCamera.getPosition();
             if (
               this.textHMDPos &&
               this.textHMDPos.element &&
               this.textHMDPos.element.text &&
               this.isLocalDemo
             ) {
-              this.textHMDPos.element.text = `${vrCameraPos.x.toFixed(
+              this.textHMDPos.element.text = `${xrCameraPos.x.toFixed(
                 4
-              )}, ${vrCameraPos.y.toFixed(4)}, ${vrCameraPos.z.toFixed(4)}`;
+              )}, ${xrCameraPos.y.toFixed(4)}, ${xrCameraPos.z.toFixed(4)}`;
             }
           }
 
@@ -641,7 +645,7 @@ export class Renderer {
           });
         });
 
-        this.vrCamera?.camera?.startXr(pc.XRTYPE_VR, pc.XRSPACE_LOCALFLOOR, {
+        this.xrCamera?.camera?.startXr(pc.XRTYPE_VR, pc.XRSPACE_LOCALFLOOR, {
           callback: err => {
             Logger.getInstance().error('startXr callback err:', err);
           },
@@ -650,8 +654,8 @@ export class Renderer {
     }
   }
 
-  public getVRCameraPos(): pc.Vec3 | undefined {
-    return this.vrCamera?.getPosition();
+  public getXRCameraPos(): pc.Vec3 | undefined {
+    return this.xrCamera?.getPosition();
   }
 
   public setTextInputSourceLeftPos(text: string): void {
@@ -702,7 +706,7 @@ export class Renderer {
     }
   }
 
-  public setVRCamera(vrCamera: pc.Entity): void {
-    this.vrCamera = vrCamera;
+  public setXRCamera(xrCamera: pc.Entity): void {
+    this.xrCamera = xrCamera;
   }
 }

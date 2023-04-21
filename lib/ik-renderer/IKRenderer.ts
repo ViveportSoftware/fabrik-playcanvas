@@ -73,12 +73,12 @@ export class IKRenderer {
         }
       });
 
-      const vrCameraPos = this.renderer.getVRCameraPos();
+      const xrCameraPos = this.renderer.getXRCameraPos();
 
-      if (vrCameraPos) {
+      if (xrCameraPos) {
         const target = this.ik.getTarget(HumanoidPart.Head);
         target?.setPosition(
-          new Fabrik.Vec3(vrCameraPos?.x, vrCameraPos?.y, vrCameraPos?.z)
+          new Fabrik.Vec3(xrCameraPos?.x, xrCameraPos?.y, xrCameraPos?.z)
         );
         this.ik?.setNeedToSolve(true);
         this.ik?.update();

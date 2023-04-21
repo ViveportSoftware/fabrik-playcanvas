@@ -13,6 +13,7 @@ fromEvent(window, 'load').subscribe(() => {
   // so, wait for a second for assets loaded
   timer(1000).subscribe(() => {
     ikRenderer.setIK(new implement.HumanoidVRM());
+    ikRenderer.setDebug(true);
     ikRenderer.run();
   });
 });

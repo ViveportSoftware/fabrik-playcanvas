@@ -24,7 +24,16 @@ export class AvatarRendererNormal
 
     if (this.renderer) {
       // @ts-ignore
-      this.renderer.addXRCalculateScaleCallback(boneLengthMap => {
+      this.renderer.addScaleAvatarWithHMDCallback(boneLengthMap => {
+        const hipsPos = this.renderer?.getAvatarHipsPosition();
+        if (hipsPos) {
+          const fabrikHipsPos = IKRenderer.pcV3ToFabrikV3(hipsPos);
+
+          this.ikHumanoid = new HumanoidNormal(fabrikHipsPos, boneLengthMap);
+        }
+      });
+
+      this.renderer.addFitXRCameraToAvatarHeadCallback(boneLengthMap => {
         const hipsPos = this.renderer?.getAvatarHipsPosition();
         if (hipsPos) {
           const fabrikHipsPos = IKRenderer.pcV3ToFabrikV3(hipsPos);
