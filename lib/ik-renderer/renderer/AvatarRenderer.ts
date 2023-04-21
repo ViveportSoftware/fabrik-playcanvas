@@ -919,11 +919,11 @@ export class AvatarRenderer extends Renderer {
             );
           }
 
-          this.xrCamera?.parent.setLocalPosition(
-            xrCameraParentLocalPos.x,
-            xrCameraParentLocalPos.y + yOffset,
-            xrCameraParentLocalPos.z
-          );
+          // this.xrCamera?.parent.setLocalPosition(
+          //   xrCameraParentLocalPos.x,
+          //   xrCameraParentLocalPos.y + yOffset,
+          //   xrCameraParentLocalPos.z
+          // );
 
           this.calculateBoneLenth();
 
