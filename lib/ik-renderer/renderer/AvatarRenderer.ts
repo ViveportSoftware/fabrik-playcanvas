@@ -903,7 +903,12 @@ export class AvatarRenderer extends Renderer {
             `[AvatarRender] xrCameraPos.y: ${xrCameraPos.y}, headPos.y: ${headPos.y}, yOffset: ${yOffset}`
           );
 
-          this.xrCamera?.parent.setPosition(0, yOffset, 0);
+          const xrCameraParentPos = this.xrCamera?.parent.getPosition();
+          this.xrCamera?.parent.setPosition(
+            xrCameraParentPos.x,
+            xrCameraParentPos.y + yOffset,
+            xrCameraParentPos.z
+          );
 
           this.calculateBoneLenth();
 
