@@ -908,6 +908,16 @@ export class AvatarRenderer extends Renderer {
             this.xrCamera?.parent.getLocalPosition();
 
           Logger.getInstance().log(
+            `[AvatarRender] xrCameraParentPos:`,
+            xrCameraParentPos
+          );
+
+          Logger.getInstance().log(
+            `[AvatarRender] xrCameraParentLocalPos:`,
+            xrCameraParentLocalPos
+          );
+
+          Logger.getInstance().log(
             `[AvatarRender] this.xrCamera?.parent:`,
             this.xrCamera?.parent
           );
