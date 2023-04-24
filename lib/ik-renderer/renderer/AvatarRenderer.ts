@@ -939,7 +939,7 @@ export class AvatarRenderer extends Renderer {
 
           // calculate scale after calculate bone length
           // scale for controllers local position
-          this.scale = xrCameraPos.y / headPos.y;
+          this.scale = headPos.y / xrCameraPos.y;
 
           this.fitXRCameraToAvatarHeadCallback.forEach(fn => {
             fn.call(this, this.boneLengthMap);
