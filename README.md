@@ -78,6 +78,10 @@ classDiagram
   this.ikRenderer.run();
 ```
 
+## Know issues
+
+- In VR mode if MHD rotate-y 180 degrees, IK will fail.
+
 ## Todos
 
 - `Fabrik` - local hinge with global axis constrained
