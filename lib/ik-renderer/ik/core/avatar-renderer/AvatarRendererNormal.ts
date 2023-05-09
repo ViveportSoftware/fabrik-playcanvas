@@ -4,7 +4,7 @@ import * as Fabrik from '../../../../fabrik';
 import {IKRenderer} from '../../../IKRenderer';
 import {Logger} from '../../../Logger';
 import * as Renderer from '../../../renderer';
-import {AvatarPart} from '../../../renderer';
+import {AvatarPartMap} from '../../../renderer';
 import {IK} from '../IK';
 import {Util} from '../Util';
 import {HumanoidNormal} from '../humanoid/HumanoidNormal';
@@ -126,9 +126,9 @@ export class AvatarRendererNormal
   }
 
   private applyIKToAvatarSpine(avatarEntity: pc.Entity): void {
-    const avatarHead = avatarEntity.findByName(AvatarPart.Head);
-    const avatarChest = avatarEntity.findByName(AvatarPart.Chest);
-    const avatarUpperChest = avatarEntity.findByName(AvatarPart.UpperChest);
+    const avatarHead = avatarEntity.findByName(AvatarPartMap.Head);
+    const avatarChest = avatarEntity.findByName(AvatarPartMap.Chest);
+    const avatarUpperChest = avatarEntity.findByName(AvatarPartMap.UpperChest);
 
     const chain = this.getSolver()?.getChainByName(HumanoidPart.Spine);
     const chainName = chain?.getName() as string;
@@ -155,7 +155,7 @@ export class AvatarRendererNormal
   }
 
   private applyIKToAvatarHead(avatarEntity: pc.Entity): void {
-    const avatarNeck = avatarEntity.findByName(AvatarPart.Neck);
+    const avatarNeck = avatarEntity.findByName(AvatarPartMap.Neck);
 
     const chain = this.getSolver()?.getChainByName(HumanoidPart.Head);
     const chainName = chain?.getName() as string;
@@ -173,12 +173,12 @@ export class AvatarRendererNormal
 
   private applyIKToAvatarRightArm(avatarEntity: pc.Entity): void {
     const avatarRightUpperArm = avatarEntity.findByName(
-      AvatarPart.RightUpperArm
+      AvatarPartMap.RightUpperArm
     );
     const avatarRightLowerArm = avatarEntity.findByName(
-      AvatarPart.RightLowerArm
+      AvatarPartMap.RightLowerArm
     );
-    const avatarRightHand = avatarEntity.findByName(AvatarPart.RightHand);
+    const avatarRightHand = avatarEntity.findByName(AvatarPartMap.RightHand);
 
     const chain = this.getSolver()?.getChainByName(HumanoidPart.RightArm);
     const chainName = chain?.getName() as string;
@@ -255,9 +255,13 @@ export class AvatarRendererNormal
   }
 
   private applyIKToAvatarLeftArm(avatarEntity: pc.Entity): void {
-    const avatarLeftUpperArm = avatarEntity.findByName(AvatarPart.LeftUpperArm);
-    const avatarLeftLowerArm = avatarEntity.findByName(AvatarPart.LeftLowerArm);
-    const avatarLeftHand = avatarEntity.findByName(AvatarPart.LeftHand);
+    const avatarLeftUpperArm = avatarEntity.findByName(
+      AvatarPartMap.LeftUpperArm
+    );
+    const avatarLeftLowerArm = avatarEntity.findByName(
+      AvatarPartMap.LeftLowerArm
+    );
+    const avatarLeftHand = avatarEntity.findByName(AvatarPartMap.LeftHand);
 
     const chain = this.getSolver()?.getChainByName(HumanoidPart.LeftArm);
     const chainName = chain?.getName() as string;
@@ -314,12 +318,12 @@ export class AvatarRendererNormal
 
   private applyIKToAvatarRightLeg(avatarEntity: pc.Entity): void {
     const avatarRightUpperLeg = avatarEntity.findByName(
-      AvatarPart.RightUpperLeg
+      AvatarPartMap.RightUpperLeg
     );
     const avatarRightLowerLeg = avatarEntity.findByName(
-      AvatarPart.RightLowerLeg
+      AvatarPartMap.RightLowerLeg
     );
-    const avatarRightFoot = avatarEntity.findByName(AvatarPart.RightFoot);
+    const avatarRightFoot = avatarEntity.findByName(AvatarPartMap.RightFoot);
 
     const chain = this.getSolver()?.getChainByName(HumanoidPart.RightLeg);
     const chainName = chain?.getName() as string;
@@ -368,9 +372,13 @@ export class AvatarRendererNormal
   }
 
   private applyIKToAvatarLeftLeg(avatarEntity: pc.Entity): void {
-    const avatarLeftUpperLeg = avatarEntity.findByName(AvatarPart.LeftUpperLeg);
-    const avatarLeftLowerLeg = avatarEntity.findByName(AvatarPart.LeftLowerLeg);
-    const avatarLeftFoot = avatarEntity.findByName(AvatarPart.LeftFoot);
+    const avatarLeftUpperLeg = avatarEntity.findByName(
+      AvatarPartMap.LeftUpperLeg
+    );
+    const avatarLeftLowerLeg = avatarEntity.findByName(
+      AvatarPartMap.LeftLowerLeg
+    );
+    const avatarLeftFoot = avatarEntity.findByName(AvatarPartMap.LeftFoot);
 
     const chain = this.getSolver()?.getChainByName(HumanoidPart.LeftLeg);
     const chainName = chain?.getName() as string;

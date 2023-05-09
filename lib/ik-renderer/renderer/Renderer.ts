@@ -2,16 +2,16 @@ import * as pc from 'playcanvas';
 import {fromEvent} from 'rxjs';
 import {Logger} from '../Logger';
 
-// // assets for local demo
-// // font
-// import RobotoMediumUrl from '../assets/fonts/Roboto-Medium.json?url';
-// import RobotoMediumTextureUrl from '../assets/fonts/Roboto-Medium.png';
-// import assetsGLBAvatar from '../assets/glbs/avatar.glb?url';
-// import assetsImagesGrid from '../assets/images/grid.png';
-// // @ts-ignore
-// import {createMouseInput} from '../playcanvas/scripts/mouse-input';
-// // @ts-ignore
-// import {createOrbitCamera} from '../playcanvas/scripts/orbit-camera';
+// assets for local demo
+// font
+import RobotoMediumUrl from '../assets/fonts/Roboto-Medium.json?url';
+import RobotoMediumTextureUrl from '../assets/fonts/Roboto-Medium.png';
+import assetsGLBAvatar from '../assets/glbs/avatar.glb?url';
+import assetsImagesGrid from '../assets/images/grid.png';
+// @ts-ignore
+import {createMouseInput} from '../playcanvas/scripts/mouse-input';
+// @ts-ignore
+import {createOrbitCamera} from '../playcanvas/scripts/orbit-camera';
 
 export class Renderer {
   protected app?: pc.Application;
@@ -124,8 +124,8 @@ export class Renderer {
     this.app.setCanvasResolution(pc.RESOLUTION_AUTO);
 
     if (this.isLocalDemo) {
-      // createMouseInput();
-      // createOrbitCamera();
+      createMouseInput();
+      createOrbitCamera();
     }
 
     if (!this.rootEntity) {
@@ -146,11 +146,11 @@ export class Renderer {
     const assets: Array<pc.Asset> = [];
 
     if (this.isLocalDemo) {
-      // assets.push(new pc.Asset('grid', 'texture', {url: assetsImagesGrid}));
-      // assets.push(new pc.Asset('avatar', 'container', {url: assetsGLBAvatar}));
-      // assets.push(
-      //   new pc.Asset('RobotoMedium.json', 'json', {url: RobotoMediumUrl})
-      // );
+      assets.push(new pc.Asset('grid', 'texture', {url: assetsImagesGrid}));
+      assets.push(new pc.Asset('avatar', 'container', {url: assetsGLBAvatar}));
+      assets.push(
+        new pc.Asset('RobotoMedium.json', 'json', {url: RobotoMediumUrl})
+      );
     }
 
     const assetListLoader = new pc.AssetListLoader(
@@ -167,10 +167,9 @@ export class Renderer {
 
   private async loadFontAssets(): Promise<void> {
     const fontAssets: Array<pc.Asset> = [];
-    fontAssets
-      .push
-      // new pc.Asset('RobotoMedium', 'font', {url: RobotoMediumTextureUrl})
-      ();
+    fontAssets.push(
+      new pc.Asset('RobotoMedium', 'font', {url: RobotoMediumTextureUrl})
+    );
 
     fontAssets.forEach(fontAsset => {
       const resource = this.app?.assets.find(

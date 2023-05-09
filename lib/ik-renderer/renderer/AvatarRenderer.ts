@@ -1,6 +1,6 @@
 import * as pc from 'playcanvas';
 import {Logger} from '../Logger';
-import {AvatarPart} from './AvatarPart';
+import {AvatarPart, AvatarPartMap} from './AvatarPart';
 import {Renderer} from './Renderer';
 
 export class AvatarRenderer extends Renderer {
@@ -116,7 +116,7 @@ export class AvatarRenderer extends Renderer {
 
       // entity.setEulerAngles(0, 0, 0);
 
-      // const hips = entity?.findByName(AvatarPart.Hips);
+      // const hips = entity?.findByName(AvatarPartMap.Hips);
       // if (hips) {
       //   const hipsPos = hips?.getPosition();
       //   entity.setPosition(0, -1 * hipsPos?.y, -0.2);
@@ -141,7 +141,7 @@ export class AvatarRenderer extends Renderer {
   }
 
   public getAvatarHipsPosition(): pc.Vec3 | undefined {
-    const hips = this.avatarEntity?.findByName(AvatarPart.Hips);
+    const hips = this.avatarEntity?.findByName(AvatarPartMap.Hips);
     if (hips) {
       const hipsPos = hips?.getPosition();
       return hipsPos;
@@ -306,9 +306,13 @@ export class AvatarRenderer extends Renderer {
   }
 
   private renderAvatarLeftArmForwardLines(avatarEntity: pc.Entity): void {
-    const avatarLeftUpperArm = avatarEntity.findByName(AvatarPart.LeftUpperArm);
-    const avatarLeftLowerArm = avatarEntity.findByName(AvatarPart.LeftLowerArm);
-    const avatarLeftHand = avatarEntity.findByName(AvatarPart.LeftHand);
+    const avatarLeftUpperArm = avatarEntity.findByName(
+      AvatarPartMap.LeftUpperArm
+    );
+    const avatarLeftLowerArm = avatarEntity.findByName(
+      AvatarPartMap.LeftLowerArm
+    );
+    const avatarLeftHand = avatarEntity.findByName(AvatarPartMap.LeftHand);
 
     if (avatarLeftUpperArm) {
       const pos = avatarLeftUpperArm.getLocalPosition();
@@ -331,12 +335,12 @@ export class AvatarRenderer extends Renderer {
 
   private renderAvatarRightArmForwardLines(avatarEntity: pc.Entity): void {
     const avatarRightUpperArm = avatarEntity.findByName(
-      AvatarPart.RightUpperArm
+      AvatarPartMap.RightUpperArm
     );
     const avatarRightLowerArm = avatarEntity.findByName(
-      AvatarPart.RightLowerArm
+      AvatarPartMap.RightLowerArm
     );
-    const avatarRightHand = avatarEntity.findByName(AvatarPart.RightHand);
+    const avatarRightHand = avatarEntity.findByName(AvatarPartMap.RightHand);
 
     if (avatarRightUpperArm) {
       const pos = avatarRightUpperArm.getLocalPosition();
@@ -358,9 +362,13 @@ export class AvatarRenderer extends Renderer {
   }
 
   private renderAvatarLeftLegForwardLines(avatarEntity: pc.Entity): void {
-    const avatarLeftUpperLeg = avatarEntity.findByName(AvatarPart.LeftUpperLeg);
-    const avatarLeftLowerLeg = avatarEntity.findByName(AvatarPart.LeftLowerLeg);
-    const avatarLeftFoot = avatarEntity.findByName(AvatarPart.LeftFoot);
+    const avatarLeftUpperLeg = avatarEntity.findByName(
+      AvatarPartMap.LeftUpperLeg
+    );
+    const avatarLeftLowerLeg = avatarEntity.findByName(
+      AvatarPartMap.LeftLowerLeg
+    );
+    const avatarLeftFoot = avatarEntity.findByName(AvatarPartMap.LeftFoot);
 
     if (avatarLeftUpperLeg) {
       const pos = avatarLeftUpperLeg.getLocalPosition();
@@ -383,12 +391,12 @@ export class AvatarRenderer extends Renderer {
 
   private renderAvatarRightLegForwardLines(avatarEntity: pc.Entity): void {
     const avatarRightUpperLeg = avatarEntity.findByName(
-      AvatarPart.RightUpperLeg
+      AvatarPartMap.RightUpperLeg
     );
     const avatarRightLowerLeg = avatarEntity.findByName(
-      AvatarPart.RightLowerLeg
+      AvatarPartMap.RightLowerLeg
     );
-    const avatarRightFoot = avatarEntity.findByName(AvatarPart.RightFoot);
+    const avatarRightFoot = avatarEntity.findByName(AvatarPartMap.RightFoot);
 
     if (avatarRightUpperLeg) {
       const pos = avatarRightUpperLeg.getLocalPosition();
@@ -472,8 +480,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const neck = this.avatarEntity.findByName(AvatarPart.Neck);
-    const head = this.avatarEntity.findByName(AvatarPart.Head);
+    const neck = this.avatarEntity.findByName(AvatarPartMap.Neck);
+    const head = this.avatarEntity.findByName(AvatarPartMap.Head);
 
     if (neck && head) {
       const neckPos = neck.getPosition();
@@ -490,8 +498,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const hips = this.avatarEntity.findByName(AvatarPart.Hips);
-    const spine = hips?.findByName(AvatarPart.Spine);
+    const hips = this.avatarEntity.findByName(AvatarPartMap.Hips);
+    const spine = hips?.findByName(AvatarPartMap.Spine);
 
     if (hips && spine) {
       const hipsPos = hips.getPosition();
@@ -508,8 +516,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const spine = this.avatarEntity.findByName(AvatarPart.Spine);
-    const chest = spine?.findByName(AvatarPart.Chest);
+    const spine = this.avatarEntity.findByName(AvatarPartMap.Spine);
+    const chest = spine?.findByName(AvatarPartMap.Chest);
 
     if (spine && chest) {
       const spinePos = spine.getPosition();
@@ -526,8 +534,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const chest = this.avatarEntity.findByName(AvatarPart.Chest);
-    const upperChest = chest?.findByName(AvatarPart.UpperChest);
+    const chest = this.avatarEntity.findByName(AvatarPartMap.Chest);
+    const upperChest = chest?.findByName(AvatarPartMap.UpperChest);
 
     if (chest && upperChest) {
       const chestPos = chest.getPosition();
@@ -544,8 +552,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const upperChest = this.avatarEntity.findByName(AvatarPart.UpperChest);
-    const neck = upperChest?.findByName(AvatarPart.Neck);
+    const upperChest = this.avatarEntity.findByName(AvatarPartMap.UpperChest);
+    const neck = upperChest?.findByName(AvatarPartMap.Neck);
 
     if (upperChest && neck) {
       const upperChestPos = upperChest.getPosition();
@@ -562,8 +570,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const shoulder = this.avatarEntity.findByName(AvatarPart.RightShoulder);
-    const upperArm = shoulder?.findByName(AvatarPart.RightUpperArm);
+    const shoulder = this.avatarEntity.findByName(AvatarPartMap.RightShoulder);
+    const upperArm = shoulder?.findByName(AvatarPartMap.RightUpperArm);
 
     if (shoulder && upperArm) {
       const shoulderPos = shoulder.getPosition();
@@ -580,8 +588,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const upperArm = this.avatarEntity.findByName(AvatarPart.RightUpperArm);
-    const lowerArm = upperArm?.findByName(AvatarPart.RightLowerArm);
+    const upperArm = this.avatarEntity.findByName(AvatarPartMap.RightUpperArm);
+    const lowerArm = upperArm?.findByName(AvatarPartMap.RightLowerArm);
 
     if (upperArm && lowerArm) {
       const upperArmPos = upperArm?.getPosition();
@@ -598,8 +606,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const lowerArm = this.avatarEntity.findByName(AvatarPart.RightLowerArm);
-    const hand = lowerArm?.findByName(AvatarPart.RightHand);
+    const lowerArm = this.avatarEntity.findByName(AvatarPartMap.RightLowerArm);
+    const hand = lowerArm?.findByName(AvatarPartMap.RightHand);
 
     if (lowerArm && hand) {
       const lowerArmPos = lowerArm?.getPosition();
@@ -616,8 +624,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const hand = this.avatarEntity?.findByName(AvatarPart.RightHand);
-    const middle1 = hand?.findByName(AvatarPart.RightMiddle1);
+    const hand = this.avatarEntity?.findByName(AvatarPartMap.RightHand);
+    const middle1 = hand?.findByName(AvatarPartMap.RightMiddle1);
 
     if (hand && middle1) {
       const handPos = hand?.getPosition();
@@ -634,8 +642,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const shoulder = this.avatarEntity.findByName(AvatarPart.LeftShoulder);
-    const upperArm = shoulder?.findByName(AvatarPart.LeftUpperArm);
+    const shoulder = this.avatarEntity.findByName(AvatarPartMap.LeftShoulder);
+    const upperArm = shoulder?.findByName(AvatarPartMap.LeftUpperArm);
 
     if (shoulder && upperArm) {
       const shoulderPos = shoulder.getPosition();
@@ -652,8 +660,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const upperArm = this.avatarEntity.findByName(AvatarPart.LeftUpperArm);
-    const lowerArm = upperArm?.findByName(AvatarPart.LeftLowerArm);
+    const upperArm = this.avatarEntity.findByName(AvatarPartMap.LeftUpperArm);
+    const lowerArm = upperArm?.findByName(AvatarPartMap.LeftLowerArm);
 
     if (upperArm && lowerArm) {
       const upperArmPos = upperArm?.getPosition();
@@ -670,8 +678,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const lowerArm = this.avatarEntity.findByName(AvatarPart.LeftLowerArm);
-    const hand = lowerArm?.findByName(AvatarPart.LeftHand);
+    const lowerArm = this.avatarEntity.findByName(AvatarPartMap.LeftLowerArm);
+    const hand = lowerArm?.findByName(AvatarPartMap.LeftHand);
 
     if (lowerArm && hand) {
       const lowerArmPos = lowerArm?.getPosition();
@@ -688,8 +696,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const hand = this.avatarEntity?.findByName(AvatarPart.LeftHand);
-    const middle1 = hand?.findByName(AvatarPart.LeftMiddle1);
+    const hand = this.avatarEntity?.findByName(AvatarPartMap.LeftHand);
+    const middle1 = hand?.findByName(AvatarPartMap.LeftMiddle1);
 
     if (hand && middle1) {
       const handPos = hand?.getPosition();
@@ -706,8 +714,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const hips = this.avatarEntity.findByName(AvatarPart.Hips);
-    const upperLeg = hips?.findByName(AvatarPart.RightUpperLeg);
+    const hips = this.avatarEntity.findByName(AvatarPartMap.Hips);
+    const upperLeg = hips?.findByName(AvatarPartMap.RightUpperLeg);
 
     if (hips && upperLeg) {
       const hipsPos = hips?.getPosition();
@@ -724,8 +732,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const upperLeg = this.avatarEntity.findByName(AvatarPart.RightUpperLeg);
-    const lowerLeg = upperLeg?.findByName(AvatarPart.RightLowerLeg);
+    const upperLeg = this.avatarEntity.findByName(AvatarPartMap.RightUpperLeg);
+    const lowerLeg = upperLeg?.findByName(AvatarPartMap.RightLowerLeg);
 
     if (upperLeg && lowerLeg) {
       const upperLegPos = upperLeg?.getPosition();
@@ -742,8 +750,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const lowerLeg = this.avatarEntity.findByName(AvatarPart.RightLowerLeg);
-    const foot = lowerLeg?.findByName(AvatarPart.RightFoot);
+    const lowerLeg = this.avatarEntity.findByName(AvatarPartMap.RightLowerLeg);
+    const foot = lowerLeg?.findByName(AvatarPartMap.RightFoot);
 
     if (lowerLeg && foot) {
       const lowerLegPos = lowerLeg?.getPosition();
@@ -760,8 +768,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const foot = this.avatarEntity.findByName(AvatarPart.RightFoot);
-    const toeBase = foot?.findByName(AvatarPart.RightToeBase);
+    const foot = this.avatarEntity.findByName(AvatarPartMap.RightFoot);
+    const toeBase = foot?.findByName(AvatarPartMap.RightToeBase);
 
     if (foot && toeBase) {
       const footPos = foot?.getPosition();
@@ -778,8 +786,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const hips = this.avatarEntity.findByName(AvatarPart.Hips);
-    const upperLeg = hips?.findByName(AvatarPart.LeftUpperLeg);
+    const hips = this.avatarEntity.findByName(AvatarPartMap.Hips);
+    const upperLeg = hips?.findByName(AvatarPartMap.LeftUpperLeg);
 
     if (hips && upperLeg) {
       const hipsPos = hips?.getPosition();
@@ -796,8 +804,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const upperLeg = this.avatarEntity.findByName(AvatarPart.LeftUpperLeg);
-    const lowerLeg = upperLeg?.findByName(AvatarPart.LeftLowerLeg);
+    const upperLeg = this.avatarEntity.findByName(AvatarPartMap.LeftUpperLeg);
+    const lowerLeg = upperLeg?.findByName(AvatarPartMap.LeftLowerLeg);
 
     if (upperLeg && lowerLeg) {
       const upperLegPos = upperLeg?.getPosition();
@@ -814,8 +822,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const lowerLeg = this.avatarEntity.findByName(AvatarPart.LeftLowerLeg);
-    const foot = lowerLeg?.findByName(AvatarPart.LeftFoot);
+    const lowerLeg = this.avatarEntity.findByName(AvatarPartMap.LeftLowerLeg);
+    const foot = lowerLeg?.findByName(AvatarPartMap.LeftFoot);
 
     if (lowerLeg && foot) {
       const lowerLegPos = lowerLeg?.getPosition();
@@ -832,8 +840,8 @@ export class AvatarRenderer extends Renderer {
       throw new Error('avatar entity is undefined');
     }
 
-    const foot = this.avatarEntity.findByName(AvatarPart.LeftFoot);
-    const toeBase = foot?.findByName(AvatarPart.LeftToeBase);
+    const foot = this.avatarEntity.findByName(AvatarPartMap.LeftFoot);
+    const toeBase = foot?.findByName(AvatarPartMap.LeftToeBase);
 
     if (foot && toeBase) {
       const footPos = foot?.getPosition();
@@ -863,7 +871,7 @@ export class AvatarRenderer extends Renderer {
     if (this.xrCamera) {
       const xrCameraPos = this.xrCamera.getLocalPosition();
       if (this.avatarEntity) {
-        const head = this.avatarEntity.findByName(AvatarPart.Head);
+        const head = this.avatarEntity.findByName(AvatarPartMap.Head);
         if (head) {
           const headPos = head.getPosition();
           head.setLocalScale(0, 0, 0);
@@ -892,7 +900,7 @@ export class AvatarRenderer extends Renderer {
     if (this.xrCamera) {
       const xrCameraPos = this.xrCamera.getLocalPosition();
       if (this.avatarEntity) {
-        const head = this.avatarEntity.findByName(AvatarPart.Head);
+        const head = this.avatarEntity.findByName(AvatarPartMap.Head);
         if (head) {
           const headPos = head.getPosition();
           head.setLocalScale(0, 0, 0);

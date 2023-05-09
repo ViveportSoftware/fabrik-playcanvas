@@ -130,4 +130,8 @@ export class IKRenderer {
       }
     }
   }
+
+  public setAvatarPartMap(part: Renderer.AvatarPart, name: string): void {
+    Renderer.AvatarPartMap.set(part, name);
+  }
 }
