@@ -1,3 +1,5 @@
+import {Logger} from '../Logger';
+
 export enum AvatarPart {
   Hips,
   Spine,
@@ -71,6 +73,7 @@ export class AvatarPartMap {
 
   public static set(part: AvatarPart, name: string): void {
     this.partMap.set(part, name);
+    Logger.getInstance().log(part, name);
   }
 
   static get Hips(): string {
