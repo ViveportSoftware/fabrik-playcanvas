@@ -913,6 +913,10 @@ export class AvatarRenderer extends Renderer {
         this.avatarEntity
       );
       if (this.avatarEntity) {
+        Logger.getInstance().log(
+          '[AvatarRender] AvatarPartMap.Head:',
+          AvatarPartMap.Head
+        );
         const head = this.avatarEntity.findByName(AvatarPartMap.Head);
         Logger.getInstance().log('[AvatarRender] head:', head);
         if (head) {
