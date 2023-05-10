@@ -3,8 +3,8 @@ import {Logger} from '../Logger';
 export enum AvatarPart {
   Hips,
   Spine,
-  UpperChest,
   Chest,
+  UpperChest,
   Neck,
   Head,
   RightEye,

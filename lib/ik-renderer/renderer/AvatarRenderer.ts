@@ -897,6 +897,7 @@ export class AvatarRenderer extends Renderer {
   }
 
   public fitXRCameraToAvatarHead(): void {
+    Logger.getInstance().log('[AvatarRender] fitXRCameraToAvatarHead()');
     if (this.xrCamera) {
       const xrCameraPos = this.xrCamera.getLocalPosition();
       if (this.avatarEntity) {
