@@ -35,10 +35,8 @@ export enum AvatarPart {
   LeftToeBase,
 }
 
-class AvatarPartMapManager {
-  private static instance: AvatarPartMapManager;
-
-  private partMap: Map<AvatarPart, string> = new Map([
+export class AvatarPartMap {
+  private static partMap: Map<AvatarPart, string> = new Map([
     [AvatarPart.Hips, 'J_Bip_C_Hips'],
     [AvatarPart.Spine, 'J_Bip_C_Spine'],
     [AvatarPart.UpperChest, 'J_Bip_C_UpperChest'],
@@ -73,149 +71,120 @@ class AvatarPartMapManager {
     [AvatarPart.LeftToeBase, 'J_Bip_L_ToeBase'],
   ]);
 
-  private constructor() {}
-
-  public static get Instance(): AvatarPartMapManager {
-    if (!AvatarPartMapManager.instance) {
-      AvatarPartMapManager.instance = new AvatarPartMapManager();
-    }
-
-    return AvatarPartMapManager.instance;
-  }
-
-  public set(part: AvatarPart, name: string): void {
+  public static set(part: AvatarPart, name: string): void {
     this.partMap.set(part, name);
     Logger.getInstance().log(part, name, this.partMap);
   }
 
-  public get(part: AvatarPart): string {
-    const result = this.partMap.get(part);
-    if (!result) {
-      throw new Error(`Part [${part}] not exisits`);
-    }
-    return result;
-  }
-}
-
-export class AvatarPartMap {
-  public static set(part: AvatarPart, name: string): void {
-    AvatarPartMapManager.Instance.set(part, name);
-    Logger.getInstance().log(
-      part,
-      name,
-      AvatarPartMapManager.Instance.get(part)
-    );
-  }
-
   static get Hips(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.Hips);
+    return this.partMap.get(AvatarPart.Hips) as string;
   }
 
   static get Spine(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.Spine);
+    return this.partMap.get(AvatarPart.Spine) as string;
   }
 
   static get UpperChest(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.UpperChest);
+    return this.partMap.get(AvatarPart.UpperChest) as string;
   }
 
   static get Chest(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.Chest);
+    return this.partMap.get(AvatarPart.Chest) as string;
   }
 
   static get Neck(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.Neck);
+    return this.partMap.get(AvatarPart.Neck) as string;
   }
 
   static get Head(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.Head);
+    return this.partMap.get(AvatarPart.Head) as string;
   }
 
   static get RightEye(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.RightEye);
+    return this.partMap.get(AvatarPart.RightEye) as string;
   }
 
   static get LeftEye(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.LeftEye);
+    return this.partMap.get(AvatarPart.LeftEye) as string;
   }
 
   static get RightShoulder(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.RightShoulder);
+    return this.partMap.get(AvatarPart.RightShoulder) as string;
   }
 
   static get RightUpperArm(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.RightUpperArm);
+    return this.partMap.get(AvatarPart.RightUpperArm) as string;
   }
 
   static get RightLowerArm(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.RightLowerArm);
+    return this.partMap.get(AvatarPart.RightLowerArm) as string;
   }
 
   static get RightHand(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.RightHand);
+    return this.partMap.get(AvatarPart.RightHand) as string;
   }
 
   static get RightMiddle1(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.RightMiddle1);
+    return this.partMap.get(AvatarPart.RightMiddle1) as string;
   }
 
   static get LeftShoulder(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.LeftShoulder);
+    return this.partMap.get(AvatarPart.LeftShoulder) as string;
   }
 
   static get LeftUpperArm(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.LeftUpperArm);
+    return this.partMap.get(AvatarPart.LeftUpperArm) as string;
   }
 
   static get LeftLowerArm(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.LeftLowerArm);
+    return this.partMap.get(AvatarPart.LeftLowerArm) as string;
   }
 
   static get LeftHand(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.LeftHand);
+    return this.partMap.get(AvatarPart.LeftHand) as string;
   }
 
   static get LeftMiddle1(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.LeftMiddle1);
+    return this.partMap.get(AvatarPart.LeftMiddle1) as string;
   }
 
   static get RightHip(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.RightHip);
+    return this.partMap.get(AvatarPart.RightHip) as string;
   }
 
   static get RightUpperLeg(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.RightUpperLeg);
+    return this.partMap.get(AvatarPart.RightUpperLeg) as string;
   }
 
   static get RightLowerLeg(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.RightLowerLeg);
+    return this.partMap.get(AvatarPart.RightLowerLeg) as string;
   }
 
   static get RightFoot(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.RightFoot);
+    return this.partMap.get(AvatarPart.RightFoot) as string;
   }
 
   static get RightToeBase(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.RightToeBase);
+    return this.partMap.get(AvatarPart.RightToeBase) as string;
   }
 
   static get LeftHip(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.LeftHip);
+    return this.partMap.get(AvatarPart.LeftHip) as string;
   }
 
   static get LeftUpperLeg(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.LeftUpperLeg);
+    return this.partMap.get(AvatarPart.LeftUpperLeg) as string;
   }
 
   static get LeftLowerLeg(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.LeftLowerLeg);
+    return this.partMap.get(AvatarPart.LeftLowerLeg) as string;
   }
 
   static get LeftFoot(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.LeftFoot);
+    return this.partMap.get(AvatarPart.LeftFoot) as string;
   }
 
   static get LeftToeBase(): string {
-    return AvatarPartMapManager.Instance.get(AvatarPart.LeftToeBase);
+    return this.partMap.get(AvatarPart.LeftToeBase) as string;
   }
 }
