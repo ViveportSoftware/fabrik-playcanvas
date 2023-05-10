@@ -868,10 +868,16 @@ export class AvatarRenderer extends Renderer {
   public scaleAvatarWithHMD(): void {
     Logger.getInstance().log('[AvatarRender] calculateAvatarScaleWithHMD()');
 
+    Logger.getInstance().log('[AvatarRender] this.xrCamera:', this.xrCamera);
     if (this.xrCamera) {
       const xrCameraPos = this.xrCamera.getLocalPosition();
+      Logger.getInstance().log(
+        '[AvatarRender] this.avatarEntity:',
+        this.avatarEntity
+      );
       if (this.avatarEntity) {
         const head = this.avatarEntity.findByName(AvatarPartMap.Head);
+        Logger.getInstance().log('[AvatarRender] head:', head);
         if (head) {
           const headPos = head.getPosition();
           head.setLocalScale(0, 0, 0);
