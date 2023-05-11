@@ -50,7 +50,7 @@ export class Renderer {
         if (!this.isRunning) return;
 
         this.updateCallbacks.forEach(cb => {
-          cb.call(this, dt);
+          cb(dt);
         });
 
         this.drawBaseLines();
@@ -149,7 +149,7 @@ export class Renderer {
       if (!this.isRunning) return;
 
       this.updateCallbacks.forEach(cb => {
-        cb.call(this, dt);
+        cb(dt);
       });
 
       this.drawBaseLines();

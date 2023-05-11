@@ -36,7 +36,7 @@ export class IKRenderer {
       throw new Error('Renderer is undefined');
     }
     this.renderer = renderer;
-    this.renderer.addUpdateCallback(this.update);
+    this.renderer.addUpdateCallback(this.update.bind(this));
     this.renderer.init();
   }
 
