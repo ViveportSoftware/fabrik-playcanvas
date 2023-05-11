@@ -68,7 +68,7 @@ export class AvatarRendererNormal
       avatarAngles
     );
     if (avatarAngles) {
-      const q3 = new pc.Quat().setFromEulerAngles(0, 0, 0);
+      const q3 = new pc.Quat().setFromEulerAngles(0, avatarAngles.y + 45, 0);
       dest.setRotation(q3.mul(q1).mul(q2));
     } else {
       dest.setRotation(q1.mul(q2));
