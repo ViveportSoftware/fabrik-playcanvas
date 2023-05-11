@@ -193,7 +193,7 @@ export class Renderer {
       if (resource) {
         fontAsset.data = resource;
       } else {
-        Logger.getInstance().error(
+        Logger.Instance.error(
           `Font Loading: You did'nt loaded ${fontAsset.name} json file`
         );
       }
@@ -660,7 +660,7 @@ export class Renderer {
 
         this.xrCamera?.camera?.startXr(pc.XRTYPE_VR, pc.XRSPACE_LOCALFLOOR, {
           callback: err => {
-            Logger.getInstance().error('startXr callback err:', err);
+            Logger.Instance.error('startXr callback err:', err);
           },
         });
       }
