@@ -49,9 +49,8 @@ export class Renderer {
       this.app.on('update', dt => {
         if (!this.isRunning) return;
 
-        Logger.Instance.log('[Render] update L:52', this.updateCallbacks);
-
         this.updateCallbacks.forEach(cb => {
+          Logger.Instance.log('[Render] this.updateCallbacks.forEach:', cb, dt);
           cb.call(this, dt);
         });
 
@@ -149,8 +148,6 @@ export class Renderer {
 
     this.app.on('update', dt => {
       if (!this.isRunning) return;
-
-      Logger.Instance.log('[Render] update L:153', this.updateCallbacks);
 
       this.updateCallbacks.forEach(cb => {
         cb.call(this, dt);
