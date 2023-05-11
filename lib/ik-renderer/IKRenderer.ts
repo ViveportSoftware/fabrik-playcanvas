@@ -58,6 +58,14 @@ export class IKRenderer {
     this.updateTargetsByXRInputSources();
   }
 
+  public stop(): void {
+    this.renderer.stop();
+  }
+
+  public resume(): void {
+    this.renderer.resume();
+  }
+
   private updateTargetsByXRInputSources(): void {
     if (this.renderer && this.renderer.isLocalDemo) {
       this.renderer.getXRInputSources()?.forEach(inputSource => {

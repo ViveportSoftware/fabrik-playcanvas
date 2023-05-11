@@ -37,6 +37,8 @@ export class Renderer {
   protected rootEntity?: pc.Entity;
   public isLocalDemo: boolean = true;
 
+  private isRunning = true;
+
   constructor(
     app: pc.Application | undefined = undefined,
     rootEntity: pc.Entity | undefined = undefined,
@@ -45,6 +47,8 @@ export class Renderer {
     if (app) {
       this.app = app;
       this.app.on('update', dt => {
+        if (!this.isRunning) return;
+
         this.updateCallbacks.forEach(cb => {
           cb.call(this, dt);
         });
@@ -106,6 +110,14 @@ export class Renderer {
     });
   }
 
+  public stop(): void {
+    this.isRunning = false;
+  }
+
+  public resume(): void {
+    this.isRunning = true;
+  }
+
   private initApplication() {
     const canvas = document.getElementById('canvas');
     this.app = new pc.Application(canvas as HTMLCanvasElement, {
@@ -134,6 +146,8 @@ export class Renderer {
     }
 
     this.app.on('update', dt => {
+      if (!this.isRunning) return;
+
       this.updateCallbacks.forEach(cb => {
         cb.call(this, dt);
       });
