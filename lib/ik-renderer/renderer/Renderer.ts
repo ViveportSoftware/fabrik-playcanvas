@@ -50,7 +50,6 @@ export class Renderer {
         if (!this.isRunning) return;
 
         this.updateCallbacks.forEach(cb => {
-          Logger.Instance.log("[Renderer] this.app.on('update'", cb, dt);
           cb(dt);
         });
 
