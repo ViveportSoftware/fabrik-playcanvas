@@ -36,7 +36,7 @@ export class IKRenderer {
       throw new Error('Renderer is undefined');
     }
     this.renderer = renderer;
-    this.renderer.addUpdateCallback(this.update.bind(this));
+    this.renderer.addUpdateCallback(this.update);
     this.renderer.init();
   }
 
@@ -54,7 +54,6 @@ export class IKRenderer {
   }
 
   private update(dt: number): void {
-    Logger.Instance.log('[IKRenderer] update:', dt);
     this.ik?.update();
     this.updateTargetsByXRInputSources();
   }
