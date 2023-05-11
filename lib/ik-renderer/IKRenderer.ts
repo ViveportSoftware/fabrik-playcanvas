@@ -54,6 +54,7 @@ export class IKRenderer {
   }
 
   private update(dt: number): void {
+    Logger.Instance.log('[IKRenderer] update:', dt);
     this.ik?.update();
     this.updateTargetsByXRInputSources();
   }

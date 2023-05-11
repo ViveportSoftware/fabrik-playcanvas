@@ -1,5 +1,3 @@
-import {Logger} from '../Logger';
-
 export enum AvatarPart {
   Hips = '1',
   Spine = '2',
@@ -73,7 +71,6 @@ export class AvatarPartMap {
 
   public static set(part: AvatarPart, name: string): void {
     this.partMap.set(part, name);
-    Logger.Instance.log(part, name, this.partMap);
   }
 
   static get Hips(): string {
