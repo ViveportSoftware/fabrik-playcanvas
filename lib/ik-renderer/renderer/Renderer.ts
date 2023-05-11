@@ -49,9 +49,8 @@ export class Renderer {
       this.app.on('update', dt => {
         if (!this.isRunning) return;
 
-        Logger.Instance.log("[Renderer] this.app.on('update'", dt);
-
         this.updateCallbacks.forEach(cb => {
+          Logger.Instance.log("[Renderer] this.app.on('update'", cb, dt);
           cb(dt);
         });
 
