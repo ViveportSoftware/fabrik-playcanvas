@@ -122,7 +122,7 @@ export class AvatarRenderer extends Renderer {
       //   entity.setPosition(0, -1 * hipsPos?.y, -0.2);
       // }
 
-      Logger.getInstance().log('addAvatar:', entity);
+      Logger.Instance.log('addAvatar:', entity);
 
       if (this.rootEntity) {
         this.rootEntity.addChild(entity);
@@ -866,29 +866,29 @@ export class AvatarRenderer extends Renderer {
   }
 
   public scaleAvatarWithHMD(): void {
-    Logger.getInstance().log('[AvatarRender] calculateAvatarScaleWithHMD()');
+    Logger.Instance.log('[AvatarRender] calculateAvatarScaleWithHMD()');
 
-    Logger.getInstance().log('[AvatarRender] this.xrCamera:', this.xrCamera);
+    Logger.Instance.log('[AvatarRender] this.xrCamera:', this.xrCamera);
     if (this.xrCamera) {
       const xrCameraPos = this.xrCamera.getLocalPosition();
-      Logger.getInstance().log(
+      Logger.Instance.log(
         '[AvatarRender] this.avatarEntity:',
         this.avatarEntity
       );
       if (this.avatarEntity) {
         const head = this.avatarEntity.findByName(AvatarPartMap.Head);
-        Logger.getInstance().log('[AvatarRender] head:', head);
+        Logger.Instance.log('[AvatarRender] head:', head);
         if (head) {
           const headPos = head.getPosition();
           head.setLocalScale(0, 0, 0);
 
-          Logger.getInstance().log(
+          Logger.Instance.log(
             `[AvatarRender] xrCameraPos.y: ${xrCameraPos.y}, headPos.y: ${headPos.y}`
           );
 
           this.scale = xrCameraPos.y / headPos.y;
 
-          Logger.getInstance().log(`[AvatarRender]this.scale: ${this.scale}`);
+          Logger.Instance.log(`[AvatarRender]this.scale: ${this.scale}`);
 
           this.avatarEntity.setLocalScale(this.scale, this.scale, this.scale);
 
@@ -903,29 +903,29 @@ export class AvatarRenderer extends Renderer {
   }
 
   public fitXRCameraToAvatarHead(): void {
-    Logger.getInstance().log('[AvatarRender] fitXRCameraToAvatarHead()');
+    Logger.Instance.log('[AvatarRender] fitXRCameraToAvatarHead()');
 
-    Logger.getInstance().log('[AvatarRender] this.xrCamera:', this.xrCamera);
+    Logger.Instance.log('[AvatarRender] this.xrCamera:', this.xrCamera);
     if (this.xrCamera) {
       const xrCameraPos = this.xrCamera.getLocalPosition();
-      Logger.getInstance().log(
+      Logger.Instance.log(
         '[AvatarRender] this.avatarEntity:',
         this.avatarEntity
       );
       if (this.avatarEntity) {
-        Logger.getInstance().log(
+        Logger.Instance.log(
           '[AvatarRender] AvatarPartMap.Head:',
           AvatarPartMap.Head
         );
         const head = this.avatarEntity.findByName(AvatarPartMap.Head);
-        Logger.getInstance().log('[AvatarRender] head:', head);
+        Logger.Instance.log('[AvatarRender] head:', head);
         if (head) {
           const headPos = head.getPosition();
           head.setLocalScale(0, 0, 0);
 
           const yOffset = headPos.y - xrCameraPos.y;
 
-          Logger.getInstance().log(
+          Logger.Instance.log(
             `[AvatarRender] xrCameraPos.y: ${xrCameraPos.y}, headPos.y: ${headPos.y}, yOffset: ${yOffset}`
           );
 
@@ -933,23 +933,23 @@ export class AvatarRenderer extends Renderer {
           const xrCameraParentLocalPos =
             this.xrCamera?.parent.getLocalPosition();
 
-          Logger.getInstance().log(
+          Logger.Instance.log(
             `[AvatarRender] xrCameraParentPos:`,
             xrCameraParentPos
           );
 
-          Logger.getInstance().log(
+          Logger.Instance.log(
             `[AvatarRender] xrCameraParentLocalPos:`,
             xrCameraParentLocalPos
           );
 
-          Logger.getInstance().log(
+          Logger.Instance.log(
             `[AvatarRender] this.xrCamera?.parent:`,
             this.xrCamera?.parent
           );
 
           if (this.xrCamera?.parent.parent) {
-            Logger.getInstance().log(
+            Logger.Instance.log(
               `[AvatarRender] this.xrCamera?.parent.parent:`,
               this.xrCamera?.parent.parent
             );

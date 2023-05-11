@@ -15,7 +15,7 @@ class Logger {
    * This implementation let you subclass the Logger class while keeping
    * just one instance of each subclass around.
    */
-  public static getInstance(): Logger {
+  public static get Instance(): Logger {
     if (!Logger.instance) {
       Logger.instance = new Logger();
     }

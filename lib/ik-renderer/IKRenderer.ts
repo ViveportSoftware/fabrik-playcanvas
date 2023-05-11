@@ -46,7 +46,7 @@ export class IKRenderer {
   }
 
   public setDebug(debug: boolean): void {
-    Logger.getInstance().setDebug(debug);
+    Logger.Instance.setDebug(debug);
   }
 
   public run(): void {

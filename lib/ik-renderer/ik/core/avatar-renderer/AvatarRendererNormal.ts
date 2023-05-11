@@ -34,10 +34,7 @@ export class AvatarRendererNormal
       });
 
       this.renderer.addFitXRCameraToAvatarHeadCallback(boneLengthMap => {
-        Logger.getInstance().log(
-          'FitXRCameraToAvatarHeadCallback:',
-          boneLengthMap
-        );
+        Logger.Instance.log('FitXRCameraToAvatarHeadCallback:', boneLengthMap);
         const hipsPos = this.renderer?.getAvatarHipsPosition();
         if (hipsPos) {
           const fabrikHipsPos = IKRenderer.pcV3ToFabrikV3(hipsPos);
@@ -201,11 +198,11 @@ export class AvatarRendererNormal
 
     if (!this.printOnceFlag) {
       this.printOnceFlag = true;
-      Logger.getInstance().log(
+      Logger.Instance.log(
         '[applyIKToAvatarRightArm] avatarEntity:',
         avatarEntity
       );
-      Logger.getInstance().log(`[applyIKToAvatarRightArm] chain: ${chain}`);
+      Logger.Instance.log(`[applyIKToAvatarRightArm] chain: ${chain}`);
     }
 
     if (

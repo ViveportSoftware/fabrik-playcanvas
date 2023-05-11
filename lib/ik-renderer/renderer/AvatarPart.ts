@@ -73,7 +73,7 @@ export class AvatarPartMap {
 
   public static set(part: AvatarPart, name: string): void {
     this.partMap.set(part, name);
-    Logger.getInstance().log(part, name, this.partMap);
+    Logger.Instance.log(part, name, this.partMap);
   }
 
   static get Hips(): string {
