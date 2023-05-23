@@ -1,0 +1,30 @@
+import * as pc from 'playcanvas';
+import * as Fabrik from '../../../fabrik';
+import * as Renderer from '../../renderer';
+import { IK } from '../core/IK';
+import { Target } from '../core/Target';
+export declare class Base implements IK {
+    private boneEntityCacheMap;
+    private targetCacheMap;
+    private needToSolve;
+    private renderForwardLine;
+    protected renderer: Renderer.Renderer | Renderer.AvatarRenderer | undefined;
+    private renderIKBone;
+    constructor();
+    setRenderer(renderer: Renderer.Renderer | Renderer.AvatarRenderer): void;
+    setRenderIKBone(renderIKBone: boolean): void;
+    addTarget(id: string, pos?: Fabrik.Vec3): void;
+    getTarget(id: string): Target | undefined;
+    randomMoveTarget(id: string, max?: Fabrik.Vec3, min?: Fabrik.Vec3, tick?: (pos: Fabrik.Vec3) => void): void;
+    setNeedToSolve(needToSolve: boolean): void;
+    solveIK(): void;
+    getBoneFromCache(chainName: string, boneIndex: number): pc.Entity | undefined;
+    setBoneToCache(chainName: string, boneIndex: number, bone: pc.Entity): void;
+    private addBoneEntity;
+    render(): void;
+    private renderEntityForwardLine;
+    getSolver(): Fabrik.FabrikStructure3D | undefined;
+    solveForTargets(targets: Map<string, Fabrik.Vec3>): void;
+    run(): void;
+    update(): void;
+}

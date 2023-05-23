@@ -1,0 +1,11 @@
+export * from './Constants';
+export { BoneConnectionPoint } from './core/BoneConnectionPoint';
+export { FabrikBone3D } from './core/FabrikBone3D';
+export { BaseboneConstraintType3D, FabrikChain3D } from './core/FabrikChain3D';
+export { FabrikJoint3D, JointType } from './core/FabrikJoint3D';
+export { FabrikStructure3D } from './core/FabrikStructure3D';
+export { Color } from './utils/Color';
+export { Mat3 } from './utils/Mat3';
+export { Mat4 } from './utils/Mat4';
+export { Utils } from './utils/Utils';
+export { Vec3 } from './utils/Vec3';
