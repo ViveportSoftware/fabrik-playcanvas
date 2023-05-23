@@ -21,8 +21,10 @@
     "fix": "gts fix",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
-    "posttest": "npm run lint",
-    "publish": "rm -rf dist && pnpm publish"
+    "posttest": "npm run lint"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "devDependencies": {
     "@types/node": "^18.13.0",
