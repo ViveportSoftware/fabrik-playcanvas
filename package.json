@@ -14,21 +14,27 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "pnpm run clean && tsc",
+    "build": "pnpm clean && tsc",
     "lint": "gts lint",
     "clean": "gts clean",
     "compile": "tsc",
     "fix": "gts fix",
-    "prepare": "npm run compile",
-    "pretest": "npm run compile",
-    "posttest": "npm run lint"
+    "prepare": "pnpm compile && husky install",
+    "pretest": "pnpm compile",
+    "posttest": "pnpm lint",
+    "commit": "cz"
   },
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.7.1",
+    "@commitlint/config-conventional": "^17.7.0",
     "@types/node": "^18.13.0",
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0",
     "gts": "^3.1.1",
+    "husky": "^8.0.0",
     "typescript": "~4.9.5",
     "vite": "^4.1.1",
     "vite-plugin-dts": "2.0.0-beta.3"
@@ -39,5 +45,10 @@
     "rollup-plugin-typescript2": "^0.34.1",
     "rxjs": "^7.8.0",
     "vite-plugin-mkcert": "^1.13.3"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
