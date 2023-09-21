@@ -82,6 +82,14 @@ classDiagram
 
 - In VR mode if MHD rotate-y 180 degrees, IK will fail.
 
+## Use `pnpm commit` for code commits
+
+For better commit messages, please use `pnpm commit` instead of `git commit`. This will guide you through a series of prompts to help you write a better commit message.
+
+```bash
+pnpm commit
+```
+
 ## Todos
 
 - `Fabrik` - local hinge with global axis constrained
