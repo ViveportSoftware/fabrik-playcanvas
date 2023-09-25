@@ -17,4 +17,3 @@ jobs:
         with:
           release-type: node
           package-name: fabrik-playcanvas
-          release-as: 1.1.0
