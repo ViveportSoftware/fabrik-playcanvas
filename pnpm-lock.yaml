@@ -9,8 +9,8 @@ dependencies:
     specifier: ^18.6.4
     version: 18.6.4
   playcanvas:
-    specifier: ^1.61.0
-    version: 1.61.0
+    specifier: 1.65.4
+    version: 1.65.4
   rollup-plugin-typescript2:
     specifier: ^0.34.1
     version: 0.34.1(rollup@3.14.0)(typescript@4.9.5)
@@ -198,7 +198,7 @@ packages:
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
       resolve-from: 5.0.0
-      ts-node: 10.9.1(@types/node@20.4.7)(typescript@4.9.5)
+      ts-node: 10.9.1(@types/node@18.13.0)(typescript@4.9.5)
       typescript: 4.9.5
     transitivePeerDependencies:
       - '@swc/core'
@@ -1282,7 +1282,7 @@ packages:
     dependencies:
       '@types/node': 20.4.7
       cosmiconfig: 8.3.6(typescript@4.9.5)
-      ts-node: 10.9.1(@types/node@20.4.7)(typescript@4.9.5)
+      ts-node: 10.9.1(@types/node@18.13.0)(typescript@4.9.5)
       typescript: 4.9.5
     dev: true
 
@@ -2744,8 +2744,8 @@ packages:
       find-up: 4.1.0
     dev: false
 
-  /playcanvas@1.61.0:
-    resolution: {integrity: sha512-3uKixIQlwGv+4BHjArQuM8TLtDhuXQdZs0/ZPs06fNDuN6XTng2zbieWuwL+HycFs/L9iywWiSp0hl8F0sEtRQ==}
+  /playcanvas@1.65.4:
+    resolution: {integrity: sha512-awWalFBYXjNv3xFd0vBn8fmMtd3u8vNwOwa9+3bvZfEQ9KvWzj0EcrjlRFoONa3uVs6dmAaq2x3huKB2Vw0BpA==}
     dev: false
 
   /postcss@8.4.21:
@@ -3188,7 +3188,7 @@ packages:
       code-block-writer: 11.0.3
     dev: true
 
-  /ts-node@10.9.1(@types/node@20.4.7)(typescript@4.9.5):
+  /ts-node@10.9.1(@types/node@18.13.0)(typescript@4.9.5):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -3207,7 +3207,7 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 20.4.7
+      '@types/node': 18.13.0
       acorn: 8.10.0
       acorn-walk: 8.2.0
       arg: 4.1.3
